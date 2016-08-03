@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/baselayout" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{general.error}">Error!</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1 th:text="${status}"></h1>
+    <h3 th:text="${exception}"></h3>
+    <h3 th:text="${message}"></h3>
+
+</div>
+</body>
+</html>

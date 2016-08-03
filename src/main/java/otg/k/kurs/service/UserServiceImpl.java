@@ -1,0 +1,105 @@
+package otg.k.kurs.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import otg.k.kurs.domain.Role;
+import otg.k.kurs.domain.User;
+import otg.k.kurs.domain.VerificationToken;
+import otg.k.kurs.dto.UserDto;
+import otg.k.kurs.event.OnRegistrationCompleteEvent;
+import otg.k.kurs.repository.TokenRepository;
+import otg.k.kurs.repository.UserRepository;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
+
+@Service
+@Transactional
+public class UserServiceImpl implements UserService{
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    TokenRepository tokenRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    @Override
+    public boolean registerUser(UserDto userDto, HttpServletRequest request) {
+        User user = saveUser(userDto);
+        if (user == null) {
+            return false;
+        }
+        try {
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user,
+                    String.format("%s://%s:%d", request.getScheme(),
+                            request.getServerName(), request.getServerPort()), request.getLocale()));
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public VerificationToken createVerificationToken(User user, String token) {
+        return tokenRepository.save(new VerificationToken(user, token));
+    }
+
+    @Override
+    public boolean activateUser(String token) {
+        VerificationToken verificationToken = tokenRepository.findByToken(token);
+        if (verificationToken == null) {
+            return false;
+        }
+        User user = verificationToken.getUser();
+        Calendar calendar = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+            return false;
+        }
+        user.setEnabled(true);
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public void resendConfirmationMessage(String email) {
+
+    }
+
+    private User saveUser(UserDto userDto) {
+        User user = createUser(userDto);
+        return (!userExist(userDto) && userRepository.save(user) != null) ? user : null;
+    }
+
+    private User createUser(UserDto userDto) {
+        User user = new User();
+        user.setFirstname(userDto.getFirstname());
+        user.setLastname(userDto.getLastname());
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setEnabled(false);
+        user.setRole(Role.ROLE_USER);
+        return user;
+    }
+
+    private boolean userExist(UserDto user) {
+        return emailExist(user.getEmail()) || usernameExist(user.getUsername());
+    }
+
+    private boolean emailExist(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
+
+    private boolean usernameExist(String username) {
+        return userRepository.findByUsername(username) != null;
+    }
+}
