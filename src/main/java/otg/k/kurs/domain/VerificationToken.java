@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -28,9 +29,14 @@ public class VerificationToken {
 
     private Date expiryDate;
 
-    public VerificationToken(User user, String token) {
-        this.token = token;
+    public VerificationToken(User user) {
+        this.token = UUID.randomUUID().toString();;
         this.user = user;
+        this.expiryDate = calculateExpiryDate(EXPIRATION);
+    }
+
+    public void refreshToken(){
+        this.token = UUID.randomUUID().toString();;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 

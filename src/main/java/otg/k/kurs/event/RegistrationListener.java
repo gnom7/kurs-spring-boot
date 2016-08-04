@@ -1,6 +1,7 @@
 package otg.k.kurs.event;
 
 import otg.k.kurs.domain.User;
+import otg.k.kurs.domain.VerificationToken;
 import otg.k.kurs.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -28,22 +29,18 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     @Autowired
     private JavaMailSender mailSender;
 
-    @Autowired
-    private Environment environment;
-
     @Override
     @Async
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-        confirmRegistration(event);
+//        VerificationToken verToken = userService.createVerificationToken(event.getUser());
+        new Thread( () -> {confirmRegistration(event);} ).start();
     }
 
     @Async
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
         User user = event.getUser();
-        String token = UUID.randomUUID().toString();
-        userService.createVerificationToken(user, token);
         try {
-            mailSender.send(createMessage(user.getFirstname(), user.getEmail(), token,
+            mailSender.send(createMessage(user.getFirstname(), user.getEmail(), event.getToken(),
                     event.getApplicationUrl(), event.getLocale()));
         } catch (MessagingException e) {
             e.printStackTrace();

@@ -10,10 +10,10 @@ public interface UserService {
 
     boolean registerUser(UserDto userDto, HttpServletRequest request);
 
-    VerificationToken createVerificationToken(User user, String token);
+    VerificationToken createVerificationToken(User user);
 
     boolean activateUser(String token);
 
-    void resendConfirmationMessage(String email);
+    void resendConfirmationMessage(HttpServletRequest request, String token);
 
 }

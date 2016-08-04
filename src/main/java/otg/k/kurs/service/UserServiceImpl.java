@@ -15,6 +15,7 @@ import otg.k.kurs.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -38,8 +39,14 @@ public class UserServiceImpl implements UserService{
         if (user == null) {
             return false;
         }
+        VerificationToken verToken = createVerificationToken(user);
+        publishEvent(request, user, verToken.getToken());
+        return true;
+    }
+
+    private boolean publishEvent(HttpServletRequest request, User user, String token){
         try {
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user,
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, token,
                     String.format("%s://%s:%d", request.getScheme(),
                             request.getServerName(), request.getServerPort()), request.getLocale()));
         } catch (Exception e) {
@@ -49,8 +56,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public VerificationToken createVerificationToken(User user, String token) {
-        return tokenRepository.save(new VerificationToken(user, token));
+    public VerificationToken createVerificationToken(User user) {
+        return tokenRepository.save(new VerificationToken(user));
     }
 
     @Override
@@ -70,7 +77,12 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void resendConfirmationMessage(String email) {
+    public void resendConfirmationMessage(HttpServletRequest request, String token) {
+        VerificationToken verToken = tokenRepository.findByToken(token);
+        User user = verToken.getUser();
+        verToken.refreshToken();
+        tokenRepository.save(verToken);
+        publishEvent(request, user, verToken.getToken());
 
     }
 

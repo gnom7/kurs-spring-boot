@@ -13,6 +13,9 @@
     <div th:if="${authError}" class="alert alert-danger" role="alert" th:text="#{registration.error}">
         Error
     </div>
+    <div th:if="${authError}" th:utext="#{registration.resendToken(${oldToken})}">
+        Error
+    </div>
 </div>
 </body>
 </html>
