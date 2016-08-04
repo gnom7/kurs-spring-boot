@@ -21,8 +21,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/**")
-                    .authorizeRequests().anyRequest().permitAll()
+                    .antMatcher("/login").anonymous()
+                .and()
+                    .antMatcher("/**")
+                        .authorizeRequests().anyRequest().permitAll()
                 .and()
                     .formLogin()
                         .loginPage("/login")
@@ -31,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .defaultSuccessUrl("/index")
                         .failureUrl("/login?error=true")
                 .and()
-                .logout().logoutSuccessUrl("/login?logout");
+                    .logout().logoutSuccessUrl("/login?logout");
     }
 
     @Override

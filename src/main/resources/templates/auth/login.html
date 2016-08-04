@@ -45,34 +45,34 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a href="#" th:onclick="'signInFacebook()'">Facebook</a></li>
-                        <li><a href="#" th:onclick="'signInTwitter()'">Twitter</a></li>
-                        <li><a href="#" th:onclick="'signInVkontakte()'">Vkontakte</a></li>
+                        <li><a href="@{/auth/facebook}" th:onclick="'signInFacebook()'">Facebook</a></li>
+                        <li><a href="@{/auth/twitter}" th:onclick="'signInTwitter()'">Twitter</a></li>
+                        <li><a href="@{/auth/vkontakte}" th:onclick="'signInVkontakte()'">VK</a></li>
                     </ul>
                 </div>
             </form>
         </div>
-        <div class="col-md-4"></div>
+        <!--<div class="col-md-4"></div>-->
     </div>
 
-    <th:block th:replace="connect/facebookConnect :: connect"/>
-    <th:block th:replace="connect/twitterConnect :: connect"/>
+    <!--<th:block th:replace="connect/facebookConnect :: connect"/>-->
+    <!--<th:block th:replace="connect/twitterConnect :: connect"/>-->
 </div>
 
-<th:block layout:fragment="scripts">
-    <th:block th:replace="auth/validation :: scripts" />
+<!--<th:block layout:fragment="scripts">-->
+    <!--<th:block th:replace="auth/validation :: scripts" />-->
 
-    <script th:inline="javascript">
-        function signInFacebook() {
-            $('#facebook').submit();
-        }
-        function signInTwitter() {
-            $('#twitter').submit();
-        }
-        function signInVkontakte() {
-            alert('zadr');
-        }
-    </script>
-</th:block>
+    <!--<script th:inline="javascript">-->
+        <!--function signInFacebook() {-->
+            <!--$('#facebook').submit();-->
+        <!--}-->
+        <!--function signInTwitter() {-->
+            <!--$('#twitter').submit();-->
+        <!--}-->
+        <!--function signInVkontakte() {-->
+            <!--alert('zadr');-->
+        <!--}-->
+    <!--</script>-->
+<!--</th:block>-->
 </body>
 </html>
