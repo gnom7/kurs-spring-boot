@@ -3,6 +3,7 @@ package otg.k.kurs.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import otg.k.kurs.domain.Role;
@@ -32,6 +33,18 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+
+    @Override
+    public void registerSocialUser(UserProfile userProfile) {
+        User user = createSocialUser(userProfile);
+        userRepository.save(user);
+    }
+
+    private User createSocialUser(UserProfile userProfile){
+        String password = passwordEncoder.encode(UUID.randomUUID().toString());
+        return new User(userProfile.getUsername(), userProfile.getFirstName(),
+                userProfile.getLastName(), userProfile.getEmail(), password, false, true, Role.ROLE_USER);
+    }
 
     @Override
     public boolean registerUser(UserDto userDto, HttpServletRequest request) {
@@ -107,11 +120,13 @@ public class UserServiceImpl implements UserService{
         return emailExist(user.getEmail()) || usernameExist(user.getUsername());
     }
 
-    private boolean emailExist(String email) {
+    @Override
+    public boolean emailExist(String email) {
         return userRepository.findByEmail(email) != null;
     }
 
-    private boolean usernameExist(String username) {
+    @Override
+    public boolean usernameExist(String username) {
         return userRepository.findByUsername(username) != null;
     }
 }

@@ -9,8 +9,8 @@
 //import org.springframework.social.security.SocialUserDetailsService;
 //import org.springframework.stereotype.Service;
 //
-//@Service
-//public class SocialUsersDetailServiceImpl implements SocialUserDetailsService {
+//@Service("socialDetails")
+//public class SocialUserDetailsServiceImpl implements SocialUserDetailsService {
 //
 //    @Autowired
 //    private UserDetailsService userDetailsService;
@@ -18,7 +18,8 @@
 //    @Override
 //    public SocialUserDetails loadUserByUserId(String s) throws UsernameNotFoundException {
 //        UserDetails userDetails = userDetailsService.loadUserByUsername(s);
-//        return new SocialUser(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+//        return new SocialUser(userDetails.getUsername(), userDetails.getPassword(),
+//                userDetails.isEnabled(), true, true, userDetails.isAccountNonLocked(), userDetails.getAuthorities());
 //    }
 //
 //}
