@@ -22,6 +22,7 @@ public class User implements UserDetails {
 
     private String lastname;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
@@ -35,6 +36,12 @@ public class User implements UserDetails {
     private Role role;
 
     public User(){}
+
+    public User(String username, String firstname, String lastname){
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
 
     public User(String username, String firstname, String lastname, String email,
                 String password, boolean locked, boolean enabled, Role role) {

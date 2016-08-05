@@ -23,10 +23,10 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService{
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    TokenRepository tokenRepository;
+    private TokenRepository tokenRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
