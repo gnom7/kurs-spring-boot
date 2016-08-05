@@ -7,8 +7,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SpringSocialConfigurer;
 import otg.k.kurs.repository.UserRepository;
 
 @Configuration
@@ -35,7 +37,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .failureUrl("/login?error=true")
                 .and()
                     .logout()
-                        .logoutSuccessUrl("/login?logout");
+                        .logoutSuccessUrl("/login?logout")
+                        .deleteCookies("JSESSIONID")
+                .and()
+                       .apply(new SpringSocialConfigurer()
+                            .postLoginUrl("/")
+                            .alwaysUsePostLoginUrl(true));
     }
 
     @Override

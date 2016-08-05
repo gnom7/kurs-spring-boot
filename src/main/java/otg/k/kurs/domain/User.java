@@ -43,6 +43,13 @@ public class User implements UserDetails {
         this.lastname = lastname;
     }
 
+    public User(String username, String firstname, String lastname, String email) {
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+    }
+
     public User(String username, String firstname, String lastname, String email,
                 String password, boolean locked, boolean enabled, Role role) {
         this.username = username;
