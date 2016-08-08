@@ -5,42 +5,135 @@
 <head>
     <title th:text="#{constructor.title}">Constructor</title>
     <th:block layout:fragment="styles">
-        <link rel="stylesheet" href="css/custom/constructor.css" th:href="@{/css/custom/constructor.css}"/>
+        <!--<link rel="stylesheet" href="css/custom/constructor.css" th:href="@{/css/custom/constructor.css}"/>-->
 
     </th:block>
 </head>
 <body>
 <div layout:fragment="nowrap-content">
 
-    <div class="my-toolbar flex-container">
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-text">
-            <span class="glyphicon glyphicon-font" aria-hidden="true"></span> Text
+    <div class="container my-toolbar">
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-font">
+            <span class="glyphicon glyphicon-font"></span> Text
         </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-image">
-            <span class="glyphicon glyphicon-camera" aria-hidden="true"></span> Image
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-camera">
+            <span class="glyphicon glyphicon-camera"></span> Image
         </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-video">
-            <span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video
-        </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-1">
-            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-film">
+            <span class="glyphicon glyphicon-film"></span> Video
         </button>
         <button type="button" class="my-tool btn btn-default btn-lg" id="tool-comment">
-            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Comments
+            <span class="glyphicon glyphicon-comment"></span> Comments
         </button>
-        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-rating">
-            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Rating
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-star">
+            <span class="glyphicon glyphicon-star"></span> Rating
         </button>
     </div>
 
-    <div class="row my-container">
+    <div class="container my-container">
 
     </div>
-
+    <div th:replace="constructor/elements :: modals"></div>
 </div>
+
 <th:block layout:fragment="scripts">
-    <script type="text/javascript" src="js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/showdown.min.js}"></script>
     <script th:inline="javascript">
+
+        var modal = $('.modal');
+        var modalInvoker;
+        var currentModal;
+
+        $(modal).on('show.bs.modal', function (e) {
+            modalInvoker = $(e.relatedTarget.parentNode);
+            currentModal = $(this);
+            if(modalInvoker.children('iframe').length != 0){
+                var iframe = modalInvoker.children('iframe');
+                var sourceLink = iframe.attr('src');
+                currentModal.find('#video-url').val(sourceLink);
+                currentModal.find('#video-width').val(iframe.attr('width'));
+                currentModal.find('#video-height').val(iframe.attr('height'));
+                currentModal.find('#video-autoplay').prop('checked', sourceLink.indexOf('autoplay=') != -1);
+                currentModal.find('#video-loop').prop('checked', sourceLink.indexOf('loop=') != -1);
+            }
+            if(modalInvoker.children('.markdown').length != 0){
+                // populate modal for text
+                var element = modalInvoker.find('input');
+                currentModal.find('textarea').val(element.val());
+            }
+            if(modalInvoker.children('img').length != 0){
+                // populate modal for img
+            }
+        });
+
+        $(modal).on('hidden.bs.modal', function () {
+            $.each($(this).find('input'), function (index, item) {
+                item.checked = false;
+                item.value = '';
+            });
+            $.each($(this).find('textarea'), function (index, item) {
+                item.value = '';
+            })
+        });
+
+        function saveModalData() {
+            setTimeout(function () {
+                fncs[currentModal.attr('id')]();
+            }, 100)
+        }
+
+        fncs = {'film': function() {
+            var videoUrl = $('#video-url').val().replace('watch', 'embed');
+            var videoAutoplay = $('#video-autoplay').is(':checked');
+            var videoLoop = $('#video-loop').is(':checked');
+            var videoWidth = $('#video-width').val() || 300;
+            var videoHeight = $('#video-height').val() || 200;
+
+            if(videoAutoplay){
+                videoUrl += '\u0026autoplay=1'
+            }
+            if(videoLoop){
+                videoUrl += '\u0026loop=1'
+            }
+
+            if(modalInvoker.children('.my-tool').length != 0) {
+                modalInvoker.children('.my-tool').remove();
+                modalInvoker.prepend('<iframe width="' + videoWidth + '" height="' + videoHeight + '" src="' + videoUrl +
+                        '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
+            } else {
+                var iframe = modalInvoker.children('iframe');
+                iframe.prop('width', videoWidth);
+                iframe.prop('height', videoHeight);
+                iframe.prop('src', videoUrl)
+            }
+        },
+
+        'font': function () {
+            var text = $('#text').val();
+
+            function markdownToHtml(text) {
+                var converter = new showdown.Converter();
+                var element = converter.makeHtml(text);
+                var wrapper = $('<div class="markdown"></div>');
+                wrapper.append(element);
+                wrapper.append($('<input type="hidden"/>').val(text));
+                console.log(wrapper);
+                return wrapper;
+            }
+
+            if(modalInvoker.children('.my-tool').length != 0) {
+                modalInvoker.children('.my-tool').remove();
+                modalInvoker.prepend(markdownToHtml(text));
+            } else {
+                modalInvoker.children('.markdown').remove();
+                modalInvoker.prepend(markdownToHtml(text));
+            }
+        },
+        'camera': function () {
+
+        }};
+
         $(document).ready(function () {
 
             // config
@@ -48,41 +141,35 @@
 
             var toolbar = $('.my-toolbar');
 
-            $('.my-tool', toolbar).draggable({
-                revert: 'invaid',
+            $('.my-tool').draggable({
+                revert: 'invalid',
                 helper: 'clone',
                 containment: 'body',
                 cancel: false
             });
 
             function addElement(item, container) {
-                let id = item.attr('id');
-                if (id === 'tool-text') {
-                    container.append(createElement('text'))
-                } else if (id === 'tool-image') {
-                    container.append(createElement('image'))
-                } else if (id === 'tool-video') {
-                    container.append(createElement('video'))
-                } else if (id === 'tool-comment') { // TODO add
-                    container.append(createElement('comments'))
-                } else if (id === 'tool-rating') {
-                    container.append(createElement('rating'))
-                }
-
+                var id = item.attr('id');
+                container.append(createElement(id.substr(5)));
             }
 
             function createElement(text) {
-                let wrapper = $('<div class="my-element"></div>');
-                wrapper.text(text);
+                var wrapper = $('<div class="my-element"></div>');
+                wrapper.append('<button type="button" class="my-tool btn btn-default btn-lg ' +
+                        'tn-lg"><span class="glyphicon glyphicon-' + text + '"></span></button>');
+                wrapper.append('<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#' +
+                        text + '"><span class="glyphicon glyphicon-cog"></span></button>');
+                wrapper.append('<button onclick="parentNode.remove()" class="btn btn-danger btn-xs">' +
+                        '<span class="glyphicon glyphicon-remove"></span></button>');
+
                 return wrapper;
             }
 
             generateGrid($('.my-container'), layout);
 
             function generateGrid(container, rows) {
-
                 rows.forEach(function (row) {
-                    let rowTemplate = $('<div class="row"></div>');
+                    var rowTemplate = $('<div class="row"></div>');
                     row.forEach(function (col) {
                        rowTemplate.append('<div class="my-content col-md-' + col + '"></div>');
                     });
@@ -92,13 +179,13 @@
                 var editField = $('.my-content');
 
                 editField.droppable({
-                    accept: '.my-toolbar > .my-tool',
+                    accept: '.my-tool',
                     drop: function (event, ui) {
                         addElement(ui.draggable, $(this));
                     }
                 });
 
-                let shouldDelete = false;
+                var shouldDelete = false;
                 editField.sortable({
                     cursor: 'move',
                     connectWith: editField,
@@ -136,6 +223,33 @@
 
 
         });
+    </script>
+
+    <script th:src="@{/js/jquery.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery.cloudinary.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery.ui.widget.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery.iframe-transport.js}" type="text/javascript"></script>
+    <script th:src="@{/js/jquery.fileupload.js}" type="text/javascript"></script>
+    <script>$.cloudinary.config({ cloud_name: 'gnom-7-cloud', api_key: '994662958897139'});</script>
+
+    <script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
+    <script>
+        var widget = cloudinary.createUploadWidget(
+                { cloud_name: 'gnom-7-cloud', upload_preset: 'sample_7eb3c60c0a',
+                    cropping_default_selection_ratio: 1.0, cropping: 'server', thumbnails: '.uploadedImages',
+                    theme: 'white', keep_widget_open: 'true', inline_container: '#widget-container'},
+                function(error, result) {
+                    console.log(error, result);
+
+                    $.post('submit', {photoUrl: result[0].url,
+                        "${_csrf.parameterName}": "${_csrf.token}"}, function() {
+
+                    });
+                });
+        widget.open();
+
+        $()
     </script>
 </th:block>
 </body>

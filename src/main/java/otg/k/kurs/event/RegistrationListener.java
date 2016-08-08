@@ -32,7 +32,6 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     @Override
     @Async
     public void onApplicationEvent(OnRegistrationCompleteEvent event) {
-//        VerificationToken verToken = userService.createVerificationToken(event.getUser());
         new Thread( () -> {confirmRegistration(event);} ).start();
     }
 

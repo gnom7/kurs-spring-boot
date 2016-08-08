@@ -17,7 +17,7 @@
                        <span class="icon-bar"></span>
                        <span class="icon-bar"></span>
                    </button>
-                   <a class="navbar-brand" th:href="@{~/}" th:text="#{navbar.title}">Site Maker</a>
+                   <a class="navbar-brand" th:href="@{/}" th:text="#{navbar.title}">Site Maker</a>
                </div>
                <!-- Collect the nav links, forms, and other content for toggling -->
                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -31,12 +31,12 @@
                                    <a href="?lang=en" th:text="English">English</a>
                                </li>
                                <li>
-                                   <a href="?lang=ru" th:text="Russian">Russian</a>
+                                   <a href="?lang=ru" th:text="Русский">Русский</a>
                                </li>
                            </ul>
                        </li>
                        <li sec:authorize="isAnonymous()">
-                           <a href="/login" th:href="@{~/login}" th:text="#{navbar.signin}">Sign in</a>
+                           <a href="/login" th:href="@{/login}" th:text="#{navbar.signin}">Sign in</a>
                        </li>
                        <li class="dropdown" sec:authorize="isAuthenticated()">
                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -49,6 +49,7 @@
                                <li>
                                    <a href="#" th:text="#{navbar.profile}">My profile</a>
                                </li>
+                               <li role="separator" class="divider"></li>
                                <li>
                                    <a href="#" onclick="$('#logout').submit()" th:text="#{navbar.logout}">Logout</a>
                                </li>

@@ -1,0 +1,84 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+
+<th:body th:fragment = "modals">
+    <div id="film" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add video</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label for="video-url">URL</label>
+                        <input type="text" id="video-url" class="form-control" autofocus="autofocus" />
+                    </div>
+                    <div>
+                        <label for="video-width">Width</label>
+                        <input type="text" id="video-width" class="form-control" />
+                    </div>
+                    <div>
+                        <label for="video-height">Height</label>
+                        <input type="text" id="video-height" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="checkbox" style="float: left;">
+                        <label><input type="checkbox" id="video-autoplay" /> Autoplay</label>
+                        <br/>
+                        <label style="float: left"><input type="checkbox" id="video-loop" /> Loop</label>
+                    </div>
+                    <button onclick="saveModalData()" class="btn btn-default" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="font" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add text</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <label for="text">Text</label>
+                        <textarea id="text" class="form-control" autofocus="autofocus" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="saveModalData()" class="btn btn-default" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="camera" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add image</h4>
+                </div>
+                <div class="modal-body" id="widget-container">
+                </div>
+                <div class="modal-footer">
+                    <button onclick="saveModalData()" class="btn btn-default" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:body>
+
+</body>
+</html>
