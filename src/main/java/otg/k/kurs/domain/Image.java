@@ -15,6 +15,8 @@ public class Image {
 
     private String url;
 
-//    private Site site;
+    private int position;
+
+    private String site;
 
 }

@@ -62,19 +62,28 @@
         </div>
     </div>
 
-    <div id="camera" class="modal fade" role="dialog">
+    <div id="site-opts-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add image</h4>
+                    <h4 class="modal-title">Options</h4>
                 </div>
-                <div class="modal-body" id="widget-container">
-                </div>
+                <p><b>Site theme:</b><br />
+                    <label><input type="radio" name="theme" value="white" checked="checked" />White</label><br />
+                    <label><input type="radio" name="theme" value="dark" />Dark</label>
+                </p>
+                <p><b>Grid:</b><br />
+                    <label><input type="radio" name="grid" value="1" checked="checked" /><img th:src="@{/layouts/01.png}" /></label>
+                    <label><input type="radio" name="grid" value="2" /><img th:src="@{/layouts/02.png}" /></label><br />
+                    <label><input type="radio" name="grid" value="3" /><img th:src="@{/layouts/03.png}" /></label>
+                    <label><input type="radio" name="grid" value="4" /><img th:src="@{/layouts/04.png}" /></label>
+                </p>
                 <div class="modal-footer">
-                    <div class="row uploadedImages"></div>
-                    <button onclick="saveModalData()" class="btn btn-default" data-dismiss="modal">Save</button>
+                    <label style="float: left;">Site name: <input id="site-name" /></label>
+                    <button class="btn btn-success" data-dismiss="modal">Save site</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

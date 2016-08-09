@@ -23,6 +23,10 @@ public class Site implements Serializable {
 
     private String theme;
 
+    private boolean rating;
+
+    private boolean comments;
+
 //    private List<Image> images;
 //
 //    private List<Text> texts;
