@@ -52,7 +52,7 @@
                 <div class="modal-body">
                     <div>
                         <label for="text">Text</label>
-                        <textarea id="text" class="form-control" autofocus="autofocus" />
+                        <textarea rows="15" id="text" class="form-control" autofocus="autofocus" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -74,12 +74,6 @@
                 <p><b>Site theme:</b><br />
                     <label><input type="radio" name="theme" value="white" checked="checked" />White</label><br />
                     <label><input type="radio" name="theme" value="dark" />Dark</label>
-                </p>
-                <p><b>Grid:</b><br />
-                    <label><input type="radio" name="grid" value="[12]" checked="checked" /><img th:src="@{/layouts/01.png}" /></label>
-                    <label><input type="radio" name="grid" value="[6,6]" /><img th:src="@{/layouts/02.png}" /></label><br />
-                    <label><input type="radio" name="grid" value="[4,8]" /><img th:src="@{/layouts/03.png}" /></label>
-                    <label><input type="radio" name="grid" value="[[12],[6,6],[12]]" /><img th:src="@{/layouts/04.png}" /></label>
                 </p>
                 <label><input type="checkbox" name="allowRating" />Allow rating</label>
                 <label><input type="checkbox" name="allowComments" />Allow comments</label>

@@ -44,6 +44,10 @@ body {
     margin-bottom: 5px;
 }
 
+.modal-dialog {
+    text-align: center;
+}
+
 .my-element {
     text-align: center;
     vertical-align: middle;
