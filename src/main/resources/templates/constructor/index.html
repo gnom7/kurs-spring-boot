@@ -31,7 +31,7 @@
     </div>
 
     <div class="container my-container">
-
+        
     </div>
     <div th:replace="constructor/elements :: modals"></div>
 </div>
@@ -81,7 +81,8 @@
         }
 
         fncs = {'film': function() {
-            var videoUrl = $('#video-url').val().replace('watch', 'embed');
+            var videoUrl = $('#video-url').val().replace('watch?v=', 'embed/');
+            videoUrl += '?';
             var videoAutoplay = $('#video-autoplay').is(':checked');
             var videoLoop = $('#video-loop').is(':checked');
             var videoWidth = $('#video-width').val() || 300;
