@@ -70,21 +70,25 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Options</h4>
                 </div>
+                <form id="save-site-form" th:action="@{~/savesite}" th:object="${site}" method="post">
                 <p><b>Site theme:</b><br />
                     <label><input type="radio" name="theme" value="white" checked="checked" />White</label><br />
                     <label><input type="radio" name="theme" value="dark" />Dark</label>
                 </p>
                 <p><b>Grid:</b><br />
-                    <label><input type="radio" name="grid" value="1" checked="checked" /><img th:src="@{/layouts/01.png}" /></label>
-                    <label><input type="radio" name="grid" value="2" /><img th:src="@{/layouts/02.png}" /></label><br />
-                    <label><input type="radio" name="grid" value="3" /><img th:src="@{/layouts/03.png}" /></label>
-                    <label><input type="radio" name="grid" value="4" /><img th:src="@{/layouts/04.png}" /></label>
+                    <label><input type="radio" name="grid" value="[12]" checked="checked" /><img th:src="@{/layouts/01.png}" /></label>
+                    <label><input type="radio" name="grid" value="[6,6]" /><img th:src="@{/layouts/02.png}" /></label><br />
+                    <label><input type="radio" name="grid" value="[4,8]" /><img th:src="@{/layouts/03.png}" /></label>
+                    <label><input type="radio" name="grid" value="[[12],[6,6],[12]]" /><img th:src="@{/layouts/04.png}" /></label>
                 </p>
+                <label><input type="checkbox" name="allowRating" />Allow rating</label>
+                <label><input type="checkbox" name="allowComments" />Allow comments</label>
                 <div class="modal-footer">
-                    <label style="float: left;">Site name: <input id="site-name" /></label>
-                    <button class="btn btn-success" data-dismiss="modal">Save site</button>
+                    <label style="float: left;">Site name: <input id="site-name" name="siteName" /></label>
+                    <button type="submit" class="btn btn-success">Save site</button>
                     <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
