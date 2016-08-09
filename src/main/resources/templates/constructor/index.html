@@ -62,9 +62,6 @@
                 var element = modalInvoker.find('input');
                 currentModal.find('textarea').val(element.val());
             }
-            if(modalInvoker.children('img').length != 0){
-                // populate modal for img
-            }
         });
 
         $(modal).on('hidden.bs.modal', function () {
@@ -161,11 +158,10 @@
                     paramsForWidget['thumbnails'] = '#uploadedImages' + widgets.length;
                     widgets.push(cloudinary.createUploadWidget(paramsForWidget, callbackOfWidget));
                     wrapper.append($('<input type="hidden" />').val(widgets.length - 1));
-                    console.log($(this).siblings('input').val());
                     wrapper.append('<button onclick="' +
                             'widgets[$(this).siblings(\'input\').val()].open()" class="btn btn-primary btn-xs">' +
                             '<span class="glyphicon glyphicon-cog"></span></button>');
-                    wrapper.append('<div id="uploadedImages' + (widgets.length - 1) + '"></div>');
+                    wrapper.prepend('<div id="uploadedImages' + (widgets.length - 1) + '"></div>');
                 } else {
                     wrapper.append('<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#' +
                             text + '"><span class="glyphicon glyphicon-cog"></span></button>');
@@ -214,74 +210,29 @@
                         }
                     }
                 });
-
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         });
     </script>
 
-    <script th:src="@{/js/cloudinary/all.js}" type="text/javascript"></script>
-    <!--<script th:src="@{/js/jquery.cloudinary.js}" type="text/javascript"></script>-->
-    <!--<script th:src="@{/js/jquery.ui.widget.js}" type="text/javascript"></script>-->
-    <!--<script th:src="@{/js/jquery.iframe-transport.js}" type="text/javascript"></script>-->
-    <!--<script th:src="@{/js/jquery.fileupload.js}" type="text/javascript"></script>-->
-    <!--<script>$.cloudinary.config({ cloud_name: 'gnom-7-cloud', api_key: '994662958897139'});</script>-->
-
-
-    <!--<script>-->
-        <!--var widget = cloudinary.createUploadWidget(-->
-                <!--{ cloud_name: 'gnom-7-cloud', upload_preset: 'sample_7eb3c60c0a',-->
-                    <!--cropping_default_selection_ratio: 1.0, cropping: 'server', thumbnails: '.uploadedImages',-->
-                    <!--theme: 'white', keep_widget_open: 'true', inline_container: '#widget-container'},-->
-                <!--function(error, result) {-->
-
-                    <!--$.post('submit', {photoUrl: result[0].url,-->
-                        <!--"${_csrf.parameterName}": "${_csrf.token}"}, function() {-->
-
-                    <!--});-->
-                <!--});-->
-        <!--widget.open();-->
-    <!--</script>-->
-
-
-    <a href="#" id="upload_widget_opener">Upload multiple images</a>
-    <div id="uploadedImages" class="row"></div>
     <script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 
     <script type="text/javascript">
         var widgets = [];
-//        var countOfWidgets = 0;
         var paramsForWidget = { cloud_name: 'gnom-7-cloud', upload_preset: 'sample_7eb3c60c0a',
             thumbnails: '#uploadedImages', theme: 'white'};
         var callbackOfWidget = function(error, result) {
             if (!result) return;
             $('img').each(function(){
                 var img = $(this);
-                var sourceLink = img.attr('src').replace('/c_limit,h_60,w_90', '');
-                if(sourceLink == result[0].url){
+                var src = img.attr('src').replace('/c_limit,h_60,w_90', '');
+                if(src == result[0].url){
                     img.closest('li').append($('<button onclick="$(this).closest(\'ul\')' +
                             '.remove()" class="btn btn-danger btn-xs">&times;</button>'));
                 }
+                img.prop('src', img.attr('src').replace('/c_limit,h_60,w_90', '/c_limit,h_200,w_300'));
             });
         };
 
-//    var widget = cloudinary.createUploadWidget(paramsForWidget, callbackOfWidget);
     </script>
 
 </th:block>

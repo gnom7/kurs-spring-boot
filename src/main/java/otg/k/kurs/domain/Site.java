@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -11,11 +12,21 @@ import java.io.Serializable;
 public class Site implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue
+    private Long siteId;
 
-    private String name;
+    private String siteName;
 
-    private String user;
+    private String username;
+
+    private String grid;
+
+    private String theme;
+
+//    private List<Image> images;
+//
+//    private List<Text> texts;
+//
+//    private List<Video> videos;
 
 }

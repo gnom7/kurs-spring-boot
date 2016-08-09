@@ -5,6 +5,6 @@ import otg.k.kurs.domain.Site;
 
 public interface SiteRepository extends JpaRepository<Site, Long> {
 
-    Site findByUser(String user);
+    Site findByUsername(String username);
 
 }
