@@ -1,18 +1,20 @@
 package otg.k.kurs.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import otg.k.kurs.dto.SiteDto;
+import otg.k.kurs.service.SiteService;
 
 @Controller
 public class MainController {
 
+    @Autowired
+    private SiteService siteService;
+
     @GetMapping("constructor")
-    public String get(Model model){
-        model.addAttribute("site", new SiteDto());
+    public String get(){
         return "constructor/index";
     }
 
@@ -24,6 +26,13 @@ public class MainController {
         System.out.println(site.isAllowComments());
         System.out.println(site.isAllowRating());
         return "index";
+    }
+
+    @PostMapping("/checkSiteName")
+    public @ResponseBody String checkSiteName(@RequestParam String siteName){
+        System.out.println("checking");
+        if(siteService.isSiteNameExist(siteName)) return "exist";
+        return "";
     }
 
 }

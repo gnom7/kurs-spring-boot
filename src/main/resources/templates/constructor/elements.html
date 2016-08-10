@@ -35,7 +35,7 @@
                         <br/>
                         <label style="float: left"><input type="checkbox" id="video-loop" /> Loop</label>
                     </div>
-                    <button onclick="saveModalData()" class="btn btn-default" data-dismiss="modal">Save</button>
+                    <button class="btn btn-default modal-data" data-dismiss="modal">Save</button>
                 </div>
             </div>
         </div>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button onclick="saveModalData()" class="btn btn-default" data-dismiss="modal">Save</button>
+                    <button class="btn btn-default modal-data" data-dismiss="modal">Save</button>
                 </div>
             </div>
         </div>
@@ -70,19 +70,21 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Options</h4>
                 </div>
-                <form id="save-site-form" th:action="@{~/savesite}" th:object="${site}" method="post">
+                <!--<form id="save-site-form" th:action="@{/}" th:object="${site}" method="post">-->
                 <p><b>Site theme:</b><br />
                     <label><input type="radio" name="theme" value="white" checked="checked" />White</label><br />
                     <label><input type="radio" name="theme" value="dark" />Dark</label>
                 </p>
                 <label><input type="checkbox" name="allowRating" />Allow rating</label>
                 <label><input type="checkbox" name="allowComments" />Allow comments</label>
+                <input type="hidden" />
                 <div class="modal-footer">
-                    <label style="float: left;">Site name: <input id="site-name" name="siteName" /></label>
-                    <button type="submit" class="btn btn-success">Save site</button>
+                    <label style="float: left;">Site name: <input id="site-name" name="site-name" required="required" /></label>
+                    <div class="alert alert-danger save-site-error" style="display: none; float: left; clear: left"></div>
+                    <button type="submit" class="btn btn-success save-site">Save site</button>
                     <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
-                </form>
+                <!--</form>-->
             </div>
         </div>
     </div>

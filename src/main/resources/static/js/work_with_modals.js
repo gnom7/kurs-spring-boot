@@ -32,6 +32,10 @@ $(modal).on('hidden.bs.modal', function () {
     })
 });
 
+$('.modal-data').on('click', function () {
+    saveModalData(this);
+});
+
 function saveModalData() {
     setTimeout(function () {
         fncs[currentModal.attr('id')]();
@@ -90,7 +94,6 @@ fncs = {'film': function() {
     }};
 
 $(document).ready(function () {
-
     // config
     var layout =  [[12], [6, 6], [12]];
 
@@ -105,6 +108,11 @@ $(document).ready(function () {
 
     createGrid(layout);
 
+});
+
+$('.grid-layout').on('click', function () {
+    var rows = JSON.parse(this.value);
+    createGrid(rows);
 });
 
 function createGrid(rows) {

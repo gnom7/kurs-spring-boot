@@ -16,6 +16,6 @@ public class Text implements Serializable {
 
     private String markdownText;
 
-//    private Site site;
+    private String siteName;
 
 }

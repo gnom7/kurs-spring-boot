@@ -13,10 +13,10 @@
 <div layout:fragment="nowrap-content">
 
     <div class="container">
-        <input type="image" id="1" onclick="createGrid([[12]])" th:src="@{/layouts/1.png}" value="[12]" checked="checked" />
-        <input type="image" id="2" onclick="createGrid([[6,6]])" th:src="@{/layouts/2.png}" value="[6,6]" />
-        <input type="image" id="3" onclick="createGrid([[4,8]])" th:src="@{/layouts/3.png}" value="[4,8]" />
-        <input type="image" id="4" onclick="createGrid([[12],[6,6],[12]])" th:src="@{/layouts/4.png}" value="[[12],[6,6],[12]]" />
+        <input class="grid-layout" type="image" id="1" th:src="@{/layouts/1.png}" value="[[12]]" checked="checked" />
+        <input class="grid-layout" type="image" id="2" th:src="@{/layouts/2.png}" value="[[6,6]]" />
+        <input class="grid-layout" type="image" id="3" th:src="@{/layouts/3.png}" value="[[4,8]]" />
+        <input class="grid-layout" type="image" id="4" th:src="@{/layouts/4.png}" value="[[12],[6,6],[12]]" />
 
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#site-opts-modal"
                 style="float: right;" id="site-opts">
@@ -48,6 +48,18 @@
     <script type="text/javascript" th:src="@{/js/work_with_modals.js}"></script>
     <script type="text/javascript" th:src="@{/js/cloudinary_widgets.js}"></script>
     <script type="text/javascript" th:src="@{/js/save_site.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        setTimeout(function () {
+            $.post('checkSiteName', {
+                siteName: siteName.value,
+                [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+            }, function (data) {
+                console.log(data);
+            });
+        }, 5000);
+        /*]]>*/
+    </script>
 </th:block>
 </body>
 </html>

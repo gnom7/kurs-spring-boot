@@ -17,4 +17,9 @@ public class SiteServiceImpl implements SiteService{
     public Site getSite(String user) {
         return null;
     }
+
+    @Override
+    public boolean isSiteNameExist(String siteName){
+        return siteRepository.findBySiteName(siteName) != null;
+    }
 }

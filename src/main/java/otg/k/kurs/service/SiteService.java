@@ -6,4 +6,5 @@ public interface SiteService {
 
     Site getSite(String user);
 
+    boolean isSiteNameExist(String siteName);
 }

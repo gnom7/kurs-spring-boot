@@ -17,6 +17,6 @@ public class Image {
 
     private int position;
 
-    private String site;
+    private String siteName;
 
 }

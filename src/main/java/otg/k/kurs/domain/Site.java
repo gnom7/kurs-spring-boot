@@ -12,9 +12,6 @@ import java.util.List;
 public class Site implements Serializable {
 
     @Id
-    @GeneratedValue
-    private Long siteId;
-
     private String siteName;
 
     private String username;

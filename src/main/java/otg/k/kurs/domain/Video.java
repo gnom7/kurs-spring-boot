@@ -27,6 +27,6 @@ public class Video implements Serializable {
 
     private boolean videoLoop;
 
-//    private Site site;
+    private String siteName;
 
 }
