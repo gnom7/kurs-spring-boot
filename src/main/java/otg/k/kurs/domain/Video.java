@@ -2,10 +2,7 @@ package otg.k.kurs.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
@@ -27,6 +24,8 @@ public class Video implements Serializable {
 
     private boolean videoLoop;
 
-    private String siteName;
+    @ManyToOne
+    @JoinColumn(name = "site_name")
+    private Site site;
 
 }

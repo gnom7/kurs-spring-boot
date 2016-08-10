@@ -1,11 +1,14 @@
 package otg.k.kurs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import otg.k.kurs.dto.SiteDto;
 import otg.k.kurs.service.SiteService;
+
+import java.util.Map;
 
 @Controller
 public class MainController {
@@ -19,20 +22,24 @@ public class MainController {
     }
 
     @PostMapping("/savesite")
-    public String saveSite(@ModelAttribute("site") SiteDto site){
-        System.out.println(site.getSiteName());
-        System.out.println(site.getGrid());
-        System.out.println(site.getTheme());
-        System.out.println(site.isAllowComments());
-        System.out.println(site.isAllowRating());
+    public String saveSite(@RequestParam("site") String siteJSON){
+        JacksonJsonParser parser = new JacksonJsonParser();
+        Map map = parser.parseMap(siteJSON);
+        System.out.println(map.get("siteName"));
+        System.out.println(map.get("grid"));
+        System.out.println(map.get("theme"));
+        System.out.println(map.get("images"));
+        System.out.println(map.get("videos"));
+        System.out.println(map.get("texts"));
+        System.out.println(map.get("videos"));
+        System.out.println(map.get("allowRating"));
+        System.out.println(map.get("allowComments"));
         return "index";
     }
 
-    @PostMapping("/checkSiteName")
-    public @ResponseBody String checkSiteName(@RequestParam String siteName){
-        System.out.println("checking");
-        if(siteService.isSiteNameExist(siteName)) return "exist";
-        return "";
+    @PostMapping("/checkSiteNameExist")
+    public @ResponseBody Boolean checkSiteName(@RequestParam String siteName){
+        return siteService.isSiteNameExist(siteName);
     }
 
 }

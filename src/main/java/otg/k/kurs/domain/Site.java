@@ -24,10 +24,13 @@ public class Site implements Serializable {
 
     private boolean comments;
 
-//    private List<Image> images;
-//
-//    private List<Text> texts;
-//
-//    private List<Video> videos;
+    @OneToMany(mappedBy = "site")
+    private List<Image> images;
+
+    @OneToMany(mappedBy = "site")
+    private List<Text> texts;
+
+    @OneToMany(mappedBy = "site")
+    private List<Video> videos;
 
 }

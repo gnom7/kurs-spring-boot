@@ -17,6 +17,8 @@ public class Image {
 
     private int position;
 
-    private String siteName;
+    @ManyToOne
+    @JoinColumn(name = "site_name")
+    private Site site;
 
 }

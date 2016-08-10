@@ -16,6 +16,8 @@ public class Text implements Serializable {
 
     private String markdownText;
 
-    private String siteName;
+    @ManyToOne
+    @JoinColumn(name = "site_name")
+    private Site site;
 
 }
