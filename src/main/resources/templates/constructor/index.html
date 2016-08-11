@@ -90,7 +90,7 @@
                     var currentElement = elements.eq(j);
                     if(currentElement.find('.glyphicon-camera').length != 0){
                         currentElement.find('img').each(function (index, image) {
-                            site.images.push({url: image.src, position: i, site: $('#site-name').val()});
+                            site.images.push({url: image.src, position: i});
                         })
                     }
                     if(currentElement.find('.markdown').length != 0){
@@ -98,7 +98,7 @@
                     }
                     if(currentElement.find('iframe').length != 0){
                         var iframe = currentElement.find('iframe');
-                        site.videos.push({src: iframe.attr('src'), height: iframe.attr('height'),
+                        site.videos.push({url: iframe.attr('src'), height: iframe.attr('height'),
                             width: iframe.attr('width'), position: i});
                     }
                 }
@@ -115,9 +115,9 @@
             $.post('savesite', {
                 site: JSON.stringify(site),
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
-            }, function () {
-                window.location.replace('index');
-            })
+            }, function (href) {
+                window.location.href = href;
+            });
         }
         /*]]>*/
     </script>

@@ -1,6 +1,7 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import otg.k.kurs.dto.SiteDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,15 +15,17 @@ public class Site implements Serializable {
     @Id
     private String siteName;
 
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private User user;
 
-    private String grid;
+    private int[][] grid;
 
     private String theme;
 
-    private boolean rating;
+    private boolean allowRating;
 
-    private boolean comments;
+    private boolean allowComments;
 
     @OneToMany(mappedBy = "site")
     private List<Image> images;
@@ -33,4 +36,16 @@ public class Site implements Serializable {
     @OneToMany(mappedBy = "site")
     private List<Video> videos;
 
+    public Site(){}
+
+    public Site(SiteDto siteDto){
+        this.allowComments = siteDto.isAllowComments();
+        this.allowRating = siteDto.isAllowRating();
+        this.grid = siteDto.getGrid();
+        this.siteName = siteDto.getSiteName();
+        this.theme = siteDto.getTheme();
+        this.images = siteDto.getImages();
+        this.videos = siteDto.getVideos();
+        this.texts = siteDto.getTexts();
+    }
 }

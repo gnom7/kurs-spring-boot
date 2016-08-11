@@ -16,8 +16,14 @@ public class Text implements Serializable {
 
     private String markdownText;
 
+    private int position;
+
     @ManyToOne
     @JoinColumn(name = "site_name")
     private Site site;
 
+    public Text(String markdownText, int position) {
+        this.markdownText = markdownText;
+        this.position = position;
+    }
 }

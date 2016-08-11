@@ -21,4 +21,8 @@ public class Image {
     @JoinColumn(name = "site_name")
     private Site site;
 
+    public Image(String url, int position) {
+        this.url = url;
+        this.position = position;
+    }
 }

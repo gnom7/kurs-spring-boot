@@ -20,12 +20,16 @@ public class Video implements Serializable {
 
     private int height;
 
-    private boolean autoplay;
-
-    private boolean videoLoop;
+    private int position;
 
     @ManyToOne
     @JoinColumn(name = "site_name")
     private Site site;
 
+    public Video(String url, int width, int height, int position) {
+        this.url = url;
+        this.width = width;
+        this.height = height;
+        this.position = position;
+    }
 }

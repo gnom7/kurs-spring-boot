@@ -1,21 +1,42 @@
 package otg.k.kurs.dto;
 
 import lombok.Data;
+import otg.k.kurs.domain.Image;
+import otg.k.kurs.domain.Text;
+import otg.k.kurs.domain.Video;
 
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 public class SiteDto {
 
-    @NotNull
     private String siteName;
 
     private String theme;
 
-    private String grid;
+    private int[][] grid;
 
     private boolean allowRating;
 
     private boolean allowComments;
 
+    private List<Image> images;
+
+    private List<Text> texts;
+
+    private List<Video> videos;
+
+    public SiteDto(){}
+
+    public SiteDto(String siteName, String theme, int[][] grid, boolean allowRating,
+                   boolean allowComments, List<Image> images, List<Text> texts, List<Video> videos) {
+        this.siteName = siteName;
+        this.theme = theme;
+        this.grid = grid;
+        this.allowRating = allowRating;
+        this.allowComments = allowComments;
+        this.images = images;
+        this.texts = texts;
+        this.videos = videos;
+    }
 }
