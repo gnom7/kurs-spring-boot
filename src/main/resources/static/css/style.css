@@ -33,9 +33,7 @@ body {
 }
 
 .my-content {
-    /*background-color: #0a4b3e;*/
     min-height: 20vh;
-    border: thin solid black;
     display: table;
 }
 

@@ -22,6 +22,8 @@ public class Text implements Serializable {
     @JoinColumn(name = "site_name")
     private Site site;
 
+    public Text(){}
+
     public Text(String markdownText, int position) {
         this.markdownText = markdownText;
         this.position = position;

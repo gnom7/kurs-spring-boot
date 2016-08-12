@@ -7,9 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import otg.k.kurs.domain.Site;
+import otg.k.kurs.domain.User;
+import otg.k.kurs.dto.SiteDto;
 import otg.k.kurs.repository.SiteRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Service("siteService")
@@ -19,10 +22,8 @@ public class SiteServiceImpl implements SiteService{
     @Autowired
     private SiteRepository siteRepository;
 
-    @Override
-    public Site getSite(String user) {
-        return null;
-    }
+    @Autowired
+    private UserService userService;
 
     @Override
     public boolean isSiteNameExist(String siteName){
@@ -30,13 +31,26 @@ public class SiteServiceImpl implements SiteService{
     }
 
     @Override
-    public Site createSite(String siteJSON) throws IOException {
+    public Site createSite(String siteDtoJSON, User user) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(siteJSON, Site.class);
+        SiteDto siteDto = mapper.readValue(siteDtoJSON, SiteDto.class);
+        Site site = new Site(siteDto);
+        site.setUser(user);
+        return site;
     }
 
     @Override
     public void saveSite(Site site){
         siteRepository.save(site);
+    }
+
+    @Override
+    public Site findBySiteName(String siteName){
+        return siteRepository.findBySiteName(siteName);
+    }
+
+    @Override
+    public List<Site> findByUser(String username){
+        return siteRepository.findByUser(userService.findUserByUsername(username));
     }
 }

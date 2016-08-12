@@ -4,9 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import otg.k.kurs.domain.Site;
 import otg.k.kurs.domain.User;
 
+import java.util.List;
+
 public interface SiteRepository extends JpaRepository<Site, String> {
 
-    Site findByUser(User User);
+    List<Site> findByUser(User User);
 
     Site findBySiteName(String siteName);
 

@@ -5,8 +5,9 @@
 <head>
     <title th:text="#{constructor.title}">Constructor</title>
     <th:block layout:fragment="styles">
-        <!--<link rel="stylesheet" href="css/custom/constructor.css" th:href="@{/css/custom/constructor.css}"/>-->
-
+        <style>
+            .my-content{border: thin solid black;}
+        </style>
     </th:block>
 </head>
 <body>
@@ -94,7 +95,7 @@
                         })
                     }
                     if(currentElement.find('.markdown').length != 0){
-                        site.texts.push({text: currentElement.find('input').val(), position: i});
+                        site.texts.push({markdownText: currentElement.find('input').val(), position: i});
                     }
                     if(currentElement.find('iframe').length != 0){
                         var iframe = currentElement.find('iframe');

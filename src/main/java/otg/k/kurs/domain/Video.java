@@ -26,6 +26,8 @@ public class Video implements Serializable {
     @JoinColumn(name = "site_name")
     private Site site;
 
+    public Video(){}
+
     public Video(String url, int width, int height, int position) {
         this.url = url;
         this.width = width;

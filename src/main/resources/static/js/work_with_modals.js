@@ -44,12 +44,14 @@ function saveModalData() {
 
 fncs = {'film': function() {
     var videoUrl = $('#video-url').val().replace('watch?v=', 'embed/');
-    videoUrl += '?';
     var videoAutoplay = $('#video-autoplay').is(':checked');
     var videoLoop = $('#video-loop').is(':checked');
     var videoWidth = $('#video-width').val() || 300;
     var videoHeight = $('#video-height').val() || 200;
 
+    if( (videoUrl.indexOf('?') == -1) && (videoAutoplay || videoLoop)){
+        videoUrl += '?';
+    }
     if(videoAutoplay){
         videoUrl += '&autoplay=1'
     }
@@ -108,24 +110,6 @@ $(document).ready(function () {
 
     createGrid(layout);
 
-});
-
-$('.grid-layout').on('click', function () {
-    var rows = JSON.parse(this.value);
-    createGrid(rows);
-});
-
-function createGrid(rows) {
-    var container = $('.my-container');
-    container.empty();
-    rows.forEach(function (row) {
-        var rowTemplate = $('<div class="row"></div>');
-        row.forEach(function (col) {
-            rowTemplate.append('<div class="my-content col-md-' + col + '"></div>');
-        });
-        container.append(rowTemplate);
-    }) ;
-
     var editField = $('.my-content');
 
     editField.droppable({
@@ -153,6 +137,24 @@ function createGrid(rows) {
             }
         }
     });
+
+});
+
+$('.grid-layout').on('click', function () {
+    var rows = JSON.parse(this.value);
+    createGrid(rows);
+});
+
+function createGrid(rows) {
+    var container = $('.my-container');
+    container.empty();
+    rows.forEach(function (row) {
+        var rowTemplate = $('<div class="row"></div>');
+        row.forEach(function (col) {
+            rowTemplate.append('<div class="my-content col-md-' + col + '"></div>');
+        });
+        container.append(rowTemplate);
+    }) ;
 }
 
 function addElement(item, container) {

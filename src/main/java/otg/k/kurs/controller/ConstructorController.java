@@ -8,8 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import otg.k.kurs.domain.Site;
-import otg.k.kurs.domain.User;
+import otg.k.kurs.domain.*;
 import otg.k.kurs.dto.SiteDto;
 import otg.k.kurs.service.SiteService;
 import otg.k.kurs.service.UserService;
@@ -33,7 +32,8 @@ public class ConstructorController {
 
     @PostMapping("/savesite")
     public @ResponseBody String saveSite(@RequestParam(name = "site") String siteDtoJSON) throws IOException {
-        Site site = createSite(siteDtoJSON);
+        Site site = siteService.createSite(siteDtoJSON, getUser(getUsername()));
+        setSite(site);
         siteService.saveSite(site);
         return "index";
     }
@@ -58,12 +58,16 @@ public class ConstructorController {
         return userService.findUserByUsername(username);
     }
 
-    private Site createSite(String siteDtoJSON) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        SiteDto siteDto = mapper.readValue(siteDtoJSON, SiteDto.class);
-        Site site = new Site(siteDto);
-        site.setUser(getUser(getUsername()));
-        return site;
+    private void setSite(Site site){
+        for(Text text : site.getTexts()){
+            text.setSite(site);
+        }
+        for(Image image : site.getImages()){
+            image.setSite(site);
+        }
+        for(Video video : site.getVideos()){
+            video.setSite(site);
+        }
     }
 
 }

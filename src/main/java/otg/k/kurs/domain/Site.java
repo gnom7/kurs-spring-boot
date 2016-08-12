@@ -27,13 +27,13 @@ public class Site implements Serializable {
 
     private boolean allowComments;
 
-    @OneToMany(mappedBy = "site")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<Image> images;
 
-    @OneToMany(mappedBy = "site")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<Text> texts;
 
-    @OneToMany(mappedBy = "site")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<Video> videos;
 
     public Site(){}

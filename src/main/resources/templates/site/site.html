@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html layout:decorator="layout/baselayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
+<head>
+    <title>Site</title>
+    <th:block layout:fragment="styles">
+
+    </th:block>
+</head>
+<body>
+<div layout:fragment="nowrap-content">
+    <div class="container my-container">
+
+    </div>
+</div>
+
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" th:src="@{/js/showdown.min.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var error = [[${error}]];
+        var site = [[${site}]];
+        if(error != null) {
+            $('.my-container').append('<div class="alert alert-danger">' + error['message'] + '</div>')
+        } else {
+            createSite()
+        }
+
+        function createSite(){
+            createGrid(site['grid']);
+            populateGrid(site)
+        }
+
+        function createGrid(rows) {
+            var container = $('.my-container');
+            container.empty();
+            rows.forEach(function (row) {
+                var rowTemplate = $('<div class="row"></div>');
+                row.forEach(function (col) {
+                    rowTemplate.append('<div class="my-content col-md-' + col + '" style="text-align: center"></div>');
+                });
+                container.append(rowTemplate);
+            }) ;
+        }
+
+        function populateGrid(site) {
+            var myContent = $('.my-content');
+            site['texts'].forEach(function (item, index) {
+                myContent.eq(item['position']).append('<div>' + markdownToHtml(item['markdownText']) + '</div>');
+            });
+            site['videos'].forEach(function (item, index) {
+                myContent.eq(item['position']).append('<iframe width="' +
+                        item['width'] + '" height="' + item['height'] + '" src="' + item['url'] +
+                        '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>')
+            });
+            site['images'].forEach(function (item, index) {
+                myContent.eq(item['position']).append('<div class="img-thumbnail"><img src="' +
+                        item['url'] + '" /></div>')
+            });
+            myContent.each(function (index, item) {
+                $(item).find($('iframe')).after('<br />');
+            });
+        }
+
+        function markdownToHtml(text) {
+            var converter = new showdown.Converter();
+            return converter.makeHtml(text);
+        }
+
+        console.log(site);
+        /*]]>*/
+    </script>
+</th:block>
+</body>
+</html>

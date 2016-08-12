@@ -2,6 +2,7 @@ package otg.k.kurs.dto;
 
 import lombok.Data;
 import otg.k.kurs.domain.Image;
+import otg.k.kurs.domain.Site;
 import otg.k.kurs.domain.Text;
 import otg.k.kurs.domain.Video;
 
@@ -38,5 +39,16 @@ public class SiteDto {
         this.images = images;
         this.texts = texts;
         this.videos = videos;
+    }
+
+    public SiteDto(Site site){
+        this.siteName = site.getSiteName();
+        this.theme = site.getTheme();
+        this.grid = site.getGrid();
+        this.allowRating = site.isAllowRating();
+        this.allowComments = site.isAllowComments();
+        this.images = site.getImages();
+        this.texts = site.getTexts();
+        this.videos = site.getVideos();
     }
 }
