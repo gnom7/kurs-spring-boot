@@ -1,6 +1,9 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import otg.k.kurs.dto.SiteDto;
 
 import javax.persistence.*;
@@ -9,6 +12,7 @@ import java.util.List;
 
 @Data
 @Entity
+@Indexed
 @Table(name = "sites")
 public class Site implements Serializable {
 
@@ -17,10 +21,12 @@ public class Site implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "username")
+    @IndexedEmbedded
     private User user;
 
     private int[][] grid;
 
+    @Field
     private String theme;
 
     private boolean allowRating;
@@ -31,6 +37,7 @@ public class Site implements Serializable {
     private List<Image> images;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
+    @IndexedEmbedded
     private List<Text> texts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")

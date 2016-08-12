@@ -1,6 +1,7 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import org.hibernate.search.annotations.Field;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

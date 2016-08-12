@@ -1,6 +1,7 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +15,7 @@ public class Text implements Serializable {
     @GeneratedValue
     private long textId;
 
+    @Field
     private String markdownText;
 
     private int position;

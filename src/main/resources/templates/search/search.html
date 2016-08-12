@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<ol>
+    <li th:each="site : ${searchResults}">
+        <b><span th:text="${site.siteName}"></span></b> -
+        <span th:text="${site.user.username}"></span> -
+        <span th:text="${site.theme}"></span>
+    </li>
+</ol>
+</body>
+</html>
