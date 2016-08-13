@@ -1,7 +1,6 @@
 package otg.k.kurs.search;
 
 import org.apache.lucene.search.Query;
-import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
@@ -33,7 +32,8 @@ public class SiteSearch {
         Query query =
                 queryBuilder
                     .keyword()
-                    .onFields("site_name", "theme", "users.username", "texts.markdown_text")
+                    .onFields("siteName", "theme", "user.username",
+                            "texts.markdownText", "comments.comment", "comments.user.username")
                     .matching(text)
                     .createQuery();
 

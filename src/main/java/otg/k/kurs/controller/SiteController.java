@@ -3,15 +3,16 @@ package otg.k.kurs.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import otg.k.kurs.domain.Image;
-import otg.k.kurs.domain.Site;
-import otg.k.kurs.domain.Text;
-import otg.k.kurs.domain.Video;
+import org.springframework.web.bind.annotation.*;
+import otg.k.kurs.domain.*;
+import otg.k.kurs.dto.CommentDto;
 import otg.k.kurs.dto.SiteDto;
+import otg.k.kurs.service.CommentService;
 import otg.k.kurs.service.SiteService;
+import otg.k.kurs.service.UserService;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -19,6 +20,12 @@ public class SiteController {
 
     @Autowired
     private SiteService siteService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/{username}/site/{siteName}")
     public String getSite(@PathVariable String username, @PathVariable String siteName, Model model){
@@ -29,7 +36,7 @@ public class SiteController {
         };
         if(site != null) {
             SiteDto siteDto = new SiteDto(site);
-            removeSiteReferences(siteDto);
+            removeCircularReferences(siteDto);
             model.addAttribute("site", siteDto);
         } else {
             model.addAttribute("error", new Exception("Such site doesn't exist"));
@@ -37,7 +44,17 @@ public class SiteController {
         return "site/site";
     }
 
-    private void removeSiteReferences(SiteDto site){
+    @PostMapping("/addComment")
+    public @ResponseBody void addComment(@RequestParam String comment, @RequestParam String siteName){
+        Comment c = new Comment();
+        c.setComment(comment);
+        c.setDate(Calendar.getInstance().getTime());
+        c.setUser(userService.getCurrentUser());
+        c.setSite(new Site(siteName));
+        commentService.addComment(c);
+    }
+
+    private void removeCircularReferences(SiteDto site){
         for(Image image : site.getImages()){
             image.setSite(null);
         }

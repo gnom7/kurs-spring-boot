@@ -1,12 +1,14 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
+@ToString(exclude = "site")
 @Entity
 @Table(name = "texts")
 public class Text implements Serializable {
@@ -16,6 +18,7 @@ public class Text implements Serializable {
     private long textId;
 
     @Field
+    @Column(length = 100_000)
     private String markdownText;
 
     private int position;

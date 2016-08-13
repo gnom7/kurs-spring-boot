@@ -1,12 +1,11 @@
 package otg.k.kurs.dto;
 
 import lombok.Data;
-import otg.k.kurs.domain.Image;
-import otg.k.kurs.domain.Site;
-import otg.k.kurs.domain.Text;
-import otg.k.kurs.domain.Video;
+import otg.k.kurs.domain.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class SiteDto {
@@ -26,6 +25,10 @@ public class SiteDto {
     private List<Text> texts;
 
     private List<Video> videos;
+
+    private String username;
+
+    private List<CommentDto> comments;
 
     public SiteDto(){}
 
@@ -50,5 +53,7 @@ public class SiteDto {
         this.images = site.getImages();
         this.texts = site.getTexts();
         this.videos = site.getVideos();
+        this.username = site.getUser().getUsername();
+        this.comments = site.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
     }
 }

@@ -7,7 +7,7 @@
 <ol>
     <li th:each="site : ${searchResults}">
         <b><span th:text="${site.siteName}"></span></b> -
-        <span th:text="${site.user.username}"></span> -
+        <span th:text="${site.username}"></span> -
         <span th:text="${site.theme}"></span>
     </li>
 </ol>

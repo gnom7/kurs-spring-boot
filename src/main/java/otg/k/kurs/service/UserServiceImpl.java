@@ -2,6 +2,7 @@ package otg.k.kurs.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Service;
@@ -131,5 +132,19 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User findUserByUsername(String username) {return userRepository.findByUsername(username);}
+    public User getUserByUsername(String username) {return userRepository.findByUsername(username);}
+
+    @Override
+    public User getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user;
+        if (principal instanceof User) {
+            user = (User) principal;
+        } else {
+            String username = principal.toString();
+            user = getUserByUsername(username);
+//        return new User(username);     // may be useful to avoid DataB query
+        }
+        return user;
+    }
 }

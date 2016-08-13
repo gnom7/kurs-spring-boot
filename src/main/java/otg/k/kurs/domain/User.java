@@ -1,7 +1,9 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
-import org.hibernate.search.annotations.Field;
+import lombok.ToString;
+import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Index;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +41,11 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Site> sites;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
+    private String avatarUrl;
 
     public User(){}
 

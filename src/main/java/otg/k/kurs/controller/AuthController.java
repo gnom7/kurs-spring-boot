@@ -1,12 +1,14 @@
 package otg.k.kurs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import otg.k.kurs.domain.User;
 import otg.k.kurs.dto.UserDto;
 import otg.k.kurs.service.UserService;
 
@@ -17,7 +19,7 @@ import javax.validation.Valid;
 public class AuthController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/login")
     public String login(Model model) {

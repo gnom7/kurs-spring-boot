@@ -1,11 +1,13 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
+@ToString(exclude = "site")
 @Entity
 @Table(name = "videos")
 public class Video implements Serializable {

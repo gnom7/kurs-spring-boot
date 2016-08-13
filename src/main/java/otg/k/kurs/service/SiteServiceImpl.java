@@ -2,8 +2,6 @@ package otg.k.kurs.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import otg.k.kurs.domain.Site;
@@ -13,7 +11,6 @@ import otg.k.kurs.repository.SiteRepository;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @Service("siteService")
 @Transactional
@@ -51,6 +48,6 @@ public class SiteServiceImpl implements SiteService{
 
     @Override
     public List<Site> findByUser(String username){
-        return siteRepository.findByUser(userService.findUserByUsername(username));
+        return siteRepository.findByUser(userService.getUserByUsername(username));
     }
 }

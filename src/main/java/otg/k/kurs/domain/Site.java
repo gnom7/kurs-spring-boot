@@ -1,6 +1,7 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
+@ToString(exclude = "user")
 @Entity
 @Indexed
 @Table(name = "sites")
@@ -21,7 +23,7 @@ public class Site implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "username")
-    @IndexedEmbedded
+    @IndexedEmbedded(includeEmbeddedObjectId = true)
     private User user;
 
     private int[][] grid;
@@ -43,7 +45,15 @@ public class Site implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<Video> videos;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
+    @IndexedEmbedded
+    private List<Comment> comments;
+
     public Site(){}
+
+    public Site(String siteName){
+        this.siteName = siteName;
+    }
 
     public Site(SiteDto siteDto){
         this.allowComments = siteDto.isAllowComments();
@@ -55,4 +65,6 @@ public class Site implements Serializable {
         this.videos = siteDto.getVideos();
         this.texts = siteDto.getTexts();
     }
+
+
 }

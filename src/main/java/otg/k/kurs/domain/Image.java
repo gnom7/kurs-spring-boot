@@ -1,10 +1,12 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Data
+@ToString(exclude = "site")
 @Entity
 @Table(name = "images")
 public class Image {
