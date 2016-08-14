@@ -5,14 +5,13 @@
 <head>
     <title th:text="${user.username}">Site</title>
     <th:block layout:fragment="styles">
-
+        <th:block th:replace="auth/validation :: styles" />
     </th:block>
 </head>
 <body>
-<div layout:fragment="nowrap-content">
+<div layout:fragment="content">
 
     <div class="row">
-        <div class="col-md-1"></div>
         <div class="col-md-5">
             <h1 th:text="${profileUser.username}"></h1>
             <img class="img-thumbnail" width="300" height="300" th:src="@{${profileUser.avatarUrl}}" />
@@ -27,10 +26,11 @@
     </div>
 
 
-    <div th:replace="site/elements :: modals"></div>
+    <div th:replace="profile/elements :: modals"></div>
 </div>
 
 <th:block layout:fragment="scripts">
+    <th:block th:replace="auth/validation :: scripts" />
     <script th:inline="javascript">
     /*<![CDATA[*/
 

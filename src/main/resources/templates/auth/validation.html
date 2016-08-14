@@ -114,6 +114,67 @@
                 }
             });
 
+            $('#forgot-password-form').validate({
+                rules: {
+                    newPassword: {
+                        minlength: 8,
+                        maxlength: 60,
+                        required: true
+                    },
+                    confirmNewPassword: {
+                        equalTo : "#newPassword"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                },
+                success: function (label, element) {
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+                    $(element).tooltipster('hide');
+                },
+                errorPlacement: function (error, element) {
+                    var lastError = $(element).data('lastError'),
+                            newError = $(error).text();
+
+                    $(element).data('lastError', newError);
+
+                    if(newError !== '' && newError !== lastError){
+                        $(element).tooltipster('content', newError);
+                        $(element).tooltipster('show');
+                    }
+                }
+            });
+
+            $('#change-password-form').validate({
+                rules: {
+                    newPassword: {
+                        minlength: 8,
+                        maxlength: 60,
+                        required: true
+                    },
+                    confirmNewPassword: {
+                        equalTo : "#newPassword"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').removeClass('has-success').addClass('has-error');
+                },
+                success: function (label, element) {
+                    $(element).closest('.form-group').removeClass('has-error').addClass('has-success');
+                    $(element).tooltipster('hide');
+                },
+                errorPlacement: function (error, element) {
+                    var lastError = $(element).data('lastError'),
+                            newError = $(error).text();
+
+                    $(element).data('lastError', newError);
+
+                    if(newError !== '' && newError !== lastError){
+                        $(element).tooltipster('content', newError);
+                        $(element).tooltipster('show');
+                    }
+                }
+            });
         });
                 /*]]>*/
     </script>

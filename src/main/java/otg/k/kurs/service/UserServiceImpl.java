@@ -146,6 +146,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean resetPassword(String newPassword, String token){
         ForgotPasswordToken forgotToken = forgotPasswordRepository.findByToken(token);
+        if(forgotToken == null) {return false;}
         if( forgotToken.getExpirationDate().getTime() - Calendar.getInstance().getTime().getTime() < 0) {return false;}
         User user = forgotToken.getUser();
         user.setPassword(passwordEncoder.encode(newPassword));

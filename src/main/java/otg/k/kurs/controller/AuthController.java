@@ -70,12 +70,11 @@ public class AuthController {
 
     @PostMapping("/resetPassword")
     public String resetPassword(@RequestParam String newPassword,
-                                @RequestParam String confirmPassword, @RequestParam String token){
-        if( !newPassword.equals(confirmPassword) ) {
-            return "auth/login";
+                                @RequestParam String confirmNewPassword, @RequestParam String token){
+        if( newPassword.equals(confirmNewPassword) && userService.resetPassword(newPassword, token)) {
+            return "redirect:/login?passwordReseted";
         }
-        userService.resetPassword(newPassword, token);
-        return "redirect:/login?passwordReseted";
+        return "redirect:/login?passwordResetError";
     }
 
 }
