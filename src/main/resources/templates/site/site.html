@@ -10,13 +10,12 @@
 </head>
 <body>
 
-<div layout:fragment="content">
+<div layout:fragment="nowrap-content">
 
     <div class="container my-container">
 
     </div>
-    <!--sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')"-->
-    <div class="container" style="text-align: center">
+    <div class="container" sec:authorize="isAuthenticated()" style="text-align: center">
         <textarea class="form-control" id="new-comment" rows="3" placeholder="Add comment..."></textarea>
         <br />
         <p id="comment-size" style="user-select: none">Symbols left: 255</p>

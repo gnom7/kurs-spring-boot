@@ -1,15 +1,12 @@
 package otg.k.kurs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import otg.k.kurs.domain.User;
-import otg.k.kurs.dto.UserDto;
+import otg.k.kurs.domain.ForgotPasswordToken;
+import otg.k.kurs.dto.AccountDto;
 import otg.k.kurs.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,12 +25,12 @@ public class AuthController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("user", new UserDto());
+        model.addAttribute("user", new AccountDto());
         return "auth/registration";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") @Valid UserDto user,
+    public String register(@ModelAttribute("user") @Valid AccountDto user,
                            BindingResult result, HttpServletRequest request,
                            Model model) {
         model.addAttribute(user);
@@ -61,9 +58,16 @@ public class AuthController {
     }
 
     @GetMapping("/resend-confirm")
-    public String resend(@RequestParam String token, HttpServletRequest request) {
-        userService.resendConfirmationMessage(request, token);
+    public String resend(@RequestParam String email, HttpServletRequest request) {
+        userService.resendConfirmationMessage(email, request);
         return "auth/complete";
+    }
+
+    @PostMapping("/forgotPassword")
+    public String resetPassword(@RequestParam String email, Model model, HttpServletRequest request){
+        userService.sendEmailToResetPassword(email, request);
+        model.addAttribute("resetPassword", email);
+        return "auth/login";
     }
 
 }

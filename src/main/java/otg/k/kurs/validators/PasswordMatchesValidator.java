@@ -1,6 +1,6 @@
 package otg.k.kurs.validators;
 
-import otg.k.kurs.dto.UserDto;
+import otg.k.kurs.dto.AccountDto;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -14,7 +14,7 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
 
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
-        UserDto user = (UserDto) object;
+        AccountDto user = (AccountDto) object;
         return user.getPassword().equals(user.getMatchingPassword());
     }
 }

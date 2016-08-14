@@ -33,7 +33,7 @@ public class SiteSearch {
                 queryBuilder
                     .keyword()
                     .onFields("siteName", "theme", "user.username",
-                            "texts.markdownText", "comments.comment", "comments.user.username")
+                            "texts.markdownText", "comments.comment")
                     .matching(text)
                     .createQuery();
 

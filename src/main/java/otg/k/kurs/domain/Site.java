@@ -21,7 +21,7 @@ public class Site implements Serializable {
     @Id
     private String siteName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     @IndexedEmbedded(includeEmbeddedObjectId = true)
     private User user;

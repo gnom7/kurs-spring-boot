@@ -1,12 +1,14 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
+@ToString(exclude = {"user", "site"})
 @Entity
 @Table(name = "comments")
 public class Comment {

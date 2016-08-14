@@ -15,19 +15,27 @@
     <div class="alert alert-danger alert-dismissible" role="alert" th:if="${param.error}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p th:utext="${session['SPRING_SECURITY_LAST_EXCEPTION']}"><strong>Error!</strong> Invalid username or password.</p>
+        <div th:if="${'User is disabled'.equals(session['SPRING_SECURITY_LAST_EXCEPTION'].getMessage())}">
+            <a data-toggle="modal" data-target="#resendConfirmationEmail" href=""
+               th:text="#{registration.resendConfirmationEmail}" style="color: black"></a>
+        </div>
     </div>
     <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.logout}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p th:utext="#{login.successLogout}"><strong>Logout!</strong> You have been logged out.</p>
+        <p th:utext="#{login.successLogout}"><strong>Logout!</strong> You have been successfully logged out.</p>
     </div>
     <div class="alert alert-success alert-dismissible" role="alert" th:if="${param.activate}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p th:text="#{registration.activate}">You confirm your account</p>
     </div>
+    <div class="alert alert-success alert-dismissible" role="alert" th:if="${resetPassword != null}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p th:text="#{registration.resetPassword}">Check email to reset password please</p>
+    </div>
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <form th:action="@{/login}" id="login-form" method="post">
+            <form th:action="@{~/login}" id="login-form" method="POST">
                 <div class="form-group">
                     <label for="username" th:text="#{login.username}">Username</label>
                     <input type="text" class="form-control" id="username" name="username" th:placeholder="#{login.username}"/>
@@ -36,7 +44,7 @@
                     <label for="password" th:text="#{login.password}">Password</label>
                     <input type="password" class="form-control" id="password" name="password" th:placeholder="#{login.password}"/>
                 </div>
-                <a href="#" th:text="#{login.forgot}"></a>
+                <a href="" data-toggle="modal" data-target="#forgotPassword" th:text="#{login.forgot}"></a>
                 <br/>
                 <div class="btn-group" style="display: table; margin: 20px auto">
                     <button type="submit" class="btn btn-default" th:text="#{navbar.signin}">Submit</button>
@@ -52,11 +60,11 @@
                 </div>
             </form>
         </div>
-        <!--<div class="col-md-4"></div>-->
     </div>
 
     <th:block th:replace="connect/facebookConnect :: connect"/>
     <th:block th:replace="connect/twitterConnect :: connect"/>
+    <div th:replace="auth/elements :: modals"></div>
 </div>
 
 <th:block layout:fragment="scripts">

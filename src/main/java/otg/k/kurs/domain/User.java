@@ -1,9 +1,7 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
-import lombok.ToString;
 import org.hibernate.search.annotations.*;
-import org.hibernate.search.annotations.Index;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,13 +20,16 @@ public class User implements UserDetails {
     @Id
     private String username;
 
+    @Field
     private String firstname;
 
+    @Field
     private String lastname;
 
     @Column(unique = true)
     private String email;
 
+    @Column(length = 60)
     private String password;
 
     private boolean locked;

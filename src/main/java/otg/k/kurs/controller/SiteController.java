@@ -1,6 +1,7 @@
 package otg.k.kurs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class SiteController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/{username}/site/{siteName}")
+    @GetMapping("/{username}/sites/{siteName}")
     public String getSite(@PathVariable String username, @PathVariable String siteName, Model model){
         List<Site> sites = siteService.findByUser(username);
         Site site = null;

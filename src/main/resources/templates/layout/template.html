@@ -22,6 +22,11 @@
                <!-- Collect the nav links, forms, and other content for toggling -->
                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                    <ul class="nav navbar-nav navbar-right">
+                       <li>
+                           <form id="search-form" method="get" th:action="@{~/search}" onsubmit="return q.value != ''">
+                               <input id="search-input" type="search" name="q" placeholder="Search" />
+                           </form>
+                       </li>
                        <li class="dropdown">
                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                <span class="glyphicon glyphicon-globe" aria-hidden="true"></span> <b class="caret"></b>

@@ -7,16 +7,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import otg.k.kurs.domain.ForgotPasswordToken;
 import otg.k.kurs.domain.Role;
 import otg.k.kurs.domain.User;
 import otg.k.kurs.domain.VerificationToken;
-import otg.k.kurs.dto.UserDto;
+import otg.k.kurs.dto.AccountDto;
+import otg.k.kurs.event.ForgotPasswordEvent;
 import otg.k.kurs.event.OnRegistrationCompleteEvent;
+import otg.k.kurs.repository.ForgotPasswordRepository;
 import otg.k.kurs.repository.TokenRepository;
 import otg.k.kurs.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -28,6 +32,9 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private TokenRepository tokenRepository;
+
+    @Autowired
+    private ForgotPasswordRepository forgotPasswordRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -48,17 +55,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public boolean registerUser(UserDto userDto, HttpServletRequest request) {
-        User user = saveUser(userDto);
+    public boolean registerUser(AccountDto accountDto, HttpServletRequest request) {
+        User user = saveUser(accountDto);
         if (user == null) {
             return false;
         }
         VerificationToken verToken = createVerificationToken(user);
-        publishEvent(request, user, verToken.getToken());
+        publishSendConfirmationTokenEvent(request, user, verToken.getToken());
         return true;
     }
 
-    private boolean publishEvent(HttpServletRequest request, User user, String token){
+    private boolean publishSendConfirmationTokenEvent(HttpServletRequest request, User user, String token){
         try {
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, token,
                     String.format("%s://%s:%d", request.getScheme(),
@@ -91,33 +98,30 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void resendConfirmationMessage(HttpServletRequest request, String token) {
-        VerificationToken verToken = tokenRepository.findByToken(token);
-        User user = verToken.getUser();
-        verToken.refreshToken();
-        tokenRepository.save(verToken);
-        publishEvent(request, user, verToken.getToken());
-
+    public void resendConfirmationMessage(String email, HttpServletRequest request) {
+        User user = userRepository.findByEmail(email);
+        VerificationToken verToken = createVerificationToken(user);
+        publishSendConfirmationTokenEvent(request, user, verToken.getToken());
     }
 
-    private User saveUser(UserDto userDto) {
-        User user = createUser(userDto);
-        return (!userExist(userDto) && userRepository.save(user) != null) ? user : null;
+    private User saveUser(AccountDto accountDto) {
+        User user = createUser(accountDto);
+        return (!userExist(accountDto) && userRepository.save(user) != null) ? user : null;
     }
 
-    private User createUser(UserDto userDto) {
+    private User createUser(AccountDto accountDto) {
         User user = new User();
-        user.setFirstname(userDto.getFirstname());
-        user.setLastname(userDto.getLastname());
-        user.setUsername(userDto.getUsername());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setFirstname(accountDto.getFirstname());
+        user.setLastname(accountDto.getLastname());
+        user.setUsername(accountDto.getUsername());
+        user.setEmail(accountDto.getEmail());
+        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEnabled(false);
         user.setRole(Role.ROLE_USER);
         return user;
     }
 
-    private boolean userExist(UserDto user) {
+    private boolean userExist(AccountDto user) {
         return emailExist(user.getEmail()) || usernameExist(user.getUsername());
     }
 
@@ -137,14 +141,46 @@ public class UserServiceImpl implements UserService{
     @Override
     public User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user;
+        User user = null;
         if (principal instanceof User) {
             user = (User) principal;
         } else {
             String username = principal.toString();
             user = getUserByUsername(username);
-//        return new User(username);     // may be useful to avoid DataB query
         }
         return user;
+    }
+
+    @Override
+    public boolean saveUser(User user){return userRepository.save(user) != null;}
+
+    @Override
+    public boolean changePassword(String oldPassword, String newPassword){
+        User user = getCurrentUser();
+        if( passwordEncoder.matches(oldPassword, user.getPassword()) ){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            return userRepository.save(user) != null;
+        }
+        return false;
+    }
+
+    @Override
+    public void sendEmailToResetPassword(String email, HttpServletRequest request){
+        String token = UUID.randomUUID().toString();
+        Date expirationDate = new Date(Calendar.getInstance().getTime().getTime() + 5*60*1000);
+        ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken(token, email, expirationDate);
+        publishForgotPasswordEvent(request, forgotPasswordToken);
+        forgotPasswordRepository.save(forgotPasswordToken);
+    }
+
+    private boolean publishForgotPasswordEvent(HttpServletRequest request, ForgotPasswordToken token){
+        try {
+            eventPublisher.publishEvent(new ForgotPasswordEvent(userRepository.findByEmail(token.getEmail()), token,
+                    String.format("%s://%s:%d", request.getScheme(),
+                            request.getServerName(), request.getServerPort())));
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }
