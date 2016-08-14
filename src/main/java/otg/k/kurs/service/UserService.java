@@ -32,4 +32,6 @@ public interface UserService {
     boolean changePassword(String oldPassword, String newPassword);
 
     void sendEmailToResetPassword(String email, HttpServletRequest request);
+
+    boolean resetPassword(String newPassword, String token);
 }

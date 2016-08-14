@@ -41,33 +41,41 @@ public class AuthController {
             result.rejectValue("email", "registration.userExist");
             return "auth/registration";
         }
-        return "auth/complete";
+        return "redirect:/login?registerSuccess";
     }
 
     @GetMapping("/confirm")
     public String confirm(@RequestParam("confirm_token") String token) {
         return userService.activateUser(token) ?
-                "redirect:/login?activate=true" : "redirect:/auth-error?confirm_token=" + token;
-    }
-
-    @GetMapping("/auth-error")
-    public String error(Model model, @RequestParam("confirm_token") String token) {
-        model.addAttribute("authError", true);
-        model.addAttribute("oldToken", token);
-        return "auth/complete";
+                "redirect:/login?activate=true" : "redirect:/login?wrongToken=" + token;
     }
 
     @GetMapping("/resend-confirm")
     public String resend(@RequestParam String email, HttpServletRequest request) {
         userService.resendConfirmationMessage(email, request);
-        return "auth/complete";
+        return "redirect:/login?resendConfirmEmailComplete";
     }
 
     @PostMapping("/forgotPassword")
-    public String resetPassword(@RequestParam String email, Model model, HttpServletRequest request){
+    public String sendResetPasswordEmail(@RequestParam String email, Model model, HttpServletRequest request){
         userService.sendEmailToResetPassword(email, request);
-        model.addAttribute("resetPassword", email);
-        return "auth/login";
+        return "redirect:/login?resetPassword";
+    }
+
+    @GetMapping("/forgotPassword")
+    public String getResetPasswordPage(@RequestParam String token, Model model){
+        model.addAttribute("token", token);
+        return "auth/forgotPassword";
+    }
+
+    @PostMapping("/resetPassword")
+    public String resetPassword(@RequestParam String newPassword,
+                                @RequestParam String confirmPassword, @RequestParam String token){
+        if( !newPassword.equals(confirmPassword) ) {
+            return "auth/login";
+        }
+        userService.resetPassword(newPassword, token);
+        return "redirect:/login?passwordReseted";
     }
 
 }

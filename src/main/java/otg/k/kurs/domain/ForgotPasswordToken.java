@@ -2,9 +2,7 @@ package otg.k.kurs.domain;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Data
@@ -15,16 +13,18 @@ public class ForgotPasswordToken {
     @Id
     private String token;
 
-    private String email;
-
     private Date expirationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private User user;
 
     public ForgotPasswordToken() {
     }
 
-    public ForgotPasswordToken(String token, String email, Date expirationDate) {
+    public ForgotPasswordToken(String token, User user, Date expirationDate) {
         this.token = token;
-        this.email = email;
+        this.user = user;
         this.expirationDate = expirationDate;
     }
 }

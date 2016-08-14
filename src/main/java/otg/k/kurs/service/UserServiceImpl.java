@@ -65,17 +65,6 @@ public class UserServiceImpl implements UserService{
         return true;
     }
 
-    private boolean publishSendConfirmationTokenEvent(HttpServletRequest request, User user, String token){
-        try {
-            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, token,
-                    String.format("%s://%s:%d", request.getScheme(),
-                            request.getServerName(), request.getServerPort()), request.getLocale()));
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
     @Override
     public VerificationToken createVerificationToken(User user) {
         return tokenRepository.save(new VerificationToken(user));
@@ -83,6 +72,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public boolean activateUser(String token) {
+        if(token == null) return false;
         VerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) {
             return false;
@@ -102,27 +92,6 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByEmail(email);
         VerificationToken verToken = createVerificationToken(user);
         publishSendConfirmationTokenEvent(request, user, verToken.getToken());
-    }
-
-    private User saveUser(AccountDto accountDto) {
-        User user = createUser(accountDto);
-        return (!userExist(accountDto) && userRepository.save(user) != null) ? user : null;
-    }
-
-    private User createUser(AccountDto accountDto) {
-        User user = new User();
-        user.setFirstname(accountDto.getFirstname());
-        user.setLastname(accountDto.getLastname());
-        user.setUsername(accountDto.getUsername());
-        user.setEmail(accountDto.getEmail());
-        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
-        user.setEnabled(false);
-        user.setRole(Role.ROLE_USER);
-        return user;
-    }
-
-    private boolean userExist(AccountDto user) {
-        return emailExist(user.getEmail()) || usernameExist(user.getUsername());
     }
 
     @Override
@@ -166,18 +135,60 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void sendEmailToResetPassword(String email, HttpServletRequest request){
+        User user = userRepository.findByEmail(email);
         String token = UUID.randomUUID().toString();
         Date expirationDate = new Date(Calendar.getInstance().getTime().getTime() + 5*60*1000);
-        ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken(token, email, expirationDate);
+        ForgotPasswordToken forgotPasswordToken = new ForgotPasswordToken(token, user, expirationDate);
         publishForgotPasswordEvent(request, forgotPasswordToken);
         forgotPasswordRepository.save(forgotPasswordToken);
     }
 
+    @Override
+    public boolean resetPassword(String newPassword, String token){
+        ForgotPasswordToken forgotToken = forgotPasswordRepository.findByToken(token);
+        if( forgotToken.getExpirationDate().getTime() - Calendar.getInstance().getTime().getTime() < 0) {return false;}
+        User user = forgotToken.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return userRepository.save(user) != null;
+    }
+
     private boolean publishForgotPasswordEvent(HttpServletRequest request, ForgotPasswordToken token){
         try {
-            eventPublisher.publishEvent(new ForgotPasswordEvent(userRepository.findByEmail(token.getEmail()), token,
+            eventPublisher.publishEvent(new ForgotPasswordEvent(token,
                     String.format("%s://%s:%d", request.getScheme(),
                             request.getServerName(), request.getServerPort())));
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private User saveUser(AccountDto accountDto) {
+        User user = createUser(accountDto);
+        return (!userExist(accountDto) && userRepository.save(user) != null) ? user : null;
+    }
+
+    private User createUser(AccountDto accountDto) {
+        User user = new User();
+        user.setFirstname(accountDto.getFirstname());
+        user.setLastname(accountDto.getLastname());
+        user.setUsername(accountDto.getUsername());
+        user.setEmail(accountDto.getEmail());
+        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+        user.setEnabled(false);
+        user.setRole(Role.ROLE_USER);
+        return user;
+    }
+
+    private boolean userExist(AccountDto user) {
+        return emailExist(user.getEmail()) || usernameExist(user.getUsername());
+    }
+
+    private boolean publishSendConfirmationTokenEvent(HttpServletRequest request, User user, String token){
+        try {
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, token,
+                    String.format("%s://%s:%d", request.getScheme(),
+                            request.getServerName(), request.getServerPort()), request.getLocale()));
         } catch (Exception e) {
             return false;
         }

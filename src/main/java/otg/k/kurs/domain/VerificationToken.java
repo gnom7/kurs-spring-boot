@@ -23,8 +23,8 @@ public class VerificationToken {
 
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "username")
+    @ManyToOne
+    @JoinColumn(name = "username")
     private User user;
 
     private Date expiryDate;

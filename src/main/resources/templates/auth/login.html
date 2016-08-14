@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html layout:decorator="layout/baselayout"
-      xmlns:th="http://www.w3.org/1999/xhtml"
-      xmlns:layout="http://www.w3.org/1999/xhtml">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
 <head>
     <title th:text="#{login.authorization}">Authorization</title>
     <th:block layout:fragment="styles">
@@ -24,13 +24,29 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p th:utext="#{login.successLogout}"><strong>Logout!</strong> You have been successfully logged out.</p>
     </div>
-    <div class="alert alert-success alert-dismissible" role="alert" th:if="${param.activate}">
+    <div class="alert alert-danger alert-dismissible" role="alert" th:if="${param.wrongToken}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p th:utext="#{registration.wrongToken}"><strong>Wrong token!</strong></p>
+    </div>
+    <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.activate}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p th:text="#{registration.activate}">You confirm your account</p>
     </div>
-    <div class="alert alert-success alert-dismissible" role="alert" th:if="${resetPassword != null}">
+    <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.resetPassword}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p th:text="#{registration.resetPassword}">Check email to reset password please</p>
+    </div>
+    <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.passwordReseted}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p th:text="#{registration.passwordReseted}">Password reseted</p>
+    </div>
+    <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.registerSuccess}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p th:text="#{registration.complete}">Check your email to complete registration please</p>
+    </div>
+    <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.resendConfirmEmailComplete}">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <p th:text="#{registration.confirmEmailResended}">Confirmation email was resended</p>
     </div>
     <div class="row">
         <div class="col-md-4"></div>

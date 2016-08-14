@@ -13,8 +13,8 @@ public class ForgotPasswordEvent extends ApplicationEvent {
 
     private final ForgotPasswordToken token;
 
-    public ForgotPasswordEvent(User user, ForgotPasswordToken token, String applicationUrl) {
-        super(user);
+    public ForgotPasswordEvent(ForgotPasswordToken token, String applicationUrl) {
+        super(token.getUser());
         this.token = token;
         this.applicationUrl = applicationUrl;
     }

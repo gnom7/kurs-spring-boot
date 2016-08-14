@@ -38,20 +38,19 @@ public class ForgotPasswordListener implements ApplicationListener<ForgotPasswor
 
     @Async
     private void confirmRegistration(ForgotPasswordEvent event) {
-        ForgotPasswordToken token = event.getToken();
         try {
-            mailSender.send(createMessage(token.getEmail(), token.getToken(), event.getApplicationUrl()));
+            mailSender.send(createMessage(event.getToken(), event.getApplicationUrl()));
         } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
 
     @Async
-    private MimeMessage createMessage(String email, String UUID, String url) throws MessagingException {
+    private MimeMessage createMessage(ForgotPasswordToken token, String url) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-        helper.setTo(email);
-        String msg = "<a href=\"" + url + "/forgotPassword?token=" + UUID + "\">Change password</a>";
+        helper.setTo(token.getUser().getEmail());
+        String msg = "<a href=\"" + url + "/forgotPassword?token=" + token.getToken() + "\">Change password</a>";
         helper.setSubject("Forgot password");
         helper.setText(msg, true);
         return mimeMessage;
