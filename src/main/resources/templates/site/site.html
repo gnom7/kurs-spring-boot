@@ -4,7 +4,6 @@
       xmlns:layout="http://www.thymeleaf.org">
 <head>
     <title th:text="${'Site - ' + site.siteName}">Site</title>
-    <link rel="stylesheet" th:src="@{/css/menu.scss}" />
     <th:block layout:fragment="styles" />
 </head>
 <body>
@@ -59,7 +58,6 @@
 </div>
 
 <th:block layout:fragment="scripts">
-    <script type="text/javascript" th:src="@{/js/menu.js}"></script>
     <script type="text/javascript" th:src="@{/js/showdown.min.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/

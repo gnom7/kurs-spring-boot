@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-@ToString(exclude = "user")
+@ToString(exclude = {"user", "siteHolder"})
 @Entity
 @Indexed
 @Table(name = "sites")
@@ -25,6 +25,15 @@ public class Site implements Serializable {
     @JoinColumn(name = "username")
     @IndexedEmbedded(includeEmbeddedObjectId = true, depth = 1)
     private User user;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "siteHolderName")
+    @IndexedEmbedded(includeEmbeddedObjectId = true, depth = 1)
+    private SiteHolder siteHolder;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
+    @IndexedEmbedded(depth = 1)
+    private List<Tag> tags;
 
     private int[][] grid;
 

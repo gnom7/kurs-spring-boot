@@ -49,6 +49,10 @@ public class User implements UserDetails {
     @IndexedEmbedded
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "user")
+    @IndexedEmbedded
+    private List<SiteHolder> siteHolders;
+
     private String avatarUrl;
 
     public User(){}

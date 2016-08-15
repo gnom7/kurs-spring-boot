@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import otg.k.kurs.domain.*;
 import otg.k.kurs.dto.SiteDto;
+import otg.k.kurs.service.SiteHolderService;
 import otg.k.kurs.service.SiteService;
 import otg.k.kurs.service.UserService;
 
@@ -23,6 +24,9 @@ public class ConstructorController {
     private SiteService siteService;
 
     @Autowired
+    private SiteHolderService siteHolderService;
+
+    @Autowired
     private UserService userService;
 
     @GetMapping("constructor")
@@ -31,27 +35,34 @@ public class ConstructorController {
     }
 
     @PostMapping("/savesite")
-    public @ResponseBody String saveSite(@RequestParam(name = "site") String siteDtoJSON) throws IOException {
-        Site site = siteService.createSite(siteDtoJSON, userService.getCurrentUser());
-        setSite(site);
-        siteService.saveSite(site);
+    public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON) throws IOException {
+        SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON, userService.getCurrentUser());
+        setSite(siteHolder);
+        siteHolderService.saveSiteHolder(siteHolder);
         return "index";
     }
 
-    @PostMapping("/checkSiteNameExist")
-    public @ResponseBody Boolean checkSiteName(@RequestParam String siteName){
-        return siteService.isSiteNameExist(siteName);
+//    @PostMapping("/checkSiteNameExist")
+//    public @ResponseBody Boolean checkSiteName(@RequestParam String siteName){
+//        return siteService.isSiteNameExist(siteName);
+//    }
+
+    @PostMapping("/checkSiteHolderNameExist")
+    public @ResponseBody Boolean checkSiteHolderName(@RequestParam String siteHolderName){
+        return siteHolderService.isSiteHolderNameExist(siteHolderName);
     }
 
-    private void setSite(Site site){
-        for(Text text : site.getTexts()){
-            text.setSite(site);
-        }
-        for(Image image : site.getImages()){
-            image.setSite(site);
-        }
-        for(Video video : site.getVideos()){
-            video.setSite(site);
+    private void setSite(SiteHolder siteHolder){
+        for(Site site : siteHolder.getSites()){
+            for(Text text : site.getTexts()){
+                text.setSite(site);
+            }
+            for(Image image : site.getImages()){
+                image.setSite(site);
+            }
+            for(Video video : site.getVideos()){
+                video.setSite(site);
+            }
         }
     }
 

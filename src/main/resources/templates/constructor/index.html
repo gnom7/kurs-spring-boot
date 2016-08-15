@@ -19,9 +19,14 @@
         <input class="grid-layout" type="image" id="3" th:src="@{/layouts/3.png}" value="[[4,8]]" />
         <input class="grid-layout" type="image" id="4" th:src="@{/layouts/4.png}" value="[[12],[6,6],[12]]" />
 
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#siteHolder-opts-modal"
+                style="float: right;" id="siteHolder-opts">
+            <span class="glyphicon glyphicon-cog"></span> Site options
+        </button>
+        <br />
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#site-opts-modal"
                 style="float: right;" id="site-opts">
-            <span class="glyphicon glyphicon-cog"></span> Options
+            <span class="glyphicon glyphicon-cog"></span> Page options
         </button>
     </div>
     <div class="container my-toolbar">
@@ -51,30 +56,54 @@
     <script type="text/javascript" th:src="@{/js/cloudinary_widgets.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
+        var siteHolder = {
+            sites: [],
+            siteHolderName: ''
+        };
         var site = {
             images: [],
             texts: [],
-            videos: []
+            videos: [],
+            tags: []
         };
 
-        var siteName = $('#site-name').get(0);
-
         $('.save-site').on('click', function () {
+            var siteName = $('#site-name').get(0);
             var errorDiv = $('.save-site-error').get(0);
             if(!siteName.checkValidity()){
+                errorDiv.style.display = 'inline-block';
+                errorDiv.innerHTML = '<p>Please, enter page name</p>';
+                return;
+            }
+            if(errorDiv) {errorDiv.remove();}
+            var siteOptsModal = $("#site-opts-modal");
+            siteOptsModal.modal('hide');
+            populateSiteData(site);
+            siteHolder.sites.push(site);
+            clearSiteData(site);
+            clearModal(siteOptsModal);
+            renderConstructorPage();
+        });
+
+        $('.save-siteHolder').on('click', function () {
+            var siteHolderName = $('#siteHolder-name').get(0);
+            var errorDiv = $('.save-siteHolder-error').get(0);
+            if(!siteHolderName.checkValidity()){
                 errorDiv.style.display = 'inline-block';
                 errorDiv.innerHTML = '<p>Please, enter site name</p>';
                 return;
             }
-            $.post('checkSiteNameExist', {
-                siteName: siteName.value,
+            $.post('checkSiteHolderNameExist', {
+                siteHolderName: siteHolderName.value,
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
             }, function (exist) {
                 if(exist){
+                    var errorDiv = $('.save-siteHolder-error').get(0);
                     errorDiv.style.display = 'inline-block';
                     errorDiv.innerHTML = '<p>Site with such name already exist</p>';
                 } else {
-                    sendSiteData()
+                    siteHolder.siteHolderName = siteHolderName.value;
+                    sendSiteHolderData();
                 }
             });
         });
@@ -83,7 +112,8 @@
             site.grid = this.value;
         });
 
-        function populateSiteData() {
+        function populateSiteData(site) {
+            var siteName = $('#site-name').get(0);
             var container = $('.my-container');
             for(var i = 0; i < container.find('.my-content').length; i++){
                 var elements = $('.my-content').eq(i).children('.my-element');
@@ -106,16 +136,25 @@
                 }
             }
             site.siteName = siteName.value;
+            site.tags = $('#site-tags').value;
             site.theme = $('input[name = "theme"]:checked').val();
             site.allowRating = $('input[name = "allowRating"]').is(':checked');
             site.allowComments = $('input[name = "allowComments"]').is(':checked');
             if(!site.grid) {site.grid = [[12],[6,6],[12]]} // grid which is rendered by default
         }
 
-        function sendSiteData() {
-            populateSiteData();
+        function clearSiteData(site) {
+            site = {
+                images: [],
+                texts: [],
+                videos: [],
+                tags: []
+            };
+        }
+
+        function sendSiteHolderData() {
             $.post('savesite', {
-                site: JSON.stringify(site),
+                siteHolder: JSON.stringify(siteHolder),
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
             }, function (href) {
                 window.location.href = href;

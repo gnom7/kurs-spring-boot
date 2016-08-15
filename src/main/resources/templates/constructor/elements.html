@@ -68,23 +68,41 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Options</h4>
+                    <h4 class="modal-title">Page options</h4>
                 </div>
-                <!--<form id="save-site-form" th:action="@{/}" th:object="${site}" method="post">-->
-                <p><b>Site theme:</b><br />
-                    <label><input type="radio" name="theme" value="white" checked="checked" />White</label><br />
+                <p><b>Page theme:</b><br />
+                    <label><input type="radio" name="theme" value="white" id="white" checked="checked" />White</label><br />
                     <label><input type="radio" name="theme" value="dark" />Dark</label>
                 </p>
                 <label><input type="checkbox" name="allowRating" />Allow rating</label>
                 <label><input type="checkbox" name="allowComments" />Allow comments</label>
-                <input type="hidden" />
                 <div class="modal-footer">
-                    <label style="float: left;">Site name: <input id="site-name" name="site-name" required="required" /></label>
+                    <label style="float: left;">Page tags: <input id="site-tags" name="site-tags" /></label>
+                    <br />
+                    <label style="float: left; clear:both;">Page name: <input id="site-name" name="site-name" required="required" /></label>
                     <div class="alert alert-danger save-site-error" style="display: none; float: left; clear: left; margin-left: 70px;"></div>
-                    <button type="submit" class="btn btn-success save-site">Save site</button>
+                    <button type="submit" class="btn btn-success save-site">Save page</button>
                     <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
-                <!--</form>-->
+            </div>
+        </div>
+    </div>
+
+    <div id="siteHolder-opts-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Site options</h4>
+                </div>
+                <!--/////////////-->
+                <div class="modal-footer">
+                    <label style="float: left;">Site name: <input id="siteHolder-name" name="site-name" required="required" /></label>
+                    <div class="alert alert-danger save-siteHolder-error" style="display: none; float: left; clear: left; margin-left: 70px;"></div>
+                    <button type="submit" class="btn btn-success save-siteHolder">Save site</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>

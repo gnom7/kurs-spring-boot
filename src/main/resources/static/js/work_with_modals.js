@@ -22,15 +22,22 @@ $(modal).on('show.bs.modal', function (e) {
 });
 
 $(modal).on('hidden.bs.modal', function () {
-    if($(this).attr('id') == 'site-opts-modal') {return;}
-    $.each($(this).find('input'), function (index, item) {
+    var self = $(this);
+    if(self.attr('id') == 'site-opts-modal') {return;}
+    if(self.attr('id') == 'siteHolder-opts-modal') {return;}
+    clearModal(self);
+});
+
+function clearModal(self) {
+    $.each(self.find('input'), function (index, item) {
+        if(item.id == 'white') {return;}
         item.checked = false;
         item.value = '';
     });
-    $.each($(this).find('textarea'), function (index, item) {
+    $.each(self.find('textarea'), function (index, item) {
         item.value = '';
     })
-});
+}
 
 $('.modal-data').on('click', function () {
     saveModalData(this);
@@ -90,12 +97,13 @@ fncs = {'film': function() {
             modalInvoker.children('.markdown').remove();
             modalInvoker.prepend(markdownToHtml(text));
         }
-    },
-    'camera': function () {
-
     }};
 
 $(document).ready(function () {
+    renderConstructorPage();
+});
+
+function renderConstructorPage() {
     // config
     var layout =  [[12], [6, 6], [12]];
 
@@ -138,7 +146,7 @@ $(document).ready(function () {
         }
     });
 
-});
+}
 
 $('.grid-layout').on('click', function () {
     var rows = JSON.parse(this.value);
@@ -148,6 +156,7 @@ $('.grid-layout').on('click', function () {
 function createGrid(rows) {
     var container = $('.my-container');
     container.empty();
+    if(!rows) rows = [[12], [6,6], [12]];
     rows.forEach(function (row) {
         var rowTemplate = $('<div class="row"></div>');
         row.forEach(function (col) {
