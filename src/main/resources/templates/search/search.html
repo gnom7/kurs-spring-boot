@@ -25,7 +25,7 @@
         <section id="content1">
             <h3 th:if="${searchSites.size()} == 0" th:text="${'No results'}"></h3>
             <ol>
-                <li th:each="site : ${searchSites}">
+                <li th:each="site : ${searchSites}" type="search">
                     <b>Site: <a th:href="@{~/{username}/sites/{siteName}(username = ${site.username}, siteName = ${site.siteName})}"
                                 th:text="${site.siteName}"></a></b><br />
                     Creator: <a th:href="@{~/{username}(username = ${site.username})}" th:text="${site.username}"></a><br />

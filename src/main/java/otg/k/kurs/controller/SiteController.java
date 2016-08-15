@@ -32,15 +32,18 @@ public class SiteController {
     public String getSite(@PathVariable String username, @PathVariable String siteName, Model model){
         List<Site> sites = siteService.findByUser(username);
         Site site = null;
+        SiteDto siteDto = new SiteDto();
         for(Site s : sites){
             if(s.getSiteName().equals(siteName)) site = s;
         };
         if(site != null) {
-            SiteDto siteDto = new SiteDto(site);
+            siteDto = new SiteDto(site);
             removeCircularReferences(siteDto);
             model.addAttribute("site", siteDto);
         } else {
             model.addAttribute("error", new Exception("Such site doesn't exist"));
+            siteDto.setSiteName("error");
+            model.addAttribute("site", siteDto);
         }
         return "site/site";
     }
