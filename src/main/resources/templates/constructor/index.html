@@ -14,7 +14,7 @@
 <div layout:fragment="nowrap-content">
 
     <div class="container">
-        <input class="grid-layout" type="image" id="1" th:src="@{/layouts/1.png}" value="[[12]]" checked="checked" />
+        <input class="grid-layout" type="image" id="1" th:src="@{/layouts/1.png}" value="[[12]]" />
         <input class="grid-layout" type="image" id="2" th:src="@{/layouts/2.png}" value="[[6,6]]" />
         <input class="grid-layout" type="image" id="3" th:src="@{/layouts/3.png}" value="[[4,8]]" />
         <input class="grid-layout" type="image" id="4" th:src="@{/layouts/4.png}" value="[[12],[6,6],[12]]" />
@@ -79,10 +79,12 @@
             var siteOptsModal = $("#site-opts-modal");
             siteOptsModal.modal('hide');
             populateSiteData(site);
-            siteHolder.sites.push(site);
-            clearSiteData(site);
+            siteHolder.sites.push($.extend(true, {}, site));
             clearModal(siteOptsModal);
             renderConstructorPage();
+            $('#siteList').append($('<button class="btn btn-default" onclick="renderConstructorFromSite(\'' +
+                    site.siteName + '\')">' + site.siteName + '</button>'));
+            clearSiteData(site);
         });
 
         $('.save-siteHolder').on('click', function () {
@@ -109,7 +111,10 @@
         });
 
         $('.grid-layout').on('click', function () {
-            site.grid = this.value;
+            var rows = JSON.parse(this.value);
+            site.grid = rows;
+            renderConstructorPage(rows);
+            console.log(siteHolder);
         });
 
         function populateSiteData(site) {
@@ -159,6 +164,63 @@
             }, function (href) {
                 window.location.href = href;
             });
+        }
+
+        function renderConstructorFromSite(siteName) {
+            var s;
+            for(var i = 0; i < siteHolder.sites.length; i++){
+                if(siteHolder.sites[i].siteName === siteName) s = siteHolder.sites[i];
+            }
+            renderConstructorPage(s.grid);
+            populateConstructorFromSite(s);
+        }
+
+        function populateConstructorFromSite(site) {
+            var modal = $('#site-opts-modal');
+            modal.closest('#site-name').val(site.siteName);
+            modal.closest('#site-tags').val(site.tags);
+            modal.closest('#allowRating').prop('checked', site.allowRating);
+            modal.closest('#allowComments').prop('checked', site.allowComments);
+            $(site.theme + '').prop("checked", true);
+
+            var images = site.images;
+            var videos = site.videos;
+            var texts = site.texts;
+
+            var position = -1;
+            var element;
+            var container;
+            for(let i = 0; i < images.length; i++){
+                var image = images[i];
+                if(position != image.position){
+                    position = image.position;
+                    element = createElement('camera');
+                    container = $('.my-content').eq(position);
+                    container.append(element);
+                }
+                element.find('.uploadedImages')
+                        .append('<ul class="cloudinary-thumbnails"><li class="cloudinary-thumbnail active"><img src="' +
+                                image.url + '"><button onclick="$(this).closest(\'ul\').remove()" ' +
+                                'class="btn btn-danger btn-xs">×</button></li></ul>');
+            }
+
+            for(let i = 0; i < videos.length; i++){
+                var video = videos[i];
+                position = video.position;
+                element = createElement('film');
+                container = $('.my-content').eq(position);
+                container.append(element);
+                addVideo(element, video.width, video.height, video.url);
+            }
+
+            for(let i = 0; i < texts.length; i++){
+                var text = texts[i];
+                position = text.position;
+                element = createElement('font');
+                container = $('.my-content').eq(position);
+                container.append(element);
+                addText(element, text.markdownText)
+            }
         }
         /*]]>*/
     </script>

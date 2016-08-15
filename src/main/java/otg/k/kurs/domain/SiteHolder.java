@@ -16,7 +16,7 @@ public class SiteHolder {
     @Id
     private String siteHolderName;
 
-    @OneToMany(mappedBy = "siteHolder")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "siteHolder")
     private List<Site> sites;
 
     @ManyToOne

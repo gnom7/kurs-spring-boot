@@ -19,6 +19,10 @@ import java.util.List;
 public class Site implements Serializable {
 
     @Id
+    @GeneratedValue
+    private long id;
+
+    @Field
     private String siteName;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -3,6 +3,8 @@ package otg.k.kurs.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -29,11 +31,13 @@ public class ConstructorController {
     @Autowired
     private UserService userService;
 
+    @Secured("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("constructor")
     public String get(){
         return "constructor/index";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/savesite")
     public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON) throws IOException {
         SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON, userService.getCurrentUser());

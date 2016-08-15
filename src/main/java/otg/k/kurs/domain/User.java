@@ -41,15 +41,15 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    @IndexedEmbedded(includeEmbeddedObjectId = true, depth = 1)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @IndexedEmbedded(depth = 1)
     private List<Site> sites;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @IndexedEmbedded
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @IndexedEmbedded
     private List<SiteHolder> siteHolders;
 

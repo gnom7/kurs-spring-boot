@@ -66,46 +66,52 @@ fncs = {'film': function() {
         videoUrl += '&loop=1'
     }
 
-    if(modalInvoker.children('.my-tool').length != 0) {
-        modalInvoker.children('.my-tool').remove();
-        modalInvoker.prepend('<iframe width="' + videoWidth + '" height="' + videoHeight + '" src="' + videoUrl +
-            '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
-    } else {
-        var iframe = modalInvoker.children('iframe');
-        iframe.prop('width', videoWidth);
-        iframe.prop('height', videoHeight);
-        iframe.prop('src', videoUrl)
-    }
+    addVideo(modalInvoker, videoWidth, videoHeight, videoUrl);
 },
 
     'font': function () {
         var text = $('#text').val();
 
-        function markdownToHtml(text) {
-            var converter = new showdown.Converter();
-            var element = converter.makeHtml(text);
-            var wrapper = $('<div class="markdown"></div>');
-            wrapper.append(element);
-            wrapper.append($('<input type="hidden"/>').val(text));
-            return wrapper;
-        }
-
-        if(modalInvoker.children('.my-tool').length != 0) {
-            modalInvoker.children('.my-tool').remove();
-            modalInvoker.prepend(markdownToHtml(text));
-        } else {
-            modalInvoker.children('.markdown').remove();
-            modalInvoker.prepend(markdownToHtml(text));
-        }
+        addText(modalInvoker, text);
     }};
+
+function addVideo(element, videoWidth, videoHeight, videoUrl) {
+    if(element.children('.my-tool').length != 0) {
+        element.children('.my-tool').remove();
+        element.prepend('<iframe width="' + videoWidth + '" height="' + videoHeight + '" src="' + videoUrl +
+            '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
+    } else {
+        var iframe = element.children('iframe');
+        iframe.prop('width', videoWidth);
+        iframe.prop('height', videoHeight);
+        iframe.prop('src', videoUrl)
+    }
+}
+
+function addText(element, text) {
+    if(element.children('.my-tool').length != 0) {
+        element.children('.my-tool').remove();
+        element.prepend(markdownToHtml(text));
+    } else {
+        element.children('.markdown').remove();
+        element.prepend(markdownToHtml(text));
+    }
+}
+
+function markdownToHtml(text) {
+    var converter = new showdown.Converter();
+    var element = converter.makeHtml(text);
+    var wrapper = $('<div class="markdown"></div>');
+    wrapper.append(element);
+    wrapper.append($('<input type="hidden"/>').val(text));
+    return wrapper;
+}
 
 $(document).ready(function () {
     renderConstructorPage();
 });
 
-function renderConstructorPage() {
-    // config
-    var layout =  [[12], [6, 6], [12]];
+function renderConstructorPage(layout) {
 
     var toolbar = $('.my-toolbar');
 
@@ -148,11 +154,6 @@ function renderConstructorPage() {
 
 }
 
-$('.grid-layout').on('click', function () {
-    var rows = JSON.parse(this.value);
-    createGrid(rows);
-});
-
 function createGrid(rows) {
     var container = $('.my-container');
     container.empty();
@@ -182,7 +183,7 @@ function createElement(text) {
         wrapper.append('<button onclick="' +
             'widgets[$(this).siblings(\'input\').val()].open()" class="btn btn-primary btn-xs">' +
             '<span class="glyphicon glyphicon-cog"></span></button>');
-        wrapper.prepend('<div id="uploadedImages' + (widgets.length - 1) + '"></div>');
+        wrapper.prepend('<div class="uploadedImages" id="uploadedImages' + (widgets.length - 1) + '"></div>');
     } else {
         wrapper.append('<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#' +
             text + '"><span class="glyphicon glyphicon-cog"></span></button>');
