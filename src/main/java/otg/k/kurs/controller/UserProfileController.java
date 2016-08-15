@@ -18,7 +18,9 @@ public class UserProfileController {
 
     @GetMapping("/{username}")
     public String getUserProfile(@PathVariable String username, Model model){
-        model.addAttribute("user", userService.getUserByUsername(username));
+        User user = userService.getUserByUsername(username);
+        if(user == null) return "/index";
+        model.addAttribute("user", user);
         User currentUser = userService.getCurrentUser();
         model.addAttribute("currentUser", currentUser);
         User profileUser = userService.getUserByUsername(username);

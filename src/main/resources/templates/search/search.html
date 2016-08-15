@@ -4,10 +4,9 @@
       xmlns:layout="http://www.thymeleaf.org">
 <head>
     <title th:text="${searchRequest}">Search</title>
-    <link rel="stylesheet" href="/css/tabs.scss" />
-    <th:block layout:fragment="styles">
 
-    </th:block>
+    <link rel="stylesheet" th:href="@{/css/tabs.scss}" />
+    <th:block layout:fragment="styles" />
 </head>
 <body>
 
@@ -17,10 +16,10 @@
 
     <main>
 
-        <input id="tab1" type="radio" name="tabs" checked="checked" />
+        <input class="tab" id="tab1" type="radio" name="tabs" checked="checked" />
         <label for="tab1">Sites</label>
 
-        <input id="tab2" type="radio" name="tabs" />
+        <input class="tab" id="tab2" type="radio" name="tabs" />
         <label for="tab2">User profiles</label>
 
         <section id="content1">
@@ -39,7 +38,8 @@
             <h3 th:if="${searchUsers.size()} == 0" th:text="${'No results'}"></h3>
             <ol>
                 <li th:each="user : ${searchUsers}">
-                    <b>User: <a th:href="@{~/{username}(username = ${user.username})}" th:text="${user.username}"></a></b><br />
+                    <b>User: <a th:href="@{~/{username}(username = ${user.username})}" th:text="${user.username}"></a></b>
+                    <br />
                 </li>
             </ol>
         </section>
