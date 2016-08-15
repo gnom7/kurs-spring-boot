@@ -14,6 +14,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@Indexed
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -41,9 +42,11 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user")
+    @IndexedEmbedded(includeEmbeddedObjectId = true, depth = 1)
     private List<Site> sites;
 
     @OneToMany(mappedBy = "user")
+    @IndexedEmbedded
     private List<Comment> comments;
 
     private String avatarUrl;

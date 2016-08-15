@@ -4,6 +4,7 @@
       xmlns:layout="http://www.thymeleaf.org">
 <head>
     <title th:text="${searchRequest}">Search</title>
+    <link rel="stylesheet" href="/css/tabs.scss" />
     <th:block layout:fragment="styles">
 
     </th:block>
@@ -11,16 +12,40 @@
 <body>
 
 <div layout:fragment="content">
-<h1 th:text="${searchRequest}"></h1>
-    <h3 th:if="${searchResults.size()} == 0" th:text="${'No results'}"></h3>
-    <ol>
-        <li th:each="site : ${searchResults}">
-            <b>Site: <a th:href="@{~/{username}/sites/{siteName}(username = ${site.username}, siteName = ${site.siteName})}"
-                        th:text="${site.siteName}"></a></b><br />
-            Creator: <a th:href="@{~/{username}(username = ${site.username})}" th:text="${site.username}"></a><br />
-            Site theme: <span th:text="${site.theme}"></span>
-        </li>
-    </ol>
+
+    <h1 th:text="${'Search request: ' + searchRequest}"></h1>
+
+    <main>
+
+        <input id="tab1" type="radio" name="tabs" checked="checked" />
+        <label for="tab1">Sites</label>
+
+        <input id="tab2" type="radio" name="tabs" />
+        <label for="tab2">User profiles</label>
+
+        <section id="content1">
+            <h3 th:if="${searchSites.size()} == 0" th:text="${'No results'}"></h3>
+            <ol>
+                <li th:each="site : ${searchSites}">
+                    <b>Site: <a th:href="@{~/{username}/sites/{siteName}(username = ${site.username}, siteName = ${site.siteName})}"
+                                th:text="${site.siteName}"></a></b><br />
+                    Creator: <a th:href="@{~/{username}(username = ${site.username})}" th:text="${site.username}"></a><br />
+                    Site theme: <span th:text="${site.theme}"></span>
+                </li>
+            </ol>
+        </section>
+
+        <section id="content2">
+            <h3 th:if="${searchUsers.size()} == 0" th:text="${'No results'}"></h3>
+            <ol>
+                <li th:each="user : ${searchUsers}">
+                    <b>User: <a th:href="@{~/{username}(username = ${user.username})}" th:text="${user.username}"></a></b><br />
+                </li>
+            </ol>
+        </section>
+
+    </main>
+
 </div>
 
 <th:block layout:fragment="scripts">

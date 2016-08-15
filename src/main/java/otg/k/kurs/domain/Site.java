@@ -23,7 +23,7 @@ public class Site implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
-    @IndexedEmbedded(includeEmbeddedObjectId = true)
+    @IndexedEmbedded(includeEmbeddedObjectId = true, depth = 1)
     private User user;
 
     private int[][] grid;
