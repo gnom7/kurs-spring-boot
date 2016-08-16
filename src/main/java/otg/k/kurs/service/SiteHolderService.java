@@ -16,7 +16,7 @@ public interface SiteHolderService {
 
     SiteHolder getBySiteHolderName(String siteHolderName);
 
-    void deleteSiteHolder(String siteHolderName);
+    void deleteSiteHolder(long siteHolderId);
 
     List<SiteHolder> getByUsername(String username);
 }

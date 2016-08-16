@@ -7,7 +7,7 @@ import otg.k.kurs.domain.User;
 
 import java.util.List;
 
-public interface SiteHolderRepository extends JpaRepository<SiteHolder, String> {
+public interface SiteHolderRepository extends JpaRepository<SiteHolder, Long> {
 
     SiteHolder findBySiteHolderName(String siteHolderName);
 

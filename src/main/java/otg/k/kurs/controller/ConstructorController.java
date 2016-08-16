@@ -63,8 +63,8 @@ public class ConstructorController {
     }
 
     @PostMapping("/deleteSite")
-    public @ResponseBody void deleteSite(@RequestParam String siteHolderName){
-        siteHolderService.deleteSiteHolder(siteHolderName);
+    public @ResponseBody void deleteSite(@RequestParam long siteHolderId){
+        siteHolderService.deleteSiteHolder(siteHolderId);
     }
 
 }

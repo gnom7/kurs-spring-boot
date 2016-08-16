@@ -2,6 +2,7 @@ package otg.k.kurs.domain;
 
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.search.annotations.Field;
 import otg.k.kurs.dto.SiteHolderDto;
 
 import javax.persistence.*;
@@ -16,6 +17,11 @@ import java.util.stream.Collectors;
 public class SiteHolder {
 
     @Id
+    @GeneratedValue
+    private long id;
+
+    @Field
+    @Column(unique = true)
     private String siteHolderName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siteHolder")
@@ -31,6 +37,7 @@ public class SiteHolder {
     public SiteHolder(SiteHolderDto siteHolderDto) {
         this.siteHolderName = siteHolderDto.getSiteHolderName();
         this.sites = new ArrayList<>(siteHolderDto.getSites().size());
+        this.id = siteHolderDto.getId();
         this.sites.addAll(siteHolderDto.getSites().stream().map(Site::new).collect(Collectors.toList()));
     }
 }

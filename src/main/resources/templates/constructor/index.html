@@ -72,11 +72,21 @@
             var siteHolderDto = [[${siteHolderDto}]];
             if(siteHolderDto){
                 siteHolder = siteHolderDto;
-                renderConstructorFromSite(siteHolderDto['sites'][0]['siteName'])
+                renderConstructorFromSite(siteHolderDto['sites'][0]['id']);
+                $('#siteHolder-name').val(siteHolder.siteHolderName);
+                for(let i = 0; i < siteHolder.sites.length; i++){
+                    let site = siteHolder.sites[i];
+                    appendSiteToSiteList(site);
+                }
             } else {
                 renderConstructorPage();
             }
         });
+
+        function appendSiteToSiteList(site) {
+            $('#siteList').append($('<button class="btn btn-default" onclick="renderConstructorFromSite(\'' +
+                    site.id + '\')" id="siteListButton' + site.id + '">' + site.siteName + '</button>'));
+        }
 
         $('.save-site').on('click', function () {
             var siteName = $('#site-name').get(0);
@@ -93,15 +103,16 @@
             populateSiteData(site);
             var isNewSite = true;
             for(let i = 0; i < siteHolder.sites.length; i++){
-                if(site.siteName === siteHolder.sites[i].siteName){
+                if(site.id == siteHolder.sites[i].id){
                     siteHolder.sites[i] = $.extend(true, {}, site);
+                    console.log($('#siteListButton' + site.id + ''));
+                    $('#siteListButton' + site.id + '').html(site.siteName);
                     isNewSite = false;
                 }
             }
             if(isNewSite){
                 siteHolder.sites.push($.extend(true, {}, site));
-                $('#siteList').append($('<button class="btn btn-default" onclick="renderConstructorFromSite(\'' +
-                        site.siteName + '\')">' + site.siteName + '</button>'));
+                appendSiteToSiteList(site);
             }
 
             clearModal(siteOptsModal);
@@ -136,7 +147,6 @@
             var rows = JSON.parse(this.value);
             site.grid = rows;
             renderConstructorPage(rows);
-            console.log(siteHolder);
         });
 
         function populateSiteData(site) {
@@ -163,6 +173,7 @@
                 }
             }
             site.siteName = siteName.value;
+            site.id = $('#site-id').val();
             site.menu = $('input[name = "menu"]:checked').val();
             site.tags = $('#site-tags').value || [];
             site.theme = $('input[name = "theme"]:checked').val();
@@ -188,22 +199,21 @@
             });
         }
 
-        function renderConstructorFromSite(siteName) {
+        function renderConstructorFromSite(siteId) {
             let s;
             for(let i = 0; i < siteHolder.sites.length; i++){
-                if(siteHolder.sites[i].siteName === siteName) s = siteHolder.sites[i];
+                if(siteHolder.sites[i].id == siteId) s = siteHolder.sites[i];
             }
             renderConstructorPage(s.grid);
             populateConstructorFromSite(s);
         }
 
         function populateConstructorFromSite(site) {
-            console.log(site);
-            var modal = $('#site-opts-modal');
-            modal.find('#site-name').val(site.siteName);
-            modal.find('#site-tags').val(site.tags.join(', '));
-            modal.find('#allowRating').prop('checked', site.allowRating);
-            modal.find('#allowComments').prop('checked', site.allowComments);
+            $('#site-name').val(site.siteName);
+            $('#site-id').val(site.id);
+            $('#site-tags').val(site.tags.join(', '));
+            $('#allowRating').prop('checked', site.allowRating);
+            $('#allowComments').prop('checked', site.allowComments);
             $(site.theme + '').prop("checked", true);
 
             var images = site.images;

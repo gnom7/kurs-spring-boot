@@ -53,8 +53,8 @@ public class SiteHolderServiceImpl implements SiteHolderService {
     }
 
     @Override
-    public void deleteSiteHolder(String siteHolderName){
-        siteHolderRepository.delete(siteHolderName);
+    public void deleteSiteHolder(long siteHolderId){
+        siteHolderRepository.delete(siteHolderId);
     }
 
     @Override

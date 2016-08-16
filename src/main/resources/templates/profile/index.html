@@ -36,7 +36,7 @@
                         <span class="glyphicon glyphicon-cog"></span>
                         </a>
                     <button th:if="${#authentication.getName() == profileUser.username}" class="btn btn-danger btn-xs"
-                            th:onclick="${'deleteSite(''' + siteHolder.siteHolderName + '''); parentNode.remove()'}">
+                            th:onclick="${'deleteSite(''' + siteHolder.id + '''); parentNode.remove()'}">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </div>
@@ -52,9 +52,9 @@
     <th:block th:replace="auth/validation :: scripts" />
     <script th:inline="javascript">
     /*<![CDATA[*/
-    function deleteSite(siteHolderName) {
+    function deleteSite(siteHolderId) {
         $.post('deleteSite', {
-            siteHolderName: siteHolderName,
+            siteHolderId: siteHolderId,
             [[${_csrf.parameterName}]]:[[${_csrf.token}]]
         })
     }

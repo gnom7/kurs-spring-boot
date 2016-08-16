@@ -37,11 +37,10 @@ public class SiteController {
     public String getSite(@PathVariable String username, @PathVariable String siteHolderName,
                           @PathVariable String siteName, Model model){
         SiteHolder siteHolder = siteHolderService.getBySiteHolderName(siteHolderName);
-        Site site = findSite(siteHolder, siteName);
-        if(siteHolder != null &&  site != null) {
+        if(siteHolder != null &&  findSite(siteHolder, siteName) != null) {
             SiteHolderDto siteHolderDto = new SiteHolderDto(siteHolder);
             model.addAttribute("siteHolderDto", siteHolderDto);
-            model.addAttribute("site", new SiteDto(site));
+            model.addAttribute("site", new SiteDto(findSite(siteHolder, siteName)));
         } else {
             model.addAttribute("error", new Exception("Such site doesn't exist"));
             model.addAttribute("siteHolderDto", new SiteHolderDto("error"));
