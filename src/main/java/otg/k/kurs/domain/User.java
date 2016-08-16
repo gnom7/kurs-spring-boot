@@ -57,10 +57,8 @@ public class User implements UserDetails {
 
     public User(){}
 
-    public User(String username, String firstname, String lastname){
+    public User(String username){
         this.username = username;
-        this.firstname = firstname;
-        this.lastname = lastname;
     }
 
     public User(String username, String firstname, String lastname, String email) {

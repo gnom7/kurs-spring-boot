@@ -51,6 +51,9 @@
                                <li>
                                    <a th:href="${'/' + #authentication.getName()}" th:text="#{navbar.profile}">My profile</a>
                                </li>
+                               <li>
+                                   <a th:href="@{'/constructor'}" th:text="#{constructor}">Constructor</a>
+                               </li>
                                <li role="separator" class="divider"></li>
                                <li>
                                    <a href="#" onclick="$('#logout').submit()" th:text="#{navbar.logout}">Logout</a>

@@ -31,6 +31,7 @@ $(modal).on('hidden.bs.modal', function () {
 function clearModal(self) {
     $.each(self.find('input'), function (index, item) {
         if(item.id == 'white') {return;}
+        if(item.id == 'horizontal') {return;}
         item.checked = false;
         item.value = '';
     });

@@ -19,6 +19,8 @@ public class SiteHolderDto {
     public SiteHolderDto() {
     }
 
+    public SiteHolderDto(String siteHolderName) {this.siteHolderName = siteHolderName;}
+
     public SiteHolderDto(SiteHolder siteHolder){
         this.siteHolderName = siteHolder.getSiteHolderName();
         this.username = siteHolder.getUser().getUsername();

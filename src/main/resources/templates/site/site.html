@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
-    <title th:text="${'Site - ' + siteHolderDto.siteHolderName}">Site</title>
+    <title th:text="${siteHolderDto.siteHolderName + ' - ' + site.siteName}">Site</title>
     <th:block layout:fragment="styles" />
 </head>
 <body>
@@ -95,13 +95,17 @@
                 menuElem.addClass('right-menu');
                 menuElem.append('<li><div class="btn-group"></div></li>');
                 var divElem = menuElem.find('div');
-                console.log(divElem);
                 siteHolder.sites.forEach(function (site) {
                     let siteName = site.siteName;
-                    divElem.append('<a href="/' + siteName + '" class="btn btn-link right-menu">' + siteName + '</a>');
+                    divElem.append('<a href="/' + site.username + '/' + siteHolder.siteHolderName + '/' + siteName +
+                            '" class="btn btn-link right-menu">' + siteName + '</a>');
                 })
             } else { // menu === 'vertical'
-
+                siteHolder.sites.forEach(function (site) {
+                    let siteName = site.siteName;
+                    menuElem.append('<li><a href="/' + site.username + '/' + siteHolder.siteHolderName + '/' + siteName +
+                            '" class="btn btn-link right-menu">' + siteName + '</a></li>');
+                })
             }
         }
 
@@ -146,7 +150,7 @@
             var newComment = $('#new-comment').val();
             $.post('/addComment', {
                 comment: newComment,
-                siteName: site.siteName,
+                siteId: site.id,
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
             }, function () {
                 location.reload();

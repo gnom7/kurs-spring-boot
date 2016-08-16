@@ -38,7 +38,6 @@ public class ConstructorController {
     @PostMapping("/savesite")
     public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON) throws IOException {
         SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON, userService.getCurrentUser());
-        setSite(siteHolder);
         siteHolderService.saveSiteHolder(siteHolder);
         return "index";
     }
@@ -58,29 +57,14 @@ public class ConstructorController {
         System.out.println(siteHolderName);
         SiteHolder siteHolder = siteHolderService.getBySiteHolderName(siteHolderName);
         SiteHolderDto siteHolderDto = new SiteHolderDto(siteHolder);
-        String siteHolderDtoJSON = new ObjectMapper().writeValueAsString(siteHolderDto);
-        System.out.println(siteHolderDtoJSON);
-        model.addAttribute("siteHolderDtoJSON", siteHolderDtoJSON);
+//        String siteHolderDtoJSON = new ObjectMapper().writeValueAsString(siteHolderDto);
+        model.addAttribute("siteHolderDto", siteHolderDto);
         return "constructor/index";
     }
 
     @PostMapping("/deleteSite")
     public @ResponseBody void deleteSite(@RequestParam String siteHolderName){
         siteHolderService.deleteSiteHolder(siteHolderName);
-    }
-
-    private void setSite(SiteHolder siteHolder){
-        for(Site site : siteHolder.getSites()){
-            for(Text text : site.getTexts()){
-                text.setSite(site);
-            }
-            for(Image image : site.getImages()){
-                image.setSite(site);
-            }
-            for(Video video : site.getVideos()){
-                video.setSite(site);
-            }
-        }
     }
 
 }

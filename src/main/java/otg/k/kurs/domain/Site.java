@@ -69,8 +69,8 @@ public class Site implements Serializable {
 
     public Site(){}
 
-    public Site(String siteName){
-        this.siteName = siteName;
+    public Site(long siteId){
+        this.id = siteId;
     }
 
     public Site(SiteDto siteDto){
@@ -78,14 +78,17 @@ public class Site implements Serializable {
         this.allowRating = siteDto.isAllowRating();
         this.grid = siteDto.getGrid();
         this.siteName = siteDto.getSiteName();
+        this.id = siteDto.getId();
         this.menu = siteDto.getMenu();
         this.theme = siteDto.getTheme();
         this.images = new ArrayList<>(siteDto.getImages().size());
         this.videos = new ArrayList<>(siteDto.getVideos().size());
         this.texts = new ArrayList<>(siteDto.getTexts().size());
+        this.tags = new ArrayList<>(siteDto.getTags().size());
         this.images.addAll(siteDto.getImages().stream().map(imageDto -> new Image(imageDto, this)).collect(Collectors.toList()));
         this.videos.addAll(siteDto.getVideos().stream().map(videoDto -> new Video(videoDto, this)).collect(Collectors.toList()));
         this.texts.addAll(siteDto.getTexts().stream().map(textDto -> new Text(textDto, this)).collect(Collectors.toList()));
+        this.tags.addAll(siteDto.getTags().stream().map(tagDto -> new Tag(tagDto, this)).collect(Collectors.toList()));
     }
 
 

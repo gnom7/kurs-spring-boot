@@ -26,7 +26,7 @@ public class Video implements Serializable {
     private int position;
 
     @ManyToOne
-    @JoinColumn(name = "site_name")
+    @JoinColumn(name = "site_id")
     private Site site;
 
     public Video(){}

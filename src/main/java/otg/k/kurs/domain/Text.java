@@ -25,7 +25,7 @@ public class Text implements Serializable {
     private int position;
 
     @ManyToOne
-    @JoinColumn(name = "site_name")
+    @JoinColumn(name = "site_id")
     private Site site;
 
     public Text(){}

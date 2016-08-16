@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 @Data
 public class SiteDto {
 
+    private long id;
+
     private String siteName;
 
     private String siteHolderName;
@@ -33,12 +35,17 @@ public class SiteDto {
 
     private List<CommentDto> comments;
 
+    private List<TagDto> tags;
+
     public SiteDto(){}
+
+    public SiteDto(String siteName) {this.siteName = siteName;}
 
     public SiteDto(Site site){
         this.siteName = site.getSiteName();
         this.siteHolderName = site.getSiteHolder().getSiteHolderName();
         this.menu = site.getMenu();
+        this.id = site.getId();
         this.theme = site.getTheme();
         this.grid = site.getGrid();
         this.allowRating = site.isAllowRating();
@@ -48,5 +55,6 @@ public class SiteDto {
         this.texts = site.getTexts().stream().map(TextDto::new).collect(Collectors.toList());
         this.videos = site.getVideos().stream().map(VideoDto::new).collect(Collectors.toList());
         this.comments = site.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
+        this.tags = site.getTags().stream().map(TagDto::new).collect(Collectors.toList());
     }
 }

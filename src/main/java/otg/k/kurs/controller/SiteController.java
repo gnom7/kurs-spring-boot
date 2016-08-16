@@ -44,17 +44,19 @@ public class SiteController {
             model.addAttribute("site", new SiteDto(site));
         } else {
             model.addAttribute("error", new Exception("Such site doesn't exist"));
+            model.addAttribute("siteHolderDto", new SiteHolderDto("error"));
+            model.addAttribute("site", new SiteDto("error"));
         }
         return "site/site";
     }
 
     @PostMapping("/addComment")
-    public @ResponseBody void addComment(@RequestParam String comment, @RequestParam String siteName){
+    public @ResponseBody void addComment(@RequestParam String comment, @RequestParam long siteId){
         Comment c = new Comment();
         c.setComment(comment);
         c.setDate(Calendar.getInstance().getTime());
         c.setUser(userService.getCurrentUser());
-        c.setSite(new Site(siteName));
+        c.setSite(new Site(siteId));
         commentService.addComment(c);
     }
 
