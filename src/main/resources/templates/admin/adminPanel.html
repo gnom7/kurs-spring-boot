@@ -1,10 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorator="layout/baselayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Admin Panel</title>
+    <th:block layout:fragment="styles" />
 </head>
 <body>
 
+<div layout:fragment="content">
+
+
+    <div class="container my-container">
+
+    </div>
+
+    <div id="comments-block" th:if="${site.allowComments}">
+        <div class="container" sec:authorize="isAuthenticated()" style="text-align: center">
+            <textarea class="form-control" id="new-comment" rows="3" placeholder="Add comment..."></textarea>
+            <br />
+            <p id="comment-size" style="user-select: none">Symbols left: 255</p>
+            <button id="add-comment" class="btn btn-default">Add</button>
+        </div>
+        <br />
+        <section class="comments" th:unless="${site.comments} == null">
+            <article class="comment" th:each="comment : ${site.comments}">
+                <a class="comment-img" th:href="@{~/{username}(username = ${comment.username})}">
+                    <img th:src="${comment.userAvatarUrl}" alt="" width="50" height="50" />
+                </a>
+                <div class="comment-body">
+                    <div class="text">
+                        <p th:text="${comment.comment}"></p>
+                    </div>
+                    <p class="attribution">by <a th:href="@{~/{username}(username =${comment.username})}" th:text="${comment.username}">
+                    </a> </p> <p th:text="${#calendars.format(comment.date,'EEE, d MMM yyyy HH:mm:ss')}">at 14:23pm, 4th Dec 2010</p>
+                </div>
+            </article>
+        </section>​
+    </div>
+
+</div>
+
+<th:block layout:fragment="scripts">
+    <script type="text/javascript" th:src="@{/js/showdown.min.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var error = [[${error}]];
+        var siteHolder = [[${siteHolderDto}]];
+        var site = [[${site}]];
+
+        if(error != null) {
+            var myNode = document.getElementById("wrap-container");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+            $('#wrap-container').append('<div style="vertical-align: top;" class="alert alert-danger">' + error['message'] + '</div>')
+        } else {
+            createSite(site)
+        }
+
+        //        function findSiteFromHolder(siteName) {
+        //            for(let i = 0; i < siteHolder.sites.length; i++){
+        //                if(siteName === siteHolder.sites[i].siteName){
+        //                    return siteHolder.sites[i];
+        //                }
+        //            }
+        //        }
+
+        function createSite(site){
+            createGrid(site['grid']);
+            populateGrid(site);
+            createMenu(site.menu);
+        }
+
+        function createMenu(menu) {
+            let menuElem = $('#menu');
+            if(menu === 'horizontal'){
+                menuElem.addClass('right-menu');
+                menuElem.append('<li><div class="btn-group"></div></li>');
+                var divElem = menuElem.find('div');
+                siteHolder.sites.forEach(function (site) {
+                    let siteName = site.siteName;
+                    divElem.append('<a href="/' + site.username + '/' + siteHolder.siteHolderName + '/' + siteName +
+                            '" class="btn btn-link right-menu">' + siteName + '</a>');
+                })
+            } else { // menu === 'vertical'
+                siteHolder.sites.forEach(function (site) {
+                    let siteName = site.siteName;
+                    menuElem.append('<li><a href="/' + site.username + '/' + siteHolder.siteHolderName + '/' + siteName +
+                            '" class="btn btn-link">' + siteName + '</a></li>');
+                })
+            }
+        }
+
+        function createGrid(rows) {
+            var container = $('.my-container');
+            container.empty();
+            rows.forEach(function (row) {
+                var rowTemplate = $('<div class="row"></div>');
+                row.forEach(function (col) {
+                    rowTemplate.append('<div class="my-content col-md-' + col + '" style="text-align: center"></div>');
+                });
+                container.append(rowTemplate);
+            }) ;
+        }
+        function populateGrid(site) {
+            var myContent = $('.my-content');
+            site['texts'].forEach(function (item, index) {
+                myContent.eq(item['position']).append('<div>' + markdownToHtml(item['markdownText']) + '</div>');
+            });
+            site['videos'].forEach(function (item, index) {
+                myContent.eq(item['position']).append('<iframe width="' +
+                        item['width'] + '" height="' + item['height'] + '" src="' + item['url'] +
+                        '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>')
+            });
+            site['images'].forEach(function (item, index) {
+                myContent.eq(item['position']).append('<div class="img-thumbnail"><img src="' +
+                        item['url'] + '" /></div>')
+            });
+            myContent.each(function (index, item) {
+                $(item).find($('iframe')).after('<br />');
+            });
+        }
+        function markdownToHtml(text) {
+            var converter = new showdown.Converter();
+            return converter.makeHtml(text);
+        }
+        /*]]>*/
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $('#add-comment').on('click', function () {
+            var newComment = $('#new-comment').val();
+            $.post('/addComment', {
+                comment: newComment,
+                siteId: site.id,
+                [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+            }, function () {
+                location.reload();
+            })
+        });
+        $('#new-comment').on('input', function () {
+            var newComment = $('#new-comment');
+            var leftSymbols = 255 - newComment.val().length;
+            $('#comment-size').text('Symbols left: ' + leftSymbols);
+            if(leftSymbols < 0){
+                $('#add-comment').attr('disabled', true);
+            } else {
+                $('#add-comment').attr('disabled', false);
+            }
+        });
+        /*]]>*/
+    </script>
+</th:block>
 </body>
 </html>

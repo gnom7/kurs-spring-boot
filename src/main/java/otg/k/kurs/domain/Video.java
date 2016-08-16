@@ -39,6 +39,7 @@ public class Video implements Serializable {
     }
 
     public Video(VideoDto videoDto, Site site) {
+        this.videoId = videoDto.getId();
         this.url = videoDto.getUrl();
         this.width = videoDto.getWidth();
         this.height = videoDto.getHeight();

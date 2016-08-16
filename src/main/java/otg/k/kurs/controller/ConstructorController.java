@@ -15,6 +15,7 @@ import otg.k.kurs.service.SiteService;
 import otg.k.kurs.service.UserService;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class ConstructorController {
@@ -37,7 +38,9 @@ public class ConstructorController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/savesite")
     public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON) throws IOException {
+        System.out.println(siteHolderDtoJSON);
         SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON, userService.getCurrentUser());
+        siteHolderService.deleteSiteHolder(siteHolder.getId());
         siteHolderService.saveSiteHolder(siteHolder);
         return "index";
     }
@@ -49,16 +52,20 @@ public class ConstructorController {
 
     @PostMapping("/checkSiteHolderNameExist")
     public @ResponseBody Boolean checkSiteHolderName(@RequestParam String siteHolderName){
-        return siteHolderService.isSiteHolderNameExist(siteHolderName);
+        List<SiteHolder> siteHolders = userService.getCurrentUser().getSiteHolders();
+        boolean isUserSite = false;
+        for(SiteHolder siteHolder : siteHolders){
+            if(siteHolder.getSiteHolderName().equals(siteHolderName)) {isUserSite = true;}
+        }
+        return !(isUserSite || !siteHolderService.isSiteHolderNameExist(siteHolderName));
     }
 
     @GetMapping("/redactSite")
     public String redactSite(@RequestParam String siteHolderName, Model model) throws JsonProcessingException {
-        System.out.println(siteHolderName);
         SiteHolder siteHolder = siteHolderService.getBySiteHolderName(siteHolderName);
         SiteHolderDto siteHolderDto = new SiteHolderDto(siteHolder);
-//        String siteHolderDtoJSON = new ObjectMapper().writeValueAsString(siteHolderDto);
         model.addAttribute("siteHolderDto", siteHolderDto);
+        System.out.println(siteHolderDto);
         return "constructor/index";
     }
 

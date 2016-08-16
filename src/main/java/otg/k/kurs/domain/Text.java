@@ -38,6 +38,7 @@ public class Text implements Serializable {
     public Text(TextDto textDto, Site site) {
         this.markdownText = textDto.getMarkdownText();
         this.position = textDto.getPosition();
+        this.textId = textDto.getId();
         this.site = site;
     }
 }

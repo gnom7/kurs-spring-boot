@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService{
             String username = principal.toString();
             user = getUserByUsername(username);
         }
-        return user;
+        return getUserByUsername(user.getUsername());
     }
 
     @Override

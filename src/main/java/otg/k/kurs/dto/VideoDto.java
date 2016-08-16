@@ -6,6 +6,8 @@ import otg.k.kurs.domain.Video;
 @Data
 public class VideoDto {
 
+    private long id;
+
     private String url;
 
     private int width;
@@ -18,6 +20,7 @@ public class VideoDto {
     }
 
     public VideoDto(Video video) {
+        this.id = video.getVideoId();
         this.url = video.getUrl();
         this.width = video.getWidth();
         this.height = video.getHeight();

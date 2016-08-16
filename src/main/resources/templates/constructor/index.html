@@ -105,7 +105,6 @@
             for(let i = 0; i < siteHolder.sites.length; i++){
                 if(site.id == siteHolder.sites[i].id){
                     siteHolder.sites[i] = $.extend(true, {}, site);
-                    console.log($('#siteListButton' + site.id + ''));
                     $('#siteListButton' + site.id + '').html(site.siteName);
                     isNewSite = false;
                 }

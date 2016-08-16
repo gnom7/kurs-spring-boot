@@ -34,6 +34,7 @@ public class Image {
     public Image(ImageDto imageDto, Site site) {
         this.url = imageDto.getUrl();
         this.position = imageDto.getPosition();
+        this.imageId = imageDto.getId();
         this.site = site;
     }
 }
