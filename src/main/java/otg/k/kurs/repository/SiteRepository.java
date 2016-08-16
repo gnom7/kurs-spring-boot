@@ -10,6 +10,6 @@ public interface SiteRepository extends JpaRepository<Site, String> {
 
     List<Site> findByUser(User User);
 
-    Site findBySiteName(String siteName);
+    List<Site> findBySiteName(String siteName);
 
 }

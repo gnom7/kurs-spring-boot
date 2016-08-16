@@ -49,10 +49,7 @@
                            </a>
                            <ul class="dropdown-menu">
                                <li>
-                                   <a href="#" th:text="#{navbar.sites}">My web sites</a>
-                               </li>
-                               <li>
-                                   <a href="#" th:text="#{navbar.profile}">My profile</a>
+                                   <a th:href="${'/' + #authentication.getName()}" th:text="#{navbar.profile}">My profile</a>
                                </li>
                                <li role="separator" class="divider"></li>
                                <li>

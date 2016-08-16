@@ -107,10 +107,6 @@ function markdownToHtml(text) {
     return wrapper;
 }
 
-$(document).ready(function () {
-    renderConstructorPage();
-});
-
 function renderConstructorPage(layout) {
 
     var toolbar = $('.my-toolbar');

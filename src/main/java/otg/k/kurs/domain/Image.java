@@ -2,6 +2,7 @@ package otg.k.kurs.domain;
 
 import lombok.Data;
 import lombok.ToString;
+import otg.k.kurs.dto.ImageDto;
 
 import javax.persistence.*;
 
@@ -28,5 +29,11 @@ public class Image {
     public Image(String url, int position) {
         this.url = url;
         this.position = position;
+    }
+
+    public Image(ImageDto imageDto, Site site) {
+        this.url = imageDto.getUrl();
+        this.position = imageDto.getPosition();
+        this.site = site;
     }
 }

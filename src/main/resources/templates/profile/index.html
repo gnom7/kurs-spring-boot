@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
-    <title th:text="${user.username}">Site</title>
+    <title th:text="${profileUser.username}">Site</title>
     <th:block layout:fragment="styles">
         <th:block th:replace="auth/validation :: styles" />
     </th:block>
@@ -23,6 +23,25 @@
                     <span>Change password</span></button>
             </div>
         </div>
+        <div class="col-md-5">
+            <h1 th:if="${profileUser.siteHolders.size() == 0}">User didn't create any site yet</h1>
+            <h1 th:if="${profileUser.siteHolders.size() > 0}">User sites</h1>
+            <div class="row" th:each="siteHolder : ${profileUser.siteHolders}">
+                <div class="siteHolder">
+                    <!--<img th:src="${siteHolder.logoUrl}" />-->
+                    <img class="img-thumbnail" height="200px" width="200px"
+                         src="http://i.dailymail.co.uk/i/pix/2016/03/22/13/32738A6E00000578-3504412-image-a-6_1458654517341.jpg"/>
+                        <a th:if="${#authentication.getName() == profileUser.username}"
+                                 th:href="${'/redactSite?siteHolderName=' + siteHolder.siteHolderName}" class="btn btn-primary btn-xs">
+                        <span class="glyphicon glyphicon-cog"></span>
+                        </a>
+                    <button th:if="${#authentication.getName() == profileUser.username}" class="btn btn-danger btn-xs"
+                            th:onclick="${'deleteSite(''' + siteHolder.siteHolderName + '''); parentNode.remove()'}">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -33,7 +52,12 @@
     <th:block th:replace="auth/validation :: scripts" />
     <script th:inline="javascript">
     /*<![CDATA[*/
-
+    function deleteSite(siteHolderName) {
+        $.post('deleteSite', {
+            siteHolderName: siteHolderName,
+            [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+        })
+    }
     /*]]>*/
     </script>
 </th:block>

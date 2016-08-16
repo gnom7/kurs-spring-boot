@@ -3,6 +3,7 @@ package otg.k.kurs.domain;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.search.annotations.Field;
+import otg.k.kurs.dto.TextDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,5 +33,11 @@ public class Text implements Serializable {
     public Text(String markdownText, int position) {
         this.markdownText = markdownText;
         this.position = position;
+    }
+
+    public Text(TextDto textDto, Site site) {
+        this.markdownText = textDto.getMarkdownText();
+        this.position = textDto.getPosition();
+        this.site = site;
     }
 }

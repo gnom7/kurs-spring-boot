@@ -2,6 +2,7 @@ package otg.k.kurs.domain;
 
 import lombok.Data;
 import lombok.ToString;
+import otg.k.kurs.dto.VideoDto;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -35,5 +36,13 @@ public class Video implements Serializable {
         this.width = width;
         this.height = height;
         this.position = position;
+    }
+
+    public Video(VideoDto videoDto, Site site) {
+        this.url = videoDto.getUrl();
+        this.width = videoDto.getWidth();
+        this.height = videoDto.getHeight();
+        this.position = videoDto.getPosition();
+        this.site = site;
     }
 }

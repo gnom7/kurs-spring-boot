@@ -42,7 +42,7 @@ public class SiteServiceImpl implements SiteService{
     }
 
     @Override
-    public Site findBySiteName(String siteName){
+    public List<Site> findBySiteName(String siteName){
         return siteRepository.findBySiteName(siteName);
     }
 

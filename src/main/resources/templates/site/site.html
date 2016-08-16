@@ -3,25 +3,25 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.thymeleaf.org">
 <head>
-    <title th:text="${'Site - ' + site.siteName}">Site</title>
+    <title th:text="${'Site - ' + siteHolderDto.siteHolderName}">Site</title>
     <th:block layout:fragment="styles" />
 </head>
 <body>
 
-<div layout:fragment="nowrap-content">
+<div layout:fragment="content">
 
         <div class="btn-group">
             <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="glyphicon glyphicon-th" id="user-menu-icon"></span>
             </a>
 
-            <ul class="dropdown-menu right-menu">
-                <li>
-                    <div class="btn-group">
-                        <a href="" class="btn btn-link right-menu">BOY</a>
-                        <a href="" class="btn btn-link right-menu">GIRL</a>
-                    </div>
-                </li>
+            <ul id="menu" class="dropdown-menu">
+                <!--<li>-->
+                    <!--<div class="btn-group">-->
+                        <!--<a href="" class="btn btn-link right-menu">BOY</a>-->
+                        <!--<a href="" class="btn btn-link right-menu">GIRL</a>-->
+                    <!--</div>-->
+                <!--</li>-->
             </ul>
         </div>
 
@@ -62,21 +62,49 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         var error = [[${error}]];
+        var siteHolder = [[${siteHolderDto}]];
         var site = [[${site}]];
+
         if(error != null) {
-            $('.my-container').append('<div class="alert alert-danger">' + error['message'] + '</div>')
+            var myNode = document.getElementById("wrap-container");
+            while (myNode.firstChild) {
+                myNode.removeChild(myNode.firstChild);
+            }
+            $('#wrap-container').append('<div style="vertical-align: top;" class="alert alert-danger">' + error['message'] + '</div>')
         } else {
             createSite(site)
         }
+
+//        function findSiteFromHolder(siteName) {
+//            for(let i = 0; i < siteHolder.sites.length; i++){
+//                if(siteName === siteHolder.sites[i].siteName){
+//                    return siteHolder.sites[i];
+//                }
+//            }
+//        }
+
         function createSite(site){
             createGrid(site['grid']);
             populateGrid(site);
-//            createMenu(menu);
+            createMenu(site.menu);
         }
 
-//        function createMenu(menu) {
-//            $('.nav .navbar-nav .navbar-right').prepend($('<li class="dropdown">Here</li>'));
-//        }
+        function createMenu(menu) {
+            let menuElem = $('#menu');
+            if(menu === 'horizontal'){
+                menuElem.addClass('right-menu');
+                menuElem.append('<li><div class="btn-group"></div></li>');
+                var divElem = menuElem.find('div');
+                console.log(divElem);
+                siteHolder.sites.forEach(function (site) {
+                    let siteName = site.siteName;
+                    divElem.append('<a href="/' + siteName + '" class="btn btn-link right-menu">' + siteName + '</a>');
+                })
+            } else { // menu === 'vertical'
+
+            }
+        }
+
         function createGrid(rows) {
             var container = $('.my-container');
             container.empty();
@@ -110,7 +138,6 @@
             var converter = new showdown.Converter();
             return converter.makeHtml(text);
         }
-        console.log(site);
         /*]]>*/
     </script>
     <script th:inline="javascript">

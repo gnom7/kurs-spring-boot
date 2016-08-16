@@ -9,8 +9,7 @@ import otg.k.kurs.domain.User;
 import java.util.List;
 
 @Data
-public class UserDto { // field password is absent so can send to frontend
-                       // to render sites of user and so on
+public class UserDto {
 
     private String username;
 

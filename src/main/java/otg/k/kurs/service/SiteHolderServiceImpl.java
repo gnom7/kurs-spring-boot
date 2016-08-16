@@ -12,6 +12,7 @@ import otg.k.kurs.dto.SiteHolderDto;
 import otg.k.kurs.repository.SiteHolderRepository;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @Transactional
@@ -19,6 +20,9 @@ public class SiteHolderServiceImpl implements SiteHolderService {
 
     @Autowired
     private SiteHolderRepository siteHolderRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public boolean saveSiteHolder(SiteHolder siteHolder){
@@ -41,5 +45,20 @@ public class SiteHolderServiceImpl implements SiteHolderService {
     @Override
     public boolean isSiteHolderNameExist(String siteHolderName) {
         return siteHolderRepository.findBySiteHolderName(siteHolderName) != null;
+    }
+
+    @Override
+    public SiteHolder getBySiteHolderName(String siteHolderName){
+        return siteHolderRepository.findBySiteHolderName(siteHolderName);
+    }
+
+    @Override
+    public void deleteSiteHolder(String siteHolderName){
+        siteHolderRepository.delete(siteHolderName);
+    }
+
+    @Override
+    public List<SiteHolder> getByUsername(String username){
+        return siteHolderRepository.findByUser(userService.getUserByUsername(username));
     }
 }

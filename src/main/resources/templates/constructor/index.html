@@ -64,8 +64,20 @@
             images: [],
             texts: [],
             videos: [],
-            tags: []
+            tags: [],
+            menu: ''
         };
+
+        $(document).ready(function () {
+            var siteHolderDtoJSON = [[${siteHolderDtoJSON}]];
+            if(siteHolderDtoJSON){
+                var siteHolderDto = JSON.parse(siteHolderDtoJSON);
+                siteHolder = siteHolderDto;
+                renderConstructorFromSite(siteHolderDto['sites'][0]['siteName'])
+            } else {
+                renderConstructorPage();
+            }
+        });
 
         $('.save-site').on('click', function () {
             var siteName = $('#site-name').get(0);
@@ -78,12 +90,23 @@
             if(errorDiv) {errorDiv.remove();}
             var siteOptsModal = $("#site-opts-modal");
             siteOptsModal.modal('hide');
+
             populateSiteData(site);
-            siteHolder.sites.push($.extend(true, {}, site));
+            var isNewSite = true;
+            for(let i = 0; i < siteHolder.sites.length; i++){
+                if(site.siteName === siteHolder.sites[i].siteName){
+                    siteHolder.sites[i] = $.extend(true, {}, site);
+                    isNewSite = false;
+                }
+            }
+            if(isNewSite){
+                siteHolder.sites.push($.extend(true, {}, site));
+                $('#siteList').append($('<button class="btn btn-default" onclick="renderConstructorFromSite(\'' +
+                        site.siteName + '\')">' + site.siteName + '</button>'));
+            }
+
             clearModal(siteOptsModal);
             renderConstructorPage();
-            $('#siteList').append($('<button class="btn btn-default" onclick="renderConstructorFromSite(\'' +
-                    site.siteName + '\')">' + site.siteName + '</button>'));
             clearSiteData(site);
         });
 
@@ -141,6 +164,7 @@
                 }
             }
             site.siteName = siteName.value;
+            site.menu = $('input[name = "menu"]:checked').val();
             site.tags = $('#site-tags').value;
             site.theme = $('input[name = "theme"]:checked').val();
             site.allowRating = $('input[name = "allowRating"]').is(':checked');
@@ -149,12 +173,11 @@
         }
 
         function clearSiteData(site) {
-            site = {
-                images: [],
-                texts: [],
-                videos: [],
-                tags: []
-            };
+            site.images.splice(0, site.images.length);
+            site.texts.splice(0, site.texts.length);
+            site.videos.splice(0, site.videos.length);
+            site.tags.splice(0, site.tags.length);
+            site.menu = '';
         }
 
         function sendSiteHolderData() {
@@ -167,8 +190,8 @@
         }
 
         function renderConstructorFromSite(siteName) {
-            var s;
-            for(var i = 0; i < siteHolder.sites.length; i++){
+            let s;
+            for(let i = 0; i < siteHolder.sites.length; i++){
                 if(siteHolder.sites[i].siteName === siteName) s = siteHolder.sites[i];
             }
             renderConstructorPage(s.grid);
@@ -176,6 +199,7 @@
         }
 
         function populateConstructorFromSite(site) {
+            console.log(site);
             var modal = $('#site-opts-modal');
             modal.closest('#site-name').val(site.siteName);
             modal.closest('#site-tags').val(site.tags);

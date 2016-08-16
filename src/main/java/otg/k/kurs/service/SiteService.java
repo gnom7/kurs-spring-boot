@@ -12,7 +12,7 @@ public interface SiteService {
 
     boolean isSiteNameExist(String siteName);
 
-    Site findBySiteName(String siteName);
+    List<Site> findBySiteName(String siteName);
 
     Site createSite(String siteDtoJSON, User user) throws IOException;
 

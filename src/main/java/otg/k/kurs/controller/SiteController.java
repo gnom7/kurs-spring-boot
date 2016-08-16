@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import otg.k.kurs.domain.*;
 import otg.k.kurs.dto.CommentDto;
 import otg.k.kurs.dto.SiteDto;
+import otg.k.kurs.dto.SiteHolderDto;
 import otg.k.kurs.service.CommentService;
+import otg.k.kurs.service.SiteHolderService;
 import otg.k.kurs.service.SiteService;
 import otg.k.kurs.service.UserService;
 
@@ -23,27 +25,25 @@ public class SiteController {
     private SiteService siteService;
 
     @Autowired
+    private SiteHolderService siteHolderService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/{username}/sites/{siteName}")
-    public String getSite(@PathVariable String username, @PathVariable String siteName, Model model){
-        List<Site> sites = siteService.findByUser(username);
-        Site site = null;
-        SiteDto siteDto = new SiteDto();
-        for(Site s : sites){
-            if(s.getSiteName().equals(siteName)) site = s;
-        };
-        if(site != null) {
-            siteDto = new SiteDto(site);
-            removeCircularReferences(siteDto);
-            model.addAttribute("site", siteDto);
+    @GetMapping("/{username}/{siteHolderName}/{siteName}")
+    public String getSite(@PathVariable String username, @PathVariable String siteHolderName,
+                          @PathVariable String siteName, Model model){
+        SiteHolder siteHolder = siteHolderService.getBySiteHolderName(siteHolderName);
+        Site site = findSite(siteHolder, siteName);
+        if(siteHolder != null &&  site != null) {
+            SiteHolderDto siteHolderDto = new SiteHolderDto(siteHolder);
+            model.addAttribute("siteHolderDto", siteHolderDto);
+            model.addAttribute("site", new SiteDto(site));
         } else {
             model.addAttribute("error", new Exception("Such site doesn't exist"));
-            siteDto.setSiteName("error");
-            model.addAttribute("site", siteDto);
         }
         return "site/site";
     }
@@ -58,16 +58,15 @@ public class SiteController {
         commentService.addComment(c);
     }
 
-    private void removeCircularReferences(SiteDto site){
-        for(Image image : site.getImages()){
-            image.setSite(null);
+    private Site findSite(SiteHolder siteHolder, String siteName){
+        Site site = null;
+        System.out.println(siteHolder);
+        for(Site s : siteHolder.getSites()){
+            if(siteName.equals(s.getSiteName())){
+                site = s;
+            }
         }
-        for(Text text : site.getTexts()){
-            text.setSite(null);
-        }
-        for(Video video : site.getVideos()){
-            video.setSite(null);
-        }
+        return site;
     }
 
 }

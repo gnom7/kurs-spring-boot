@@ -1,23 +1,20 @@
 package otg.k.kurs.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import otg.k.kurs.domain.*;
-import otg.k.kurs.dto.SiteDto;
+import otg.k.kurs.dto.SiteHolderDto;
 import otg.k.kurs.service.SiteHolderService;
 import otg.k.kurs.service.SiteService;
 import otg.k.kurs.service.UserService;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Controller
 public class ConstructorController {
@@ -54,6 +51,22 @@ public class ConstructorController {
     @PostMapping("/checkSiteHolderNameExist")
     public @ResponseBody Boolean checkSiteHolderName(@RequestParam String siteHolderName){
         return siteHolderService.isSiteHolderNameExist(siteHolderName);
+    }
+
+    @GetMapping("/redactSite")
+    public String redactSite(@RequestParam String siteHolderName, Model model) throws JsonProcessingException {
+        System.out.println(siteHolderName);
+        SiteHolder siteHolder = siteHolderService.getBySiteHolderName(siteHolderName);
+        SiteHolderDto siteHolderDto = new SiteHolderDto(siteHolder);
+        String siteHolderDtoJSON = new ObjectMapper().writeValueAsString(siteHolderDto);
+        System.out.println(siteHolderDtoJSON);
+        model.addAttribute("siteHolderDtoJSON", siteHolderDtoJSON);
+        return "constructor/index";
+    }
+
+    @PostMapping("/deleteSite")
+    public @ResponseBody void deleteSite(@RequestParam String siteHolderName){
+        siteHolderService.deleteSiteHolder(siteHolderName);
     }
 
     private void setSite(SiteHolder siteHolder){
