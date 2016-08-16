@@ -28,12 +28,12 @@ public class Site implements Serializable {
     @Field
     private String siteName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     @IndexedEmbedded(includeEmbeddedObjectId = true, depth = 1)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "siteHolderName")
     @IndexedEmbedded(depth = 1)
     private SiteHolder siteHolder;

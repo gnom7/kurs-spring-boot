@@ -25,7 +25,7 @@ public class Video implements Serializable {
 
     private int position;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "site_id")
     private Site site;
 

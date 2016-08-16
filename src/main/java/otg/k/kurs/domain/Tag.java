@@ -19,7 +19,7 @@ public class Tag {
     @Field
     private String tag;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "siteName")
     private Site site;
 
