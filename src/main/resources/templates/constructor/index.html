@@ -147,6 +147,11 @@
                 errorDiv.innerHTML = '<p>Site have not pages</p>';
                 return;
             }
+            for(let i = 0; i < siteHolder.sites.length; i++){
+                if(siteHolder.sites[i].id < 0){
+                    delete siteHolder.sites[i].id;
+                }
+            }
             $.post('checkSiteHolderNameExist', {
                 siteHolderName: siteHolderName.value,
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
@@ -231,9 +236,6 @@
         function renderConstructorFromSite(siteId) {
             let s;
             for(let i = 0; i < siteHolder.sites.length; i++){
-                console.log(siteHolder.sites[i].id);
-                console.log(siteId);
-                console.log(siteHolder.sites[i].id == siteId);
                 if(siteHolder.sites[i].id == siteId) s = siteHolder.sites[i];
             }
             renderConstructorPage(s.grid);
@@ -243,7 +245,8 @@
         function populateConstructorFromSite(site) {
             reActivateTagsField(site);
 
-            $('#site-tags').val(site.tags.join(' '));
+            $('#site-tags').value = site.tags.join(' ');  // might be empty so .val() method will
+                                                          // retrieve data from field instead rewrite it
             $('#site-name').val(site.siteName);
             $('#allowRating').prop('checked', site.allowRating);
             $('#allowComments').prop('checked', site.allowComments);
@@ -295,8 +298,10 @@
         function reActivateTagsField(site) {
             let tags;
             if(site){tags = site.tags}
-            $('.tag-editor').remove();
-            $('#site-tags').tagEditor({
+            var tagsTextArea = $('#site-tags');
+            tagsTextArea.tagEditor('destroy');
+            tagsTextArea.val('');
+            tagsTextArea.tagEditor({
                 initialTags: (tags || []),
                 autocomplete: {
                     delay: 0,

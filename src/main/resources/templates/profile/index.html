@@ -24,7 +24,10 @@
             </div>
         </div>
         <div class="col-md-5">
-            <h1 th:if="${profileUser.siteHolders.size() == 0}">User didn't create any site yet</h1>
+            <div th:if="${profileUser.siteHolders.size() == 0}">
+                <h1 th:if="${profileUser.username == #authentication.getName()}">You haven't created any sites yet</h1>
+                <h1 th:if="${profileUser.username != #authentication.getName()}">User haven't created any sites yet</h1>
+            </div>
             <h1 th:if="${profileUser.siteHolders.size() > 0}">User sites</h1>
             <div class="row" th:each="siteHolder : ${profileUser.siteHolders}">
                 <div class="siteHolder">

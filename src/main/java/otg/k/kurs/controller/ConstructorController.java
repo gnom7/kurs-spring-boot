@@ -33,7 +33,7 @@ public class ConstructorController {
     @Autowired
     private UserService userService;
 
-    @Secured("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("constructor")
     public String get(){
         return "constructor/index";
@@ -48,11 +48,6 @@ public class ConstructorController {
         siteHolderService.saveSiteHolder(siteHolder);
         return "index";
     }
-
-//    @PostMapping("/checkSiteNameExist")
-//    public @ResponseBody Boolean checkSiteName(@RequestParam String siteName){
-//        return siteService.isSiteNameExist(siteName);
-//    }
 
     @PostMapping("/checkSiteHolderNameExist")
     public @ResponseBody Boolean checkSiteHolderName(@RequestParam String siteHolderName){
