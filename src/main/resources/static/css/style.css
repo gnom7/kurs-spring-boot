@@ -142,21 +142,6 @@ p {
     background: orange;
 }
 
-.comment .text:before {
-    top: 18px;
-    left: 78px;
-    width: 9px;
-    height: 9px;
-    border-width: 0 0 1px 1px;
-    border-style: solid;
-    border-color: #e5e5e5;
-    background: #fff;
-    -webkit-transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-}​
-
 /*end of comment styles*/
 
 /*search styles*/
@@ -267,3 +252,13 @@ a.right-menu {
     font-size: 2.5em; margin-left: 10px;
 }
 /*end of drop right menu*/
+
+
+.optionGroup {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.optionChild {
+    padding-left: 15px;
+}

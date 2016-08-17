@@ -20,7 +20,7 @@ public class Image {
 
     private int position;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "site_id")
     private Site site;
 

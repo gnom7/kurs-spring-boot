@@ -61,4 +61,9 @@ public class SiteHolderServiceImpl implements SiteHolderService {
     public List<SiteHolder> getByUsername(String username){
         return siteHolderRepository.findByUser(userService.getUserByUsername(username));
     }
+
+    @Override
+    public List<SiteHolder> getAll(){
+        return siteHolderRepository.findAll();
+    }
 }

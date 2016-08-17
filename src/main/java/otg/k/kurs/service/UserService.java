@@ -6,6 +6,7 @@ import otg.k.kurs.domain.VerificationToken;
 import otg.k.kurs.dto.AccountDto;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public interface UserService {
 
@@ -34,4 +35,6 @@ public interface UserService {
     void sendEmailToResetPassword(String email, HttpServletRequest request);
 
     boolean resetPassword(String newPassword, String token);
+
+    List<User> getAll();
 }

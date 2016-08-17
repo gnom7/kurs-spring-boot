@@ -18,7 +18,7 @@ public class Comment {
     @GeneratedValue
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "username")
     private User user;
 

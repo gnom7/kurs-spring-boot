@@ -28,7 +28,7 @@ public class Site implements Serializable {
     @Field
     private String siteName;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username")
     @IndexedEmbedded(includeEmbeddedObjectId = true, depth = 1)
     private User user;

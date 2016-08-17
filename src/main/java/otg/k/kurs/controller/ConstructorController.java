@@ -40,7 +40,7 @@ public class ConstructorController {
     public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON) throws IOException {
         System.out.println(siteHolderDtoJSON);
         SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON, userService.getCurrentUser());
-//        siteHolderService.deleteSiteHolder(siteHolder.getId());
+        siteHolderService.deleteSiteHolder(siteHolder.getId());
         siteHolderService.saveSiteHolder(siteHolder);
         return "index";
     }

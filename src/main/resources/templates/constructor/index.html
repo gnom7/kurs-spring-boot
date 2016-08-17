@@ -127,6 +127,11 @@
                 errorDiv.innerHTML = '<p>Please, enter site name</p>';
                 return;
             }
+            if(siteHolder.sites.length == 0){
+                errorDiv.style.display = 'inline-block';
+                errorDiv.innerHTML = '<p>Site have not pages</p>';
+                return;
+            }
             $.post('checkSiteHolderNameExist', {
                 siteHolderName: siteHolderName.value,
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
