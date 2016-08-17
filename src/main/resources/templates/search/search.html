@@ -29,6 +29,7 @@
                     <b>Page: <a th:href="@{~/{username}/{siteHolderName}/{siteName}(username = ${site.username},
                     siteHolderName = ${site.siteHolderName}, siteName = ${site.siteName})}"
                                 th:text="${site.siteName}"></a></b><br />
+                    Tags: <a th:each="tag : ${site.tags}" th:href="@{~/search?q={tag}(tag = ${tag})}" th:text="${tag}"></a><br />
                     Creator: <a th:href="@{~/{username}(username = ${site.username})}" th:text="${site.username}"></a><br />
                     Site: <span th:text="${site.siteHolderName}"></span>
                 </li>

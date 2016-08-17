@@ -10,7 +10,6 @@
             font-weight: bold;
             font-style: italic;
         }
-
         .optionChild {
             padding-left: 15px;
         }
@@ -24,41 +23,49 @@
 
 <h1>GO HARD</h1>
 
-    <div class="col-xs-4"></div>
-        <div class="col-xs-4">
-            <div class="form-group">
+<div class="col-xs-4"></div>
 
-    <label for="users">Users:</label>
-    <select class="selectpicker form-control" id="users" name="users" multiple="multiple" th:each="user : ${users}">
-        <option class="optionGroup" th:value="${user.username}" th:text="${user.username}"></option>
-    </select>
-    <br />
-                <button class="btn btn-success btn-sm" id="addUser">Add new user</button>
-                <button class="btn btn-warning btn-sm" id="redactUser">Redact user</button>
-                <button class="btn btn-danger btn-sm" id="deleteUser">Delete selected user(s)</button>
+<div class="col-xs-4">
+    <div class="form-group">
 
-    <br />
+        <label for="users">Users:</label>
+        <select class="selectpicker form-control" id="users" name="users" multiple="multiple" th:each="user : ${users}">
+            <option class="optionGroup" th:value="${user.username}" th:text="${user.username}"></option>
+        </select>
+        <br />
+        <button class="btn btn-success btn-sm" id="add-user">Add new user</button>
+        <button class="btn btn-warning btn-sm" id="redact-user">Redact user</button>
+        <button class="btn btn-danger btn-sm" id="delete-user">Delete selected user(s)</button>
 
-    <label for="sites">Sites:</label>
-    <select class="selectpicker form-control" id="sites" name="sites" multiple="multiple">
-        <optgroup th:each="siteHolder : ${siteHolders}" label="------">
-            <option class="optionGroup" th:text="${siteHolder.siteHolderName}"></option>
-            <option class="optionChild" th:each="site : ${siteHolder.sites}" th:text="${site.siteName}"></option>
-        </optgroup>
-    </select>
-    <br />
-                <button class="btn btn-success btn-sm" id="addSite">Add new site</button>
-                <button class="btn btn-warning btn-sm" id="redactSite">Redact site</button>
-                <button class="btn btn-danger btn-sm" id="deleteSite">Delete selected site(s)</button>
+        <br />
 
-                </div>
-            </div>
+        <label for="sites">Sites:</label>
+        <select class="selectpicker form-control" id="sites" name="sites" multiple="multiple">
+            <optgroup th:each="siteHolder : ${siteHolders}" label="------">
+                <option class="optionGroup" th:text="${siteHolder.siteHolderName}"></option>
+                <option class="optionChild" th:each="site : ${siteHolder.sites}" th:text="${site.siteName}"></option>
+            </optgroup>
+        </select>
+        <br />
+        <button class="btn btn-success btn-sm" id="add-site">Add new site</button>
+        <button class="btn btn-warning btn-sm" id="redact-site">Redact site</button>
+        <button class="btn btn-danger btn-sm" id="delete-site">Delete selected site(s)</button>
+
+    </div>
+</div>
 
 
 
 </div>
 
 <th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+    $('#add-user').on('click', function (e) {
+
+    });
+    /*]]>*/
+    </script>
 </th:block>
 </body>
 </html>
