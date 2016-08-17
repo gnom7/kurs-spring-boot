@@ -24,6 +24,9 @@ public class SiteHolderServiceImpl implements SiteHolderService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SiteService siteService;
+
     @Override
     public boolean saveSiteHolder(SiteHolder siteHolder){
         return siteHolderRepository.save(siteHolder) != null;
@@ -34,9 +37,11 @@ public class SiteHolderServiceImpl implements SiteHolderService {
         ObjectMapper mapper = new ObjectMapper();
         SiteHolderDto siteHolderDto = mapper.readValue(siteHolderDtoJSON, SiteHolderDto.class);
         SiteHolder siteHolder = new SiteHolder(siteHolderDto);
-        for(Site site : siteHolder.getSites()){
-            site.setUser(user);
+        for(SiteDto siteDto : siteHolderDto.getSites()){
+            Site site = siteService.createSiteFromDto(siteDto);
             site.setSiteHolder(siteHolder);
+            site.setUser(user);
+            siteHolder.getSites().add(site);
         }
         siteHolder.setUser(user);
         return siteHolder;

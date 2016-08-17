@@ -38,6 +38,6 @@ public class SiteHolder {
         this.siteHolderName = siteHolderDto.getSiteHolderName();
         this.sites = new ArrayList<>(siteHolderDto.getSites().size());
         this.id = siteHolderDto.getId();
-        this.sites.addAll(siteHolderDto.getSites().stream().map(Site::new).collect(Collectors.toList()));
+        this.sites = new ArrayList<>(siteHolderDto.getSites().size());
     }
 }

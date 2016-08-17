@@ -42,7 +42,6 @@ public class ConstructorController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/savesite")
     public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON) throws IOException {
-        System.out.println(siteHolderDtoJSON);
         SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON, userService.getCurrentUser());
         siteHolderService.deleteSiteHolder(siteHolder.getId());
         siteHolderService.saveSiteHolder(siteHolder);
