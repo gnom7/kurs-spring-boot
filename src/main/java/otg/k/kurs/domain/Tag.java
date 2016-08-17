@@ -6,6 +6,7 @@ import org.hibernate.search.annotations.Field;
 import otg.k.kurs.dto.TagDto;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -14,20 +15,15 @@ public class Tag {
 
     @Id
     @GeneratedValue
-    private long id;
+    private long tagId;
 
     @Field
+    @Column(unique = true)
     private String tag;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "siteName")
-    private Site site;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
+    private List<Site> sites;
 
     public Tag(){}
-
-    public Tag(TagDto tagDto, Site site){
-        this.tag = tagDto.getTag();
-        this.site = site;
-    }
 
 }

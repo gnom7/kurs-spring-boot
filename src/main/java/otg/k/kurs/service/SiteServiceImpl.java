@@ -5,11 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import otg.k.kurs.domain.Site;
+import otg.k.kurs.domain.Tag;
 import otg.k.kurs.domain.User;
 import otg.k.kurs.dto.SiteDto;
 import otg.k.kurs.repository.SiteRepository;
+import otg.k.kurs.repository.TagRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("siteService")
@@ -20,6 +23,9 @@ public class SiteServiceImpl implements SiteService{
     private SiteRepository siteRepository;
 
     @Autowired
+    private TagService tagService;
+
+    @Autowired
     private UserService userService;
 
     @Override
@@ -28,10 +34,10 @@ public class SiteServiceImpl implements SiteService{
     }
 
     @Override
-    public Site createSite(String siteDtoJSON, User user) throws IOException {
+    public Site createSiteFromDtoJson(String siteDtoJSON, User user) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SiteDto siteDto = mapper.readValue(siteDtoJSON, SiteDto.class);
-        Site site = new Site(siteDto);
+        Site site = createSiteFromDto(siteDto);
         site.setUser(user);
         return site;
     }
@@ -50,4 +56,18 @@ public class SiteServiceImpl implements SiteService{
     public List<Site> findByUser(String username){
         return siteRepository.findByUser(userService.getUserByUsername(username));
     }
+
+    @Override
+    public Site createSiteFromDto(SiteDto siteDto){
+        Site site = new Site(siteDto);
+        List<Tag> tags = new ArrayList<>();
+        for(String stringTag : siteDto.getTags()){
+            Tag tag = tagService.getTagFromString(stringTag);
+            tag.getSites().add(site);
+            tags.add(tag);
+        }
+        site.setTags(tags);
+        return site;
+    }
+
 }

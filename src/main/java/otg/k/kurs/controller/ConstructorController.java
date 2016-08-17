@@ -12,6 +12,7 @@ import otg.k.kurs.domain.*;
 import otg.k.kurs.dto.SiteHolderDto;
 import otg.k.kurs.service.SiteHolderService;
 import otg.k.kurs.service.SiteService;
+import otg.k.kurs.service.TagService;
 import otg.k.kurs.service.UserService;
 
 import java.io.IOException;
@@ -22,6 +23,9 @@ public class ConstructorController {
 
     @Autowired
     private SiteService siteService;
+
+    @Autowired
+    private TagService tagService;
 
     @Autowired
     private SiteHolderService siteHolderService;
@@ -65,7 +69,7 @@ public class ConstructorController {
         SiteHolder siteHolder = siteHolderService.getBySiteHolderName(siteHolderName);
         SiteHolderDto siteHolderDto = new SiteHolderDto(siteHolder);
         model.addAttribute("siteHolderDto", siteHolderDto);
-        System.out.println(siteHolderDto);
+        model.addAttribute("allTags", tagService.getAllStringTags());
         return "constructor/index";
     }
 

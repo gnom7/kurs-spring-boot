@@ -54,7 +54,9 @@ public class SiteHolderServiceImpl implements SiteHolderService {
 
     @Override
     public void deleteSiteHolder(long siteHolderId){
-        siteHolderRepository.delete(siteHolderId);
+        if(siteHolderRepository.exists(siteHolderId)){
+            siteHolderRepository.delete(siteHolderId);
+        }
     }
 
     @Override

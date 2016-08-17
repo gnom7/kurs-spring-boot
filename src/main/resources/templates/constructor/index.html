@@ -4,11 +4,8 @@
       xmlns:layout="http://www.thymeleaf.org">
 <head>
     <title th:text="#{constructor.title}">Constructor</title>
-    <th:block layout:fragment="styles">
-        <style>
-            .my-content{border: thin solid black;}
-        </style>
-    </th:block>
+    <th:block layout:fragment="styles" />
+    <link rel="stylesheet" th:href="@{/css/jquery.tag-editor.css}" />
 </head>
 <body>
 <div layout:fragment="nowrap-content">
@@ -54,8 +51,12 @@
     <script type="text/javascript" th:src="@{//widget.cloudinary.com/global/all.js}"></script>
     <script type="text/javascript" th:src="@{/js/work_with_modals.js}"></script>
     <script type="text/javascript" th:src="@{/js/cloudinary_widgets.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.tag-editor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.caret.min.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
+        var counterForNewSiteID = -1;
+
         var siteHolder = {
             sites: [],
             siteHolderName: ''
@@ -91,9 +92,9 @@
         $('.save-site').on('click', function () {
             var siteName = $('#site-name').get(0);
             var errorDiv = $('.save-site-error').get(0);
-            if(!siteName.checkValidity()){
+            if(!siteName.checkValidity() || isSiteNameExist(siteName)){
                 errorDiv.style.display = 'inline-block';
-                errorDiv.innerHTML = '<p>Please, enter page name</p>';
+                errorDiv.innerHTML = '<p>Invalid page name</p>';
                 return;
             }
             if(errorDiv) {errorDiv.remove();}
@@ -101,15 +102,20 @@
             siteOptsModal.modal('hide');
 
             populateSiteData(site);
+
             var isNewSite = true;
-            for(let i = 0; i < siteHolder.sites.length; i++){
-                if(site.id == siteHolder.sites[i].id){
-                    siteHolder.sites[i] = $.extend(true, {}, site);
-                    $('#siteListButton' + site.id + '').html(site.siteName);
-                    isNewSite = false;
+            if(site.id) {
+                for(let i = 0; i < siteHolder.sites.length; i++){
+                    if(siteHolder.sites[i].id == site.id){
+                        siteHolder.sites[i] = $.extend(true, {}, site);
+                        $('#siteListButton' + site.id).html(site.siteName);
+                        isNewSite = false;
+                    }
                 }
             }
+
             if(isNewSite){
+                site.id = counterForNewSiteID--;
                 siteHolder.sites.push($.extend(true, {}, site));
                 appendSiteToSiteList(site);
             }
@@ -118,6 +124,15 @@
             renderConstructorPage();
             clearSiteData(site);
         });
+
+        function isSiteNameExist(siteName) {
+            for(let i = 0; i < siteHolder.sites.length; i++){
+                if(siteName == siteHolder.sites[i].siteName){
+                    return true;
+                }
+            }
+            return false;
+        }
 
         $('.save-siteHolder').on('click', function () {
             var siteHolderName = $('#siteHolder-name').get(0);
@@ -178,9 +193,19 @@
             }
             site.siteName = siteName.value;
             site.id = $('#site-id').val();
-            site.menu = $('input[name = "menu"]:checked').val();
-            site.tags = $('#site-tags').value || [];
-            site.theme = $('input[name = "theme"]:checked').val();
+//            site.menu = $('input[name = "menu"]:checked').val();       // wtf it sometimes doesn't work
+//            site.theme = $('input[name = "theme"]:checked').val();
+            if($('#white').is(':checked')) {                             // use this instead
+                site.menu = 'white'
+            } else {site.menu = 'dark'}
+            if($('#horizontal').is(':checked')) {
+                site.theme = 'horizontal'
+            } else {site.theme = 'vertical'}
+
+            $('#site-tags').tagEditor('getTags')[0].tags.forEach(function(item){
+                site.tags.push(item);
+            });
+
             site.allowRating = $('input[name = "allowRating"]').is(':checked');
             site.allowComments = $('input[name = "allowComments"]').is(':checked');
             if(!site.grid) {site.grid = [[12],[6,6],[12]]} // grid which is rendered by default
@@ -206,6 +231,9 @@
         function renderConstructorFromSite(siteId) {
             let s;
             for(let i = 0; i < siteHolder.sites.length; i++){
+                console.log(siteHolder.sites[i].id);
+                console.log(siteId);
+                console.log(siteHolder.sites[i].id == siteId);
                 if(siteHolder.sites[i].id == siteId) s = siteHolder.sites[i];
             }
             renderConstructorPage(s.grid);
@@ -213,12 +241,15 @@
         }
 
         function populateConstructorFromSite(site) {
+            reActivateTagsField(site);
+
+            $('#site-tags').val(site.tags.join(' '));
             $('#site-name').val(site.siteName);
-            $('#site-id').val(site.id);
-            $('#site-tags').val(site.tags.join(', '));
             $('#allowRating').prop('checked', site.allowRating);
             $('#allowComments').prop('checked', site.allowComments);
-            $(site.theme + '').prop("checked", true);
+            $('#' + site.theme).prop('checked', true);
+            $('#' + site.menu).prop('checked', true);
+            $('#site-id').val(site.id);
 
             var images = site.images;
             var videos = site.videos;
@@ -258,6 +289,22 @@
                 container.append(element);
                 addText(element, text.markdownText)
             }
+        }
+
+
+        function reActivateTagsField(site) {
+            let tags;
+            if(site){tags = site.tags}
+            $('.tag-editor').remove();
+            $('#site-tags').tagEditor({
+                initialTags: (tags || []),
+                autocomplete: {
+                    delay: 0,
+                    position: { collision: 'flip' },
+                    source: ([[${allTags}]] || []),
+                    forceLowercase: false,
+                    placeholder: 'Tags ...'
+                }});
         }
         /*]]>*/
     </script>

@@ -38,7 +38,10 @@ public class Site implements Serializable {
     @IndexedEmbedded(depth = 1)
     private SiteHolder siteHolder;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "tag_site", joinColumns = {
+            @JoinColumn(name = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "tagId")})
     @IndexedEmbedded(depth = 1)
     private List<Tag> tags;
 
@@ -84,11 +87,10 @@ public class Site implements Serializable {
         this.images = new ArrayList<>(siteDto.getImages().size());
         this.videos = new ArrayList<>(siteDto.getVideos().size());
         this.texts = new ArrayList<>(siteDto.getTexts().size());
-        this.tags = new ArrayList<>(siteDto.getTags().size());
+        this.tags = new ArrayList<>();
         this.images.addAll(siteDto.getImages().stream().map(imageDto -> new Image(imageDto, this)).collect(Collectors.toList()));
         this.videos.addAll(siteDto.getVideos().stream().map(videoDto -> new Video(videoDto, this)).collect(Collectors.toList()));
         this.texts.addAll(siteDto.getTexts().stream().map(textDto -> new Text(textDto, this)).collect(Collectors.toList()));
-        this.tags.addAll(siteDto.getTags().stream().map(tagDto -> new Tag(tagDto, this)).collect(Collectors.toList()));
     }
 
 

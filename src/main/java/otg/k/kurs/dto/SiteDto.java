@@ -3,6 +3,7 @@ package otg.k.kurs.dto;
 import lombok.Data;
 import otg.k.kurs.domain.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class SiteDto {
 
     private List<CommentDto> comments;
 
-    private List<TagDto> tags;
+    private List<String> tags;
 
     public SiteDto(){}
 
@@ -51,10 +52,11 @@ public class SiteDto {
         this.allowRating = site.isAllowRating();
         this.allowComments = site.isAllowComments();
         this.username = site.getUser().getUsername();
+        this.tags = new ArrayList<>(site.getTags().size());
         this.images = site.getImages().stream().map(ImageDto::new).collect(Collectors.toList());
         this.texts = site.getTexts().stream().map(TextDto::new).collect(Collectors.toList());
         this.videos = site.getVideos().stream().map(VideoDto::new).collect(Collectors.toList());
         this.comments = site.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
-        this.tags = site.getTags().stream().map(TagDto::new).collect(Collectors.toList());
+        this.tags.addAll(site.getTags().stream().map(Tag::getTag).collect(Collectors.toList()));
     }
 }
