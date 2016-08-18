@@ -72,7 +72,7 @@
 
         $(document).ready(function () {
             var siteHolderDto = [[${siteHolderDto}]];
-            if(siteHolderDto){
+            if(siteHolderDto && siteHolderDto.sites[0]){
                 siteHolder = siteHolderDto;
                 renderConstructorFromSite(siteHolderDto['sites'][0]['id']);
                 $('#siteHolder-name').val(siteHolder.siteHolderName);

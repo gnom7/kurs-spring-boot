@@ -43,7 +43,7 @@
         <select class="selectpicker form-control" id="sites" name="sites" multiple="multiple">
             <optgroup th:each="siteHolder : ${siteHolders}" label="------">
                 <option class="optionGroup" th:text="${siteHolder.siteHolderName}"></option>
-                <option class="optionChild" th:each="site : ${siteHolder.sites}" th:text="${site.siteName}"></option>
+                <option class="optionChild" disabled="disabled" th:each="site : ${siteHolder.sites}" th:text="${site.siteName}"></option>
             </optgroup>
         </select>
         <br />
@@ -65,6 +65,8 @@
     $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
         jqXHR.setRequestHeader('X-CSRF-Token', [[${_csrf.token}]]);
     });
+
+//    for users
 
     $('#add-user').on('click', function (e) {
         $('#create-user-modal').modal('show');
@@ -103,7 +105,7 @@
     $('#create-user').on('click', function (e) {
         let userData = collectUserData();
         $.ajax({
-            method: 'POST',                        // may not use 'PATCH', so if doesn't exist user will be created
+            method: 'POST',                        // not PATCH because 1.data prepopulated and if 2.delete field it deleted from DB
             url: '/admin/crud/datarest/users',
             contentType: 'application/json',
             data: JSON.stringify(userData)
@@ -120,6 +122,66 @@
         userData['locked'] = $('#locked').is(':checked');
         return userData;
     }
+
+//    for sites
+
+    $('#add-site').on('click', function (e) {
+        $('#create-site-modal').modal('show');
+    });
+
+    $('#create-site').on('click', function (e) {
+        let siteHolderData = {
+            siteHolderName: $('#siteHolderName').val()
+        };
+        let userData = {
+            username: $('#site-creator').val()
+        };
+        userData = populateUserData(userData);
+        siteHolderData.user = getUserLink(userData);
+        $.ajax({
+            method: 'POST',
+            url: '/admin/crud/datarest/siteHolders',
+            contentType: 'application/json',
+            data: JSON.stringify(siteHolderData)
+        });
+
+        function populateUserData(userData) {
+            $.ajax({
+                method: 'GET',
+                async: false,
+                url: '/admin/crud/datarest/users/' + userData.username,
+                success: function (response) {
+                    let username = userData.username;
+                    userData = response;
+                    userData.username = username;
+                    delete userData.authorities;
+                },
+                statusCode: {
+                    404: function() {
+                        userData.role = 'ROLE_USER';
+                    }
+                }
+            });
+            return userData;
+        }
+
+        function getUserLink(userData) {
+            let userLink;
+            $.ajax({
+                method: 'POST',
+                async: false,
+                url: '/admin/crud/datarest/users',
+                contentType: 'application/json',
+                data: JSON.stringify(userData),
+                success: function (response) {
+                    userLink = response['_links']['self']['href'];
+                    console.log(userLink);
+                }
+            });
+            return userLink;
+        }
+
+    });
 
     /*]]>*/
     </script>
