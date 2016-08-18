@@ -12,8 +12,7 @@ import java.util.List;
 @RepositoryRestResource
 public interface SiteHolderRepository extends JpaRepository<SiteHolder, Long> {
 
-    SiteHolder findBySiteHolderName(@Param("siteHolderName") String siteHolderName);
+    SiteHolder findBySiteHolderName(@Param("name") String siteHolderName);
 
     List<SiteHolder> findByUser(User user);
-
 }

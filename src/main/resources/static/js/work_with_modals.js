@@ -28,14 +28,14 @@ $(modal).on('hidden.bs.modal', function () {
     clearModal(self);
 });
 
-function clearModal(self) {
-    $.each(self.find('input'), function (index, item) {
+function clearModal(modal) {
+    $.each(modal.find('input'), function (index, item) {
         if(item.id == 'white') {item.checked = true; return;}
         if(item.id == 'horizontal') {item.checked = true; return;}
         item.checked = false;
         item.value = '';
     });
-    $.each(self.find('textarea'), function (index, item) {
+    $.each(modal.find('textarea'), function (index, item) {
         item.value = '';
     });
     $('.tag-editor').val('');

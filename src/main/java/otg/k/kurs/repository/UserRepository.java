@@ -10,7 +10,7 @@ import otg.k.kurs.domain.User;
 @RepositoryRestResource
 public interface UserRepository extends JpaRepository<User, String> {
 
-    User findByUsername(@Param("username") String username);
+    User findByUsername(String username);
 
     User findByEmail(String email);
 

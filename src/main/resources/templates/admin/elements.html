@@ -12,29 +12,30 @@
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Create user</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="create-user-data">
-                            <label>username: <input id="username" name="username" required="required" /></label><br />
-                            <label>firstname: <input id="firstname" name="firstname" /></label><br />
-                            <label>lastname: <input id="lastname" name="lastname" /></label><br />
-                            <label>email: <input id="email" name="email" /></label><br />
-                            <label>password: <input id="password" name="password" /></label><br />
-                            <label>locked: <input id="locked" name="locked" type="checkbox" /></label><br />
-                            <label>enabled: <input id="enabled" name="enabled" type="checkbox" checked="checked" /></label><br />
-                            <label>avatarUrl: <input id="avatarUrl" name="avatarUrl" /></label><br />
-                            <label>ROLE_USER <input id="ROLE_USER" name="role" type="radio" value="ROLE_USER" checked="checked" /></label><br />
-                            <label>ROLE_ADMIN <input id="ROLE_ADMIN" name="role" type="radio" value="ROLE_ADMIN" /></label><br />
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="alert alert-danger " style="display: none; float: left; clear: left; margin-left: 70px;"></div>
-                        <button id="create-user" class="btn btn-success">Save user</button>
-                        <button class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create user</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="create-user-data">
+                        <label>username: <input id="username" name="username" required="required" /></label><br />
+                        <label>firstname: <input id="firstname" name="firstname" /></label><br />
+                        <label>lastname: <input id="lastname" name="lastname" /></label><br />
+                        <label>email: <input id="email" name="email" /></label><br />
+                        <label>password: <input id="password" name="password" /></label><br />
+                        <label>locked: <input id="locked" name="locked" type="checkbox" /></label><br />
+                        <label>enabled: <input id="enabled" name="enabled" type="checkbox" checked="checked" /></label><br />
+                        <label>avatarUrl: <input id="avatarUrl" name="avatarUrl" /></label><br />
+                        <label>ROLE_USER <input id="ROLE_USER" name="role" type="radio" value="ROLE_USER" checked="checked" /></label><br />
+                        <label>ROLE_ADMIN <input id="ROLE_ADMIN" name="role" type="radio" value="ROLE_ADMIN" /></label><br />
+                    </form>
+                    <input type="hidden" id="redacting-user" />
+                </div>
+                <div class="modal-footer">
+                    <div class="alert alert-danger " style="display: none; float: left; clear: left; margin-left: 70px;"></div>
+                    <button id="save-user" class="btn btn-success" data-dismiss="modal">Save user</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -49,13 +50,14 @@
                 </div>
                 <div class="modal-body">
                     <form id="create-site-data">
-                        <label>site name: <input id="siteHolderName" name="siteHolderName" required="required" /></label><br />
-                        <label>site creator (username): <input id="site-creator" name="site-creator" /></label><br />
+                        <label>site name: <input id="site-name" required="required" /></label><br />
+                        <label>site creator (username): <input id="site-creator" /></label><br />
                     </form>
+                    <input type="hidden" id="redacting-site" />
                 </div>
                 <div class="modal-footer">
                     <div class="alert alert-danger" style="display: none; float: left; clear: left; margin-left: 70px;"></div>
-                    <button id="create-site" class="btn btn-success">Create site</button>
+                    <button id="save-site" class="btn btn-success" data-dismiss="modal">Save site</button>
                     <button class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>

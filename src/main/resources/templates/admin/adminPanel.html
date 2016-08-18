@@ -42,7 +42,7 @@
         <label for="sites">Sites:</label>
         <select class="selectpicker form-control" id="sites" name="sites" multiple="multiple">
             <optgroup th:each="siteHolder : ${siteHolders}" label="------">
-                <option class="optionGroup" th:text="${siteHolder.siteHolderName}"></option>
+                <option class="optionGroup " th:text="${siteHolder.siteHolderName}"></option>
                 <option class="optionChild" disabled="disabled" th:each="site : ${siteHolder.sites}" th:text="${site.siteName}"></option>
             </optgroup>
         </select>
@@ -69,47 +69,39 @@
 //    for users
 
     $('#add-user').on('click', function (e) {
+        $('#redacting-user').val('');
         $('#create-user-modal').modal('show');
     });
 
     $('#redact-user').on('click', function (e) {
-        let userToRedact = $('#users').find(':selected')[0];
-        if(!userToRedact) return;
-        var modal = $('#create-user-modal');
-        var user;
-        $.ajax({
-            method: 'GET',
-            async: false,
-            url: '/admin/crud/datarest/users/' + userToRedact.value,
-            success: function (response) {
-                user = response;
-            }
-        });
-        $('#username').val(userToRedact.value);
-        for(let key in user){
-            $('#' + key).val(user[key]);
+        let username = $('#users').find(':selected')[0];
+        if( !username) return;
+        username = username.value;
+        $('#redacting-user').val(username);
+
+        let userData = getUserDataFromName(username);
+
+        for(let key in userData){
+            $('#' + key).val(userData[key]);
         }
-        modal.modal('show');
+        $('#create-user-modal').modal('show');
     });
 
     $('#delete-user').on('click', function (e) {
         let usersToDelete = $('#users').find(':selected');
         for(let i = 0; i < usersToDelete.length; i++){
-            $.ajax({
-                method: 'DELETE',
-                url: '/admin/crud/datarest/users/' + usersToDelete[i].value
-            })
+            deleteUser(usersToDelete[i].value);
         }
+        location.reload();
     });
 
-    $('#create-user').on('click', function (e) {
-        let userData = collectUserData();
-        $.ajax({
-            method: 'POST',                        // not PATCH because 1.data prepopulated and if 2.delete field it deleted from DB
-            url: '/admin/crud/datarest/users',
-            contentType: 'application/json',
-            data: JSON.stringify(userData)
-        })
+    $('#save-user').on('click', function (e) {
+        let oldUsername = $('#redacting-user').val();
+        if(oldUsername) {
+            deleteUser(oldUsername);  // because username is also ID, so for possibility to change username
+        }
+        saveUser(collectUserData());
+        location.reload();
     });
 
     function collectUserData() {
@@ -123,65 +115,283 @@
         return userData;
     }
 
+    function saveUser(userData) {
+        $.ajax({
+            method: 'POST',
+            async: false,
+            url: '/admin/crud/datarest/users',
+            contentType: 'application/json',
+            data: JSON.stringify(userData)
+        });
+    }
+
+    function deleteUser(username) {
+        $.ajax({
+            method: 'DELETE',
+            async: false,
+            url: '/admin/crud/datarest/users/' + username
+        })
+    }
+
 //    for sites
 
     $('#add-site').on('click', function (e) {
+        $('#redacting-site').val('');
         $('#create-site-modal').modal('show');
     });
 
-    $('#create-site').on('click', function (e) {
-        let siteHolderData = {
-            siteHolderName: $('#siteHolderName').val()
-        };
-        let userData = {
-            username: $('#site-creator').val()
-        };
-        userData = populateUserData(userData);
-        siteHolderData.user = getUserLink(userData);
-        $.ajax({
-            method: 'POST',
-            url: '/admin/crud/datarest/siteHolders',
-            contentType: 'application/json',
-            data: JSON.stringify(siteHolderData)
-        });
+    $('#delete-site').on('click', function (e) {
+        let sitesToDelete = $('#sites').find(':selected');
+        for(let i = 0; i < sitesToDelete.length; i++){
+            deleteSite(sitesToDelete[i].value);
+        }
+        location.reload();
+    });
 
-        function populateUserData(userData) {
-            $.ajax({
-                method: 'GET',
-                async: false,
-                url: '/admin/crud/datarest/users/' + userData.username,
-                success: function (response) {
-                    let username = userData.username;
-                    userData = response;
-                    userData.username = username;
-                    delete userData.authorities;
-                },
-                statusCode: {
+    $('#redact-site').on('click', function (e) {
+        let siteName = $('#sites').find(':selected')[0];
+        if( !siteName) return;
+        siteName = siteName.value;
+
+        $('#redacting-site').val(siteName);
+
+        populateSiteForm(siteName);
+        $('#create-site-modal').modal('show');
+    });
+
+    $('#save-site').on('click', function (e) {
+        let siteData = collectSiteData();
+        let redactingSiteName = $('#redacting-site').val();
+        if(redactingSiteName) {
+            deleteSite(redactingSiteName);
+        }
+        saveSite(siteData);
+        location.reload();
+    });
+
+    function saveSite(siteData) {
+        $.ajax({
+                method: 'POST',
+                url: '/admin/crud/datarest/siteHolders',
+                contentType: 'application/json',
+                data: JSON.stringify(siteData)
+        });
+    }
+
+    function collectSiteData() {
+        let siteName = $('#site-name').val();
+        let redactingSiteName = $('#redacting-site').val();
+        let username = $('#site-creator').val();
+        let siteData;
+        if(redactingSiteName){
+            siteData = getSiteDataFromName(redactingSiteName);
+            siteData.siteHolderName = siteName;
+        } else {
+            siteData = {
+                siteHolderName: siteName
+            }
+        }
+        if(username){
+            siteData.user = getUserDataFromName(username)['_links']['self']['href']; // to not hardcode 'localhost:8080' ....
+        }
+        return siteData;
+    }
+
+    function deleteSite(siteName) {
+        let siteId = getSiteDataFromName(siteName)['_links']['self']['href'].split('/').pop();
+        if( !siteId) return;
+        $.ajax({
+            method: 'DELETE',
+            async: false,
+            url: '/admin/crud/datarest/siteHolders/' + siteId
+        });
+    }
+
+    function populateSiteForm(siteName) {
+        let siteData = getSiteDataFromName(siteName);
+        $('#site-name').val(siteData.siteHolderName);
+        let username;
+        $.ajax({
+            method: 'GET',
+            async: false,
+            url: siteData['_links']['user']['href'],
+            success: function (response) {
+                username = response['_links']['self']['href'].split('/').pop();
+            }
+        });
+        $('#site-creator').val(username);
+    }
+
+    function getSiteDataFromName(siteName) {
+        let siteData;
+        $.ajax({
+            method: 'GET',
+            async: false,
+            url: '/admin/crud/datarest/siteHolders/search/findBySiteHolderName?name=' + siteName,
+            success: function (response) {
+                siteData = response;
+            }
+        });
+        return siteData;
+    }
+
+    function getUserDataFromName(username) {
+        let userData = {};
+        $.ajax({
+            method: 'GET',
+            async: false,
+            url: '/admin/crud/datarest/users/' + username,
+            success: function (response) {
+                userData = response;
+                userData.username = username;
+                delete userData.authorities;
+            },
+            statusCode: {
                     404: function() {
+                        userData.username = username;
                         userData.role = 'ROLE_USER';
+                        saveUser(userData);
+                        userData = getUserDataFromName(username);
                     }
                 }
-            });
-            return userData;
-        }
+        });
+        return userData;
+    }
 
-        function getUserLink(userData) {
-            let userLink;
-            $.ajax({
-                method: 'POST',
-                async: false,
-                url: '/admin/crud/datarest/users',
-                contentType: 'application/json',
-                data: JSON.stringify(userData),
-                success: function (response) {
-                    userLink = response['_links']['self']['href'];
-                    console.log(userLink);
-                }
-            });
-            return userLink;
-        }
 
+
+
+    $('.modal').on('hidden.bs.modal', function () {
+        clearModal($(this));
     });
+
+    function clearModal(modal) {
+        $.each(modal.find('input'), function (index, item) {
+            if(item.id == 'enabled') {item.checked = true; return;}
+            if(item.id == 'ROLE_USER') {item.checked = true; return;}
+            item.checked = false;
+            item.value = '';
+        });
+    }
+
+//    $('#add-site').on('click', function (e) {
+//        $('#redacting-site').prop('checked', false);
+//        $('#create-site-modal').modal('show');
+//    });
+//
+//    $('#delete-site').on('click', function (e) {
+//        let sitesToDelete = $('#sites').find(':selected');
+//        for(let i = 0; i < sitesToDelete.length; i++){
+//            let siteData = populateSiteDataFromDB(sitesToDelete[i].value);
+//            deleteSite(siteData['_links']['self']['href'].splice('/').pop());
+//        }
+//    });
+//
+//    var redactSiteId;
+//    $('#redact-site').on('click', function (e) {
+//        $('#redacting-site').prop('checked', true);
+//
+//        let siteToRedact = $('#sites').find(':selected')[0];
+//        if( !siteToRedact) return;
+//        siteToRedact = siteToRedact.value;
+//
+//        let siteData = populateSiteDataFromDB(siteToRedact);
+//        redactSiteId = siteData['_links']['self']['href'].splice('/').pop();
+//
+//        for(let key in siteData){
+//            $('#' + key).val(siteData[key]);
+//        }
+//        $('#create-site-modal').modal('show');
+//
+//    });
+//
+//    function populateSiteDataFromDB(siteToRedact) {
+//        let siteData;
+//        $.ajax({
+//            method: 'GET',
+//            async: false,
+//            url: '/admin/crud/datarest/siteHolders/search/findBySiteHolderName?name=' + siteToRedact,
+//            success: function (response) {
+//                siteData = response;
+////                    siteIdToRedact = response['_links']['self']['href'].splice('/').pop();
+//            }
+//        });
+//        return siteData;
+//    }
+//
+//    $('#create-site').on('click', function (e) {
+//        if($('#redacting-site').is(':checked')) {
+//            deleteSite(redactSiteId);
+//            createSite();
+//            return;
+//        }
+//        createSite();
+//
+//        function createSite() {
+//            let siteData = collectSiteData();
+//            $.ajax({
+//                method: 'POST',
+//                url: '/admin/crud/datarest/siteHolders',
+//                contentType: 'application/json',
+//                data: JSON.stringify(siteData)
+//            });
+//        }
+//
+//        function collectSiteData() {
+//            let siteData = {
+//                siteHolderName: $('#siteHolderName').val()
+//            };
+//            let userData = populateUserDataFromDB($('#site-creator').val());
+//            siteData.user = saveUser(userData);  // returns link to user (from POST response)
+//            return siteData;
+//        }
+//
+//        function populateUserDataFromDB(username) {
+//            let userData;
+//            $.ajax({
+//                method: 'GET',
+//                async: false,
+//                url: '/admin/crud/datarest/users/' + username,
+//                success: function (response) {
+//                    let username = userData.username;
+//                    userData = response;
+//                    userData.username = username;
+//                    delete userData.authorities;
+//                },
+//                statusCode: {
+//                    404: function() {
+//                        userData.role = 'ROLE_USER';
+//                    }
+//                }
+//            });
+//            return userData;
+//        }
+//
+//        function saveUser(userData) {
+//            let userLink;
+//            $.ajax({
+//                method: 'POST',
+//                async: false,
+//                url: '/admin/crud/datarest/users',
+//                contentType: 'application/json',
+//                data: JSON.stringify(userData),
+//                success: function (response) {
+//                    userLink = response['_links']['self']['href'];
+//                    console.log(userLink);
+//                }
+//            });
+//            return userLink;
+//        }
+//
+//    });
+//
+//    function deleteSite(siteId) {
+//        $.ajax({
+//            method: 'DELETE',
+//            async: false,
+//            url: '/admin/crud/datarest/siteHolders/' + siteId
+//        })
+//    }
 
     /*]]>*/
     </script>
