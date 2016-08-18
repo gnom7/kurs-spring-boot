@@ -38,6 +38,8 @@ public class SiteDto {
 
     private List<String> tags;
 
+    private int rating;
+
     public SiteDto(){}
 
     public SiteDto(String siteName) {this.siteName = siteName;}
@@ -47,6 +49,7 @@ public class SiteDto {
         this.siteHolderName = site.getSiteHolder().getSiteHolderName();
         this.menu = site.getMenu();
         this.id = site.getId();
+        this.rating = site.getRating();
         this.theme = site.getTheme();
         this.grid = site.getGrid();
         this.allowRating = site.isAllowRating();

@@ -70,6 +70,8 @@ public class Site implements Serializable {
     @IndexedEmbedded
     private List<Comment> comments;
 
+    private int rating = 0;
+
     public Site(){}
 
     public Site(long siteId){
@@ -82,6 +84,7 @@ public class Site implements Serializable {
         this.grid = siteDto.getGrid();
         this.siteName = siteDto.getSiteName();
         this.id = siteDto.getId();
+        this.rating = siteDto.getRating();
         this.menu = siteDto.getMenu();
         this.theme = siteDto.getTheme();
         this.images = new ArrayList<>(siteDto.getImages().size());

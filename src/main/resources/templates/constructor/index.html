@@ -83,14 +83,17 @@
             } else {
                 renderConstructorPage();
             }
+            console.log('this is old site:');
+            console.log(siteHolderDto);
         });
 
         function appendSiteToSiteList(site) {
-            $('#siteList').append($('<button class="btn btn-default" onclick="renderConstructorFromSite(\'' +
-                    site.id + '\')" id="siteListButton' + site.id + '">' + site.siteName + '</button>'));
+            $('#siteList').append($('<button data-dismiss="modal" class="btn btn-default" ' +
+                    'onclick="renderConstructorFromSite(\'' + site.id + '\')" id="siteListButton'
+                    + site.id + '">' + site.siteName + '</button>'));
         }
 
-        $('.save-site').on('click', function () {
+        $('#save-site').on('click', function () {
             var siteName = $('#site-name').get(0);
             var errorDiv = $('.save-site-error').get(0);
             if(!siteName.checkValidity() || isSiteNameExist(siteName)){
@@ -120,6 +123,8 @@
                 siteHolder.sites.push($.extend(true, {}, site));
                 appendSiteToSiteList(site);
             }
+            console.log('this is new site:');
+            console.log(siteHolder);
 
             clearModal(siteOptsModal);
             renderConstructorPage();
@@ -135,7 +140,8 @@
             return false;
         }
 
-        $('.save-siteHolder').on('click', function () {
+        $('#save-siteHolder').on('click', function () {
+            $('#save-site').click();
             var siteHolderName = $('#siteHolder-name').get(0);
             var errorDiv = $('.save-siteHolder-error').get(0);
             if(!siteHolderName.checkValidity()){
@@ -184,16 +190,19 @@
                     var currentElement = elements.eq(j);
                     if(currentElement.find('.glyphicon-camera').length != 0){
                         currentElement.find('img').each(function (index, image) {
-                            site.images.push({url: image.src, position: i});
-                        })
+                            let id = $(image).siblings('input.id').val();
+                            site.images.push({url: image.src, position: i, id: id});
+                        });
                     }
                     if(currentElement.find('.markdown').length != 0){
-                        site.texts.push({markdownText: currentElement.find('input').val(), position: i});
+                        let id = currentElement.find('input.id').val();
+                        site.texts.push({markdownText: currentElement.find('input').val(), position: i, id: id});
                     }
                     if(currentElement.find('iframe').length != 0){
+                        let id = currentElement.find('input.id').val();
                         var iframe = currentElement.find('iframe');
                         site.videos.push({url: iframe.attr('src'), height: iframe.attr('height'),
-                            width: iframe.attr('width'), position: i});
+                            width: iframe.attr('width'), position: i, id: id});
                     }
                 }
             }
@@ -272,7 +281,8 @@
                 }
                 element.find('.uploadedImages')
                         .append('<ul class="cloudinary-thumbnails"><li class="cloudinary-thumbnail active"><img src="' +
-                                image.url + '"><button onclick="$(this).closest(\'ul\').remove()" ' +
+                                image.url + '"><input type="hidden" class="id" value="' + image.id +
+                                '" /><button onclick="$(this).closest(\'ul\').remove()" ' +
                                 'class="btn btn-danger btn-xs">×</button></li></ul>');
             }
 
@@ -282,7 +292,7 @@
                 element = createElement('film');
                 container = $('.my-content').eq(position);
                 container.append(element);
-                addVideo(element, video.width, video.height, video.url);
+                addVideo(element, video.width, video.height, video.url, video.id);
             }
 
             for(let i = 0; i < texts.length; i++){
@@ -291,7 +301,7 @@
                 element = createElement('font');
                 container = $('.my-content').eq(position);
                 container.append(element);
-                addText(element, text.markdownText)
+                addText(element, text.markdownText, text.id)
             }
         }
 

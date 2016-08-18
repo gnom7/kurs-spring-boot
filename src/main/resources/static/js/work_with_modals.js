@@ -77,11 +77,12 @@ fncs = {'film': function() {
         addText(modalInvoker, text);
     }};
 
-function addVideo(element, videoWidth, videoHeight, videoUrl) {
+function addVideo(element, videoWidth, videoHeight, videoUrl, id) {
     if(element.children('.my-tool').length != 0) {
-        element.children('.my-tool').remove();
+        element.children('.my-tool').remove();console.log('video: ' + id);
         element.prepend('<iframe width="' + videoWidth + '" height="' + videoHeight + '" src="' + videoUrl +
             '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
+        element.append('<input type="hidden" class="id" value="' + (id || 0) + '" />');
     } else {
         var iframe = element.children('iframe');
         iframe.prop('width', videoWidth);
@@ -90,7 +91,7 @@ function addVideo(element, videoWidth, videoHeight, videoUrl) {
     }
 }
 
-function addText(element, text) {
+function addText(element, text, id) {
     if(element.children('.my-tool').length != 0) {
         element.children('.my-tool').remove();
         element.prepend(markdownToHtml(text));
@@ -98,6 +99,7 @@ function addText(element, text) {
         element.children('.markdown').remove();
         element.prepend(markdownToHtml(text));
     }
+    element.append('<input type="hidden" class="id" value="' + (id || 0) + '" />')
 }
 
 function markdownToHtml(text) {

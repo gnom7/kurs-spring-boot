@@ -29,7 +29,7 @@
     <div class="form-group">
 
         <label for="users">Users:</label>
-        <select class="selectpicker form-control" id="users" name="users" multiple="multiple">
+        <select size="10" class="selectpicker form-control" id="users" name="users" multiple="multiple">
             <option class="optionGroup" th:each="user : ${users}" th:value="${user.username}" th:text="${user.username}"></option>
         </select>
         <br />
@@ -40,7 +40,7 @@
         <br />
 
         <label for="sites">Sites:</label>
-        <select class="selectpicker form-control" id="sites" name="sites" multiple="multiple">
+        <select size="10" class="selectpicker form-control" id="sites" name="sites" multiple="multiple">
             <optgroup th:each="siteHolder : ${siteHolders}" label="------">
                 <option class="optionGroup " th:text="${siteHolder.siteHolderName}"></option>
                 <option class="optionChild" disabled="disabled" th:each="site : ${siteHolder.sites}" th:text="${site.siteName}"></option>
