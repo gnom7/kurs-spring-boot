@@ -83,8 +83,6 @@
             } else {
                 renderConstructorPage();
             }
-            console.log('this is old site:');
-            console.log(siteHolderDto);
         });
 
         function appendSiteToSiteList(site) {
@@ -94,14 +92,15 @@
         }
 
         $('#save-site').on('click', function () {
-            var siteName = $('#site-name').get(0);
+            var siteName = $('#site-name').val();
             var errorDiv = $('.save-site-error').get(0);
-            if(!siteName.checkValidity() || isSiteNameExist(siteName)){
+            console.log(errorDiv);
+            if( !siteName ){
                 errorDiv.style.display = 'inline-block';
                 errorDiv.innerHTML = '<p>Invalid page name</p>';
                 return;
             }
-            if(errorDiv) {errorDiv.remove();}
+            if(errorDiv) {errorDiv.style.display = 'none';}
             var siteOptsModal = $("#site-opts-modal");
             siteOptsModal.modal('hide');
 
@@ -123,22 +122,11 @@
                 siteHolder.sites.push($.extend(true, {}, site));
                 appendSiteToSiteList(site);
             }
-            console.log('this is new site:');
-            console.log(siteHolder);
 
             clearModal(siteOptsModal);
             renderConstructorPage();
             clearSiteData(site);
         });
-
-        function isSiteNameExist(siteName) {
-            for(let i = 0; i < siteHolder.sites.length; i++){
-                if(siteName == siteHolder.sites[i].siteName){
-                    return true;
-                }
-            }
-            return false;
-        }
 
         $('#save-siteHolder').on('click', function () {
             $('#save-site').click();

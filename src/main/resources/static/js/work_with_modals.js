@@ -79,7 +79,7 @@ fncs = {'film': function() {
 
 function addVideo(element, videoWidth, videoHeight, videoUrl, id) {
     if(element.children('.my-tool').length != 0) {
-        element.children('.my-tool').remove();console.log('video: ' + id);
+        element.children('.my-tool').remove();
         element.prepend('<iframe width="' + videoWidth + '" height="' + videoHeight + '" src="' + videoUrl +
             '" frameborder="0" allowfullscreen="allowfullscreen"></iframe>');
         element.append('<input type="hidden" class="id" value="' + (id || 0) + '" />');
