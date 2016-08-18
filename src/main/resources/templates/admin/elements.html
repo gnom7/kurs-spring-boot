@@ -1,0 +1,86 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+
+<th:body th:fragment = "modals">
+
+    <div id="create-user-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Create user</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="create-user-data">
+                            <label>username: <input id="username" name="username" required="required" /></label><br />
+                            <label>firstname: <input id="firstname" name="firstname" /></label><br />
+                            <label>lastname: <input id="lastname" name="lastname" /></label><br />
+                            <label>email: <input id="email" name="email" /></label><br />
+                            <label>password: <input id="password" name="password" /></label><br />
+                            <label>locked: <input id="locked" name="locked" type="checkbox" /></label><br />
+                            <label>enabled: <input id="enabled" name="enabled" type="checkbox" checked="checked" /></label><br />
+                            <label>avatarUrl: <input id="avatarUrl" name="avatarUrl" /></label><br />
+                            <label>ROLE_USER <input id="ROLE_USER" name="role" type="radio" value="ROLE_USER" checked="checked" /></label><br />
+                            <label>ROLE_ADMIN <input id="ROLE_ADMIN" name="role" type="radio" value="ROLE_ADMIN" /></label><br />
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="alert alert-danger " style="display: none; float: left; clear: left; margin-left: 70px;"></div>
+                        <button id="create-user" class="btn btn-success">Create user</button>
+                        <button class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="create-site-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create user</h4>
+                </div>
+                <div class="modal-body">
+                    <label style="float: left;">site name: <input id="siteName" name="siteName" required="required" /></label>
+                    <label style="float: left;">site creator: <input id="site-creator" name="username" required="required"/></label>
+                </div>
+                <div class="modal-footer">
+                    <div class="alert alert-danger" style="display: none; float: left; clear: left; margin-left: 70px;"></div>
+                    <button id="create-site" class="btn btn-success">Create site</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="create-comment-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Create user</h4>
+                </div>
+                <div class="modal-body">
+                    <label style="float: left;">comment: <input id="comment" name="comment" required="required" /></label>
+                    <label style="float: left;">username: <input id="comment-creator" name="username" required="required"/></label>
+                </div>
+                <div class="modal-footer">
+                    <div class="alert alert-danger " style="display: none; float: left; clear: left; margin-left: 70px;"></div>
+                    <button id="create-comment" class="btn btn-success">Create comment</button>
+                    <button class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:body>
+
+</body>
+</html>

@@ -29,8 +29,8 @@
     <div class="form-group">
 
         <label for="users">Users:</label>
-        <select class="selectpicker form-control" id="users" name="users" multiple="multiple" th:each="user : ${users}">
-            <option class="optionGroup" th:value="${user.username}" th:text="${user.username}"></option>
+        <select class="selectpicker form-control" id="users" name="users" multiple="multiple">
+            <option class="optionGroup" th:each="user : ${users}" th:value="${user.username}" th:text="${user.username}"></option>
         </select>
         <br />
         <button class="btn btn-success btn-sm" id="add-user">Add new user</button>
@@ -54,16 +54,56 @@
     </div>
 </div>
 
-
+<div th:replace="admin/elements :: modals"></div>
 
 </div>
 
 <th:block layout:fragment="scripts">
     <script th:inline="javascript">
     /*<![CDATA[*/
-    $('#add-user').on('click', function (e) {
-
+// todo: add notification that email must be unique and check it (if not may produce 409 error)
+    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+        jqXHR.setRequestHeader('X-CSRF-Token', [[${_csrf.token}]]);
     });
+
+    $('#add-user').on('click', function (e) {
+        $('#create-user-modal').modal('show');
+    });
+
+    $('#delete-user').on('click', function (e) {
+        let usersToDelete = $('#users').find(':selected');
+        for(let i = 0; i < usersToDelete.length; i++){
+            console.log(usersToDelete[i].value);
+//            $.ajax({
+//                method: 'PUT',
+//                contentType: 'text/uri-list',
+//                url: '/admin/users/' + usersToDelete[i].value
+//            });
+
+            $.ajax({
+                method: 'DELETE',
+                url: '/admin/users/' + usersToDelete[i].value
+            })
+        }
+    });
+
+    $('#create-user').on('click', function (e) {
+        let userFormData = $('#create-user-data').serializeArray();
+        let userData = {};
+        $.map(userFormData, function (item) {
+            userData[item['name']] = item['value'];
+        });
+        userData['enabled'] = $('#enabled').is(':checked');
+        userData['locked'] = $('#locked').is(':checked');
+
+        $.ajax({
+            method: 'POST',
+            url: '/admin/users',
+            contentType: 'application/json',
+            data: JSON.stringify(userData)
+        })
+    });
+
     /*]]>*/
     </script>
 </th:block>
