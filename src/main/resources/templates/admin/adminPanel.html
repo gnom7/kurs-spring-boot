@@ -70,24 +70,47 @@
         $('#create-user-modal').modal('show');
     });
 
+    $('#redact-user').on('click', function (e) {
+        let userToRedact = $('#users').find(':selected')[0];
+        if(!userToRedact) return;
+        var modal = $('#create-user-modal');
+        var user;
+        $.ajax({
+            method: 'GET',
+            async: false,
+            url: '/admin/crud/datarest/users/' + userToRedact.value,
+            success: function (response) {
+                user = response;
+            }
+        });
+        $('#username').val(userToRedact.value);
+        for(let key in user){
+            $('#' + key).val(user[key]);
+        }
+        modal.modal('show');
+    });
+
     $('#delete-user').on('click', function (e) {
         let usersToDelete = $('#users').find(':selected');
         for(let i = 0; i < usersToDelete.length; i++){
-            console.log(usersToDelete[i].value);
-//            $.ajax({
-//                method: 'PUT',
-//                contentType: 'text/uri-list',
-//                url: '/admin/users/' + usersToDelete[i].value
-//            });
-
             $.ajax({
                 method: 'DELETE',
-                url: '/admin/users/' + usersToDelete[i].value
+                url: '/admin/crud/datarest/users/' + usersToDelete[i].value
             })
         }
     });
 
     $('#create-user').on('click', function (e) {
+        let userData = collectUserData();
+        $.ajax({
+            method: 'POST',                        // may not use 'PATCH', so if doesn't exist user will be created
+            url: '/admin/crud/datarest/users',
+            contentType: 'application/json',
+            data: JSON.stringify(userData)
+        })
+    });
+
+    function collectUserData() {
         let userFormData = $('#create-user-data').serializeArray();
         let userData = {};
         $.map(userFormData, function (item) {
@@ -95,14 +118,8 @@
         });
         userData['enabled'] = $('#enabled').is(':checked');
         userData['locked'] = $('#locked').is(':checked');
-
-        $.ajax({
-            method: 'POST',
-            url: '/admin/users',
-            contentType: 'application/json',
-            data: JSON.stringify(userData)
-        })
-    });
+        return userData;
+    }
 
     /*]]>*/
     </script>
