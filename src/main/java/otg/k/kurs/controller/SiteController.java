@@ -61,7 +61,6 @@ public class SiteController {
 
     private Site findSite(SiteHolder siteHolder, String siteName){
         Site site = null;
-        System.out.println(siteHolder);
         for(Site s : siteHolder.getSites()){
             if(siteName.equals(s.getSiteName())){
                 site = s;

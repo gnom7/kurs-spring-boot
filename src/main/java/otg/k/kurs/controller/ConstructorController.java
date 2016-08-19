@@ -43,20 +43,28 @@ public class ConstructorController {
     @PostMapping("/savesite")
     public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON) throws IOException {
         SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON, userService.getCurrentUser());
-//        siteHolderService.deleteSiteHolder(siteHolder.getId());
-        System.out.println(siteHolderDtoJSON);
         siteHolderService.saveSiteHolder(siteHolder);
         return "index";
     }
 
     @PostMapping("/checkSiteHolderNameExist")
-    public @ResponseBody Boolean checkSiteHolderName(@RequestParam String siteHolderName){
+    public @ResponseBody Boolean
+    checkSiteHolderName(@RequestParam String siteHolderName, @RequestParam long siteHolderId){
         List<SiteHolder> siteHolders = userService.getCurrentUser().getSiteHolders();
         boolean isUserSite = false;
+        boolean differentId = false;
+        boolean siteHolderNameExist = siteHolderService.isSiteHolderNameExist(siteHolderName);
         for(SiteHolder siteHolder : siteHolders){
-            if(siteHolder.getSiteHolderName().equals(siteHolderName)) {isUserSite = true;}
+            if(siteHolder.getSiteHolderName().equals(siteHolderName)) {
+                isUserSite = true;
+                if(siteHolderId != siteHolder.getId()) differentId = true;
+            }
         }
-        return !(isUserSite || !siteHolderService.isSiteHolderNameExist(siteHolderName));
+        if(siteHolderNameExist) {
+            if(isUserSite && !differentId) return false;
+            return true;
+        }
+        return false;
     }
 
     @GetMapping("/redactSite")

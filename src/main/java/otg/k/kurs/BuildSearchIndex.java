@@ -24,7 +24,7 @@ public class BuildSearchIndex
             fullTextEntityManager.createIndexer().startAndWait();
         }
         catch (InterruptedException e) {
-            System.out.println(
+            System.err.println(
                     "An error occurred trying to build the search index: " +
                             e.toString());
         }

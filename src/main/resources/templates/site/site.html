@@ -5,6 +5,9 @@
 <head>
     <title th:text="${siteHolderDto.siteHolderName + ' - ' + site.siteName}">Site</title>
     <th:block layout:fragment="styles" />
+    <th:block th:if="${site.theme} == 'dark'">
+        <link rel="stylesheet" th:href="@{/css/bootstrap.dark.min.css}" />
+    </th:block>
 </head>
 <body>
 
@@ -58,6 +61,11 @@
         var siteHolder = [[${siteHolderDto}]];
         var site = [[${site}]];
 
+//        if(site.theme == 'dark') {
+//            $('link[href="/css/bootstrap.min.css"]').prop('disabled', true);
+//            $('link[href="/css/bootstrap.min.css"]').remove();
+//        }
+
         if(error != null) {
             var myNode = document.getElementById("wrap-container");
             while (myNode.firstChild) {
@@ -67,14 +75,6 @@
         } else {
             createSite(site)
         }
-
-//        function findSiteFromHolder(siteName) {
-//            for(let i = 0; i < siteHolder.sites.length; i++){
-//                if(siteName === siteHolder.sites[i].siteName){
-//                    return siteHolder.sites[i];
-//                }
-//            }
-//        }
 
         function createSite(site){
             createGrid(site['grid']);

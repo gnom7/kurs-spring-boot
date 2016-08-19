@@ -94,7 +94,6 @@
         $('#save-site').on('click', function () {
             var siteName = $('#site-name').val();
             var errorDiv = $('.save-site-error').get(0);
-            console.log(errorDiv);
             if( !siteName ){
                 errorDiv.style.display = 'inline-block';
                 errorDiv.innerHTML = '<p>Invalid page name</p>';
@@ -129,7 +128,6 @@
         });
 
         $('#save-siteHolder').on('click', function () {
-            $('#save-site').click();
             var siteHolderName = $('#siteHolder-name').get(0);
             var errorDiv = $('.save-siteHolder-error').get(0);
             if(!siteHolderName.checkValidity()){
@@ -149,10 +147,10 @@
             }
             $.post('checkSiteHolderNameExist', {
                 siteHolderName: siteHolderName.value,
+                siteHolderId: siteHolder.id || 0,
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
             }, function (exist) {
                 if(exist){
-                    var errorDiv = $('.save-siteHolder-error').get(0);
                     errorDiv.style.display = 'inline-block';
                     errorDiv.innerHTML = '<p>Site with such name already exist</p>';
                 } else {
@@ -196,14 +194,14 @@
             }
             site.siteName = siteName.value;
             site.id = $('#site-id').val();
-//            site.menu = $('input[name = "menu"]:checked').val();       // wtf it sometimes doesn't work
+//            site.menu = $('input[name = "menu"]:checked').val();       // it sometimes doesn't work...?
 //            site.theme = $('input[name = "theme"]:checked').val();
             if($('#white').is(':checked')) {                             // use this instead
-                site.menu = 'white'
-            } else {site.menu = 'dark'}
+                site.theme = 'white'
+            } else {site.theme = 'dark'}
             if($('#horizontal').is(':checked')) {
-                site.theme = 'horizontal'
-            } else {site.theme = 'vertical'}
+                site.menu = 'horizontal'
+            } else {site.menu = 'vertical'}
 
             $('#site-tags').tagEditor('getTags')[0].tags.forEach(function(item){
                 site.tags.push(item);

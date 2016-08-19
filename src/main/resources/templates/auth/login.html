@@ -30,7 +30,7 @@
     </div>
     <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.activate}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <p th:text="#{registration.activate}">You confirm your account</p>
+        <p th:text="#{registration.activate}">You confirmed your account</p>
     </div>
     <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.resetPassword}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -43,6 +43,10 @@
     <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.registerSuccess}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p th:text="#{registration.complete}">Check your email to complete registration please</p>
+        <div th:if="${'User is disabled'.equals(session['SPRING_SECURITY_LAST_EXCEPTION'].getMessage())}">
+            <a data-toggle="modal" data-target="#resendConfirmationEmail" href=""
+               th:text="#{registration.resendConfirmationEmail}" style="color: black"></a>
+        </div>
     </div>
     <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.resendConfirmEmailComplete}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
