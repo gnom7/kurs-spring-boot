@@ -11,6 +11,7 @@ import javax.persistence.*;
 public class Vote {
 
     @Id
+    @GeneratedValue
     private long id;
 
     @ManyToOne
@@ -29,7 +30,7 @@ public class Vote {
         this.id = voteDto.getId();
         this.vote = voteDto.getVote();
         this.user = new User(voteDto.getUsername()); // username is already ID so we haven't make DB query ?
-        this.vote = voteDto.getVote();
+        this.site = new Site(voteDto.getSiteId());
     }
 
 }

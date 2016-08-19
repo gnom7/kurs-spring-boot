@@ -1,5 +1,6 @@
 package otg.k.kurs.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import otg.k.kurs.dto.SiteHolderDto;
 import otg.k.kurs.dto.VoteDto;
 import otg.k.kurs.service.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -58,9 +60,10 @@ public class SiteController {
     }
 
     @PostMapping("/addVote")
-    public @ResponseBody void addVote(@RequestParam VoteDto voteDto){
+    public @ResponseBody long addVote(@RequestParam String voteDtoJSON) throws IOException {
+        VoteDto voteDto = new ObjectMapper().readValue(voteDtoJSON, VoteDto.class);
         Vote vote = new Vote(voteDto);
-        voteService.save(vote);
+        return voteService.save(vote).getId();
     }
 
     private Site findSite(SiteHolder siteHolder, String siteName){

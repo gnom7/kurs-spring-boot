@@ -169,7 +169,7 @@ input::-webkit-search-cancel-button {
 input[type=search] {
     background: url(http://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
     border: solid 1px;
-    padding: 25px 10px 9px 32px;
+    padding: 25px 25px 9px 32px;
     width: 55px;
 
     -webkit-border-radius: 10em;

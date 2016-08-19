@@ -22,7 +22,7 @@
         <ul id="menu" class="dropdown-menu"></ul>
     </div>
     <br />
-    <div class="btn-group main" sec:authorize="isAuthenticated()">
+    <div class="btn-group main" th:if="${site.allowRating}">
         <button id="upButton" type="button" onclick="upVote()" class="vote" >
             <svg class="upArrow" viewBox="0 0 11.5 6.4" xml:space="preserve">
                 <path d="M11.4,5.4L6,0C5.9-0.1,5.8-0.1,5.8-0.1c-0.1,0-0.2,0-0.2,0.1
@@ -75,7 +75,6 @@
 
 <th:block layout:fragment="scripts">
     <script type="text/javascript" th:src="@{/js/showdown.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/vote.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
         let error = [[${error}]];
@@ -151,6 +150,11 @@
             var converter = new showdown.Converter();
             return converter.makeHtml(text);
         }
+
+        let firstElement = $('.my-container').find('.row').eq(0).find('.my-content').eq(0);
+        let col = firstElement.attr('class').split('col-md-')[1];
+        firstElement.removeClass('col-md-' + col);
+        firstElement.addClass('col-md-' + --col);
         /*]]>*/
     </script>
     <script th:inline="javascript">
@@ -180,6 +184,10 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         let username = [[${#authentication.getName()}]];
+        if(username == 'anonymousUser') {
+            $('#upButton').attr('disabled', true);
+            $('#downButton').attr('disabled', true);
+        }
         // let site = [[${site}]];  declared in script above
         let rating = 0;
         let userVote = {
@@ -207,10 +215,11 @@
         function upVote() {
             if(userVote.vote > 0) return;
             userVote.vote += 1;
-            $.post({
-                url: "/addVote",
-                vote: userVote,
+            $.post("/addVote", {
+                voteDtoJSON: JSON.stringify(userVote),
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+            }, function (id) {
+                userVote.id = id;
             });
             rating++;
             score.innerHTML = rating;
@@ -220,10 +229,11 @@
         function downVote() {
             if(userVote.vote < 0) return;
             userVote.vote -= 1;
-            $.post({
-                url: "/addVote",
-                vote: userVote,
+            $.post('/addVote', {
+                voteDtoJSON: JSON.stringify(userVote),
                 [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+            }, function (id) {
+                userVote.id = id;
             });
             rating--;
             score.innerHTML = rating;

@@ -47,9 +47,9 @@
                         <input type="password" class="form-control" th:field="*{matchingPassword}" th:placeholder="#{registration.passwordRepeat}"/>
                         <span class="help-block" th:if="${#fields.hasErrors('global')}" th:errors="*{global}">Incorrect input</span>
                     </div>
+                    <a th:href="@{/login}" th:text="#{login}"></a>
                     <button type="submit" class="btn btn-default center-block" th:text="#{registration.register}">Submit</button>
                 </form>
-                <a th:href="@{/login}" th:text="#{login}"></a>
                 <br />
             </div>
             <div class="col-md-4"></div>
