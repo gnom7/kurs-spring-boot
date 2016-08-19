@@ -5,6 +5,7 @@
 <head>
     <title th:text="${siteHolderDto.siteHolderName + ' - ' + site.siteName}">Site</title>
     <th:block layout:fragment="styles" />
+    <link rel="stylesheet" th:href="@{/css/vote.scss}" />
     <th:block th:if="${site.theme} == 'dark'">
         <link rel="stylesheet" th:href="@{/css/bootstrap.dark.min.css}" />
     </th:block>
@@ -13,14 +14,33 @@
 
 <div layout:fragment="content">
 
-        <div class="btn-group">
-            <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">
-                <span class="glyphicon glyphicon-th" id="user-menu-icon">
-                </span>
-            </a>
-            <ul id="menu" class="dropdown-menu">
-            </ul>
-        </div>
+<div class="col-md-1">
+    <div class="btn-group">
+        <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="">
+            <span class="glyphicon glyphicon-th" id="user-menu-icon"></span>
+        </a>
+        <ul id="menu" class="dropdown-menu"></ul>
+    </div>
+    <br />
+    <div class="btn-group main" sec:authorize="isAuthenticated()">
+        <button id="upButton" type="button" onclick="upVote()" class="vote" >
+            <svg class="upArrow" viewBox="0 0 11.5 6.4" xml:space="preserve">
+                <path d="M11.4,5.4L6,0C5.9-0.1,5.8-0.1,5.8-0.1c-0.1,0-0.2,0-0.2,0.1
+	            L0.1,5.4C0,5.6,0,5.7,0.1,5.9l0.4,0.4c0.1,0.1,0.3,0.1,0.4,0l4.8-4.8l4.8,4.8c0.1,0.1,0.3,0.1,0.4,0l0.4-0.4
+	            C11.5,5.7,11.5,5.6,11.4,5.4z"/>
+            </svg>
+        </button>
+
+        <h1 id="scoreCounter"></h1>
+
+        <button id="downButton" type="button" onclick="downVote()" class="vote">
+            <svg class="downArrow" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 11.5 6.4" xml:space="preserve">
+                <path d="M0.1,0.9l5.4,5.4c0.1,0.1,0.1,0.1,0.2,0.1c0.1,0,0.2,0,0.2-0.1
+	            l5.4-5.4c0.1-0.1,0.1-0.3,0-0.4L11,0c-0.1-0.1-0.3-0.1-0.4,0L5.8,4.8L0.9,0C0.8-0.1,0.6-0.1,0.5,0L0.1,0.4C0,0.6,0,0.7,0.1,0.9z"/>
+            </svg>
+        </button>
+    </div>
+</div>
 
 
     <div class="container my-container">
@@ -55,16 +75,12 @@
 
 <th:block layout:fragment="scripts">
     <script type="text/javascript" th:src="@{/js/showdown.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/vote.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
-        var error = [[${error}]];
-        var siteHolder = [[${siteHolderDto}]];
-        var site = [[${site}]];
-
-//        if(site.theme == 'dark') {
-//            $('link[href="/css/bootstrap.min.css"]').prop('disabled', true);
-//            $('link[href="/css/bootstrap.min.css"]').remove();
-//        }
+        let error = [[${error}]];
+        let siteHolder = [[${siteHolderDto}]];
+        let site = [[${site}]];
 
         if(error != null) {
             var myNode = document.getElementById("wrap-container");
@@ -159,6 +175,70 @@
                 $('#add-comment').attr('disabled', false);
             }
         });
+        /*]]>*/
+    </script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let username = [[${#authentication.getName()}]];
+        // let site = [[${site}]];  declared in script above
+        let rating = 0;
+        let userVote = {
+            username: username,
+            siteId: site.id,
+            vote: 0
+        };
+        for(let i = 0; i < site.votes.length; i++){
+            let vote = site.votes[i];
+            rating += vote.vote;
+            if(vote.username == username){
+                userVote = vote;
+                if(vote.vote > 0) {
+                    $('#upButton').prop('display', 'hidden');
+                } else if(vote.vote < 0) {
+                    $('#downButton').prop('display', 'hidden');
+                }
+            }
+        }
+
+        var score = document.getElementById("scoreCounter");
+        score.innerHTML = rating;
+        checkScore();
+
+        function upVote() {
+            if(userVote.vote > 0) return;
+            userVote.vote += 1;
+            $.post({
+                url: "/addVote",
+                vote: userVote,
+                [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+            });
+            rating++;
+            score.innerHTML = rating;
+            checkScore();
+        }
+
+        function downVote() {
+            if(userVote.vote < 0) return;
+            userVote.vote -= 1;
+            $.post({
+                url: "/addVote",
+                vote: userVote,
+                [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+            });
+            rating--;
+            score.innerHTML = rating;
+            checkScore();
+        }
+
+        function checkScore() {
+            if (rating < 0) {
+                score.style.color = "#FF586C";
+            } else if (rating > 0) {
+                score.style.color = "#6CC576";
+            } else {
+                score.style.color = "#666666";
+            }
+        }
         /*]]>*/
     </script>
 </th:block>

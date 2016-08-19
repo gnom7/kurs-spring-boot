@@ -38,7 +38,7 @@ public class SiteDto {
 
     private List<String> tags;
 
-    private int rating;
+    private List<VoteDto> votes;
 
     public SiteDto(){}
 
@@ -49,17 +49,18 @@ public class SiteDto {
         this.siteHolderName = site.getSiteHolder().getSiteHolderName();
         this.menu = site.getMenu();
         this.id = site.getId();
-        this.rating = site.getRating();
         this.theme = site.getTheme();
         this.grid = site.getGrid();
         this.allowRating = site.isAllowRating();
         this.allowComments = site.isAllowComments();
         this.username = site.getUser().getUsername();
         this.tags = new ArrayList<>(site.getTags().size());
+        this.votes = new ArrayList<>(site.getVotes().size());
         this.images = site.getImages().stream().map(ImageDto::new).collect(Collectors.toList());
         this.texts = site.getTexts().stream().map(TextDto::new).collect(Collectors.toList());
         this.videos = site.getVideos().stream().map(VideoDto::new).collect(Collectors.toList());
         this.comments = site.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
         this.tags.addAll(site.getTags().stream().map(Tag::getTag).collect(Collectors.toList()));
+        this.votes.addAll(site.getVotes().stream().map(VoteDto::new).collect(Collectors.toList()));
     }
 }

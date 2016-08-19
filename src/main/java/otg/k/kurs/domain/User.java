@@ -53,6 +53,9 @@ public class User implements UserDetails {
     @IndexedEmbedded
     private List<SiteHolder> siteHolders;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Vote> votes;
+
     private String avatarUrl;
 
     public User(){}

@@ -9,10 +9,8 @@ import otg.k.kurs.domain.*;
 import otg.k.kurs.dto.CommentDto;
 import otg.k.kurs.dto.SiteDto;
 import otg.k.kurs.dto.SiteHolderDto;
-import otg.k.kurs.service.CommentService;
-import otg.k.kurs.service.SiteHolderService;
-import otg.k.kurs.service.SiteService;
-import otg.k.kurs.service.UserService;
+import otg.k.kurs.dto.VoteDto;
+import otg.k.kurs.service.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,9 +20,6 @@ import java.util.List;
 public class SiteController {
 
     @Autowired
-    private SiteService siteService;
-
-    @Autowired
     private SiteHolderService siteHolderService;
 
     @Autowired
@@ -32,6 +27,9 @@ public class SiteController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private VoteService voteService;
 
     @GetMapping("/{username}/{siteHolderName}/{siteName}")
     public String getSite(@PathVariable String username, @PathVariable String siteHolderName,
@@ -57,6 +55,12 @@ public class SiteController {
         c.setUser(userService.getCurrentUser());
         c.setSite(new Site(siteId));
         commentService.addComment(c);
+    }
+
+    @PostMapping("/addVote")
+    public @ResponseBody void addVote(@RequestParam VoteDto voteDto){
+        Vote vote = new Vote(voteDto);
+        voteService.save(vote);
     }
 
     private Site findSite(SiteHolder siteHolder, String siteName){

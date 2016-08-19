@@ -1,6 +1,7 @@
 package otg.k.kurs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,26 +26,32 @@ public class UserProfileController {
         return "profile/index";
     }
 
-    @PostMapping("/changeAvatar")
-    public String changeAvatar(@RequestParam String avatarUrl){
-        User user = userService.getCurrentUser();
-        user.setAvatarUrl(avatarUrl);
-        userService.saveUser(user);
-        return "redirect:/" + user.getUsername();
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{username}/changeAvatar")
+    public String changeAvatar(@RequestParam String avatarUrl,
+                               @PathVariable String username, HttpServletRequest request){
+        User user = userService.getUserByUsername(username);
+        if( user != null &&
+                ( username.equals(request.getRemoteUser()) || request.isUserInRole("ROLE_ADMIN") ) ) {
+            user.setAvatarUrl(avatarUrl);
+            userService.saveUser(user);
+        }
+        return "redirect:/" + username;
     }
 
-    @PostMapping("/changePassword")
+    @PostMapping("/{username}/changePassword")
     public String changePassword(@RequestParam String oldPassword,
                                  @RequestParam String newPassword,
-                                 @RequestParam String confirmNewPassword,
-                                 HttpServletRequest request, Model model){
-        if( !newPassword.equals(confirmNewPassword) ){
-            model.addAttribute("error", "Password don't match");
-        } else {
-            boolean succeeded = userService.changePassword(oldPassword, newPassword);
-            if(!succeeded){model.addAttribute("error", "An error has occurred. Please try again");}
+                                 @PathVariable String username,
+                                 HttpServletRequest request){
+        User user = userService.getUserByUsername(username);
+        if(user == null) {return "redirect:/" + username + "?error=User doesn't exist";}
+        if( !(username.equals(request.getRemoteUser()) || request.isUserInRole("ROLE_ADMIN")) ){
+            return "redirect:/" + username + "?error=You have not permission to do that";
         }
-        return "redirect:/" + request.getRemoteUser();
+        boolean succeeded = userService.changePassword(user, oldPassword, newPassword);
+        if(!succeeded){ return "redirect:/" + username + "?error=An error has occurred";}
+        return "redirect:/" + username;
     }
 
 }

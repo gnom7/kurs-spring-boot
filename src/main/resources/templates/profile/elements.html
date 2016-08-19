@@ -16,7 +16,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Change avatar</h4>
                 </div>
-                <form th:action="@{~/changeAvatar}" method="POST">
+                <form th:action="@{~/{username}/changeAvatar(username = ${profileUser.username})}" method="POST">
                     <div class="modal-body">
                         <label for="avatar">Avatar URL</label>
                         <input id="avatar" name="avatarUrl" class="form-control" autofocus="autofocus" />
@@ -37,7 +37,8 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title">Change password</h4>
                 </div>
-                <form id="change-password-form" th:action="@{~/changePassword}" method="POST">
+                <form id="change-password-form"
+                      th:action="@{~/{username}/changePassword(username = ${profileUser.username})}" method="POST">
                     <div class="modal-body">
                             <label for="old">Old password</label>
                             <input id="old" name="oldPassword" class="form-control" type="password" autofocus="autofocus" />

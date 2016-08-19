@@ -1,6 +1,8 @@
 package otg.k.kurs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,14 +21,20 @@ public class AuthController {
     private UserService userService;
 
     @GetMapping("/login")
-    public String login(Model model) {
-        return "auth/login";
+    public String login() {
+        if("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+            return "auth/login";
+        }
+        return "redirect:/index";
     }
 
     @GetMapping("/register")
     public String register(Model model) {
-        model.addAttribute("user", new AccountDto());
-        return "auth/registration";
+        if("anonymousUser".equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+            model.addAttribute("user", new AccountDto());
+            return "auth/registration";
+        }
+        return "redirect:/index";
     }
 
     @PostMapping("/register")

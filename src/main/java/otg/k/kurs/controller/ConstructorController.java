@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import otg.k.kurs.service.SiteService;
 import otg.k.kurs.service.TagService;
 import otg.k.kurs.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
@@ -41,16 +45,23 @@ public class ConstructorController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/savesite")
-    public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON) throws IOException {
-        SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON, userService.getCurrentUser());
-        siteHolderService.saveSiteHolder(siteHolder);
-        return "index";
+    public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON,
+                                         HttpServletRequest request) throws IOException {
+        SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON);
+        if( request.getRemoteUser().equals(siteHolder.getUser().getUsername()) || request.isUserInRole("ROLE_ADMIN")){
+            siteHolderService.saveSiteHolder(siteHolder);
+            return "index";
+        };
+        return "error";
     }
 
     @PostMapping("/checkSiteHolderNameExist")
     public @ResponseBody Boolean
-    checkSiteHolderName(@RequestParam String siteHolderName, @RequestParam long siteHolderId){
-        List<SiteHolder> siteHolders = userService.getCurrentUser().getSiteHolders();
+    checkSiteHolderName(@RequestParam String siteHolderName, @RequestParam long siteHolderId, HttpServletRequest request){
+        if(request.isUserInRole("ROLE_ADMIN")){
+            return false;
+        }
+        List<SiteHolder> siteHolders = siteHolderService.getByUsername(request.getRemoteUser());
         boolean isUserSite = false;
         boolean differentId = false;
         boolean siteHolderNameExist = siteHolderService.isSiteHolderNameExist(siteHolderName);
@@ -67,18 +78,23 @@ public class ConstructorController {
         return false;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/redactSite")
-    public String redactSite(@RequestParam String siteHolderName, Model model) throws JsonProcessingException {
-        SiteHolder siteHolder = siteHolderService.getBySiteHolderName(siteHolderName);
+    public String redactSite(@RequestParam long id, Model model) throws JsonProcessingException {
+        SiteHolder siteHolder = siteHolderService.getBySiteHolderId(id);
         SiteHolderDto siteHolderDto = new SiteHolderDto(siteHolder);
         model.addAttribute("siteHolderDto", siteHolderDto);
         model.addAttribute("allTags", tagService.getAllStringTags());
         return "constructor/index";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/deleteSite")
-    public @ResponseBody void deleteSite(@RequestParam long siteHolderId){
-        siteHolderService.deleteSiteHolder(siteHolderId);
+    public @ResponseBody void deleteSite(@RequestParam long siteHolderId, HttpServletRequest request){
+        String siteOwner = siteHolderService.getBySiteHolderId(siteHolderId).getUser().getUsername();
+        if(request.getRemoteUser().equals(siteOwner) || request.isUserInRole("ROLE_ADMIN")){
+            siteHolderService.deleteSiteHolder(siteHolderId);
+        }
     }
 
 }

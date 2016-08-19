@@ -113,20 +113,19 @@ public class UserServiceImpl implements UserService{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = null;
         if (principal instanceof User) {
-            user = (User) principal;
+            user = getUserByUsername(((User) principal).getUsername());
         } else {
             String username = principal.toString();
             user = getUserByUsername(username);
         }
-        return getUserByUsername(user.getUsername());
+        return user;
     }
 
     @Override
     public boolean saveUser(User user){return userRepository.save(user) != null;}
 
     @Override
-    public boolean changePassword(String oldPassword, String newPassword){
-        User user = getCurrentUser();
+    public boolean changePassword(User user, String oldPassword, String newPassword){
         if( passwordEncoder.matches(oldPassword, user.getPassword()) ){
             user.setPassword(passwordEncoder.encode(newPassword));
             return userRepository.save(user) != null;

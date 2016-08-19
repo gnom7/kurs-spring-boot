@@ -16,7 +16,8 @@
             <h1 th:text="${profileUser.username}"></h1>
             <img class="img-thumbnail" width="300" height="300" th:src="@{${profileUser.avatarUrl}}" />
             <br />
-            <div id="profile-control-div" th:if="${#authentication.getName() == profileUser.username}">
+            <div id="profile-control-div" th:if="${#authentication.getName() == profileUser.username ||
+            #authorization.getRequest().isUserInRole('ROLE_ADMIN')}">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#changeAvatar">
                     <span>Change avatar</span></button>
                 <button class="btn btn-primary" data-toggle="modal" data-target="#changePassword">
@@ -34,11 +35,13 @@
                     <!--<img th:src="${siteHolder.logoUrl}" />-->
                     <img class="img-thumbnail" height="200px" width="200px"
                          src="http://i.dailymail.co.uk/i/pix/2016/03/22/13/32738A6E00000578-3504412-image-a-6_1458654517341.jpg"/>
-                        <a th:if="${#authentication.getName() == profileUser.username}"
-                                 th:href="${'/redactSite?siteHolderName=' + siteHolder.siteHolderName}" class="btn btn-primary btn-xs">
+                        <a th:if="${#authentication.getName() == profileUser.username ||
+                        #authorization.getRequest().isUserInRole('ROLE_ADMIN')}"
+                                 th:href="${'/redactSite?id=' + siteHolder.id}" class="btn btn-primary btn-xs">
                         <span class="glyphicon glyphicon-cog"></span>
                         </a>
-                    <button th:if="${#authentication.getName() == profileUser.username}" class="btn btn-danger btn-xs"
+                    <button th:if="${#authentication.getName() == profileUser.username ||
+                    #authorization.getRequest().isUserInRole('ROLE_ADMIN')}" class="btn btn-danger btn-xs"
                             th:onclick="${'deleteSite(''' + siteHolder.id + '''); parentNode.remove()'}">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
@@ -52,7 +55,7 @@
 </div>
 
 <th:block layout:fragment="scripts">
-    <th:block th:replace="auth/validation :: scripts" />
+    <th:block th:replace="profile/validation :: scripts" />
     <script th:inline="javascript">
     /*<![CDATA[*/
     function deleteSite(siteHolderId) {

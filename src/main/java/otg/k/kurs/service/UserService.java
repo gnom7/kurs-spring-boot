@@ -30,7 +30,7 @@ public interface UserService {
 
     boolean saveUser(User user);
 
-    boolean changePassword(String oldPassword, String newPassword);
+    boolean changePassword(User user, String oldPassword, String newPassword);
 
     void sendEmailToResetPassword(String email, HttpServletRequest request);
 

@@ -10,7 +10,7 @@ public interface SiteHolderService {
 
     boolean saveSiteHolder(SiteHolder siteHolder);
 
-    SiteHolder createSiteHolder(String siteHolderDtoJSON, User user) throws IOException;
+    SiteHolder createSiteHolder(String siteHolderDtoJSON) throws IOException;
 
     boolean isSiteHolderNameExist(String siteHolderName);
 
@@ -21,4 +21,6 @@ public interface SiteHolderService {
     List<SiteHolder> getByUsername(String username);
 
     List<SiteHolder> getAll();
+
+    SiteHolder getBySiteHolderId(long id);
 }

@@ -33,10 +33,17 @@ public class SiteHolderServiceImpl implements SiteHolderService {
     }
 
     @Override
-    public SiteHolder createSiteHolder(String siteHolderDtoJSON, User user) throws IOException {
+    public SiteHolder createSiteHolder(String siteHolderDtoJSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SiteHolderDto siteHolderDto = mapper.readValue(siteHolderDtoJSON, SiteHolderDto.class);
         SiteHolder siteHolder = new SiteHolder(siteHolderDto);
+        SiteHolder oldSiteHolder = siteHolderRepository.findOne(siteHolder.getId());
+        User user;
+        if(oldSiteHolder == null) {
+            user = userService.getCurrentUser();
+        } else {
+            user = oldSiteHolder.getUser();
+        }
         for(SiteDto siteDto : siteHolderDto.getSites()){
             Site site = siteService.createSiteFromDto(siteDto);
             site.setSiteHolder(siteHolder);
@@ -72,5 +79,10 @@ public class SiteHolderServiceImpl implements SiteHolderService {
     @Override
     public List<SiteHolder> getAll(){
         return siteHolderRepository.findAll();
+    }
+
+    @Override
+    public SiteHolder getBySiteHolderId(long id){
+        return siteHolderRepository.findOne(id);
     }
 }
