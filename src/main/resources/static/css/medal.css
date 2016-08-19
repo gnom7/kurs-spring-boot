@@ -1,0 +1,49 @@
+ul.custom-bullet, ol.custom-bullet{
+  font-size: 3em;
+  list-style:none;
+}
+ul.custom-bullet > li, ol.custom-bullet >li {
+  clear:left;
+}
+ol.custom-bullet {
+  counter-reset: liNum;
+}
+ol.custom-bullet > li {
+  counter-increment:liNum 1;
+}
+
+ul.custom-bullet > li:before, ol.custom-bullet > li:before {
+  content:"";
+  height:1em;
+  width:1em;
+  display:block;
+  float:left;
+  margin-left:-1.5em;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+ol.custom-bullet > li:before{
+  content:counter(liNum) ;
+  text-align:center;
+}
+ol.medals > .gold:before{
+  content:"";
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid meet'><circle cx='50' cy='50' r='45' fill='gold' stroke='goldenrod' stroke-width='5'/><text x='50' y='50' text-anchor='middle' style='font-family:Arial, Helvetica, sans-serif; font-size:24; stroke:brown; fill:goldenrod;  dominant-baseline: middle;' textLength='85' >GOLD</text></svg>");
+}
+ol.medals > .silver:before{
+  content:"";
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid meet'><circle cx='50' cy='50' r='45' fill='silver' stroke='SteelBlue' stroke-width='5'/><text x='50' y='50' text-anchor='middle' style='font-family:Arial, Helvetica, sans-serif; font-size:24; fill:SteelBlue; stroke:SlateGray;  dominant-baseline: middle;' textLength='85' >SILVER</text></svg>");
+}
+ol.medals > .bronze:before{
+  content:"";
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid meet'><circle cx='50' cy='50' r='45' fill='goldenrod' stroke='chocolate' stroke-width='5'/><text x='50' y='50' text-anchor='middle' style='font-family:Arial, Helvetica, sans-serif; font-size:24; stroke:brown; fill:chocolate;  dominant-baseline: middle;' textLength='85' >BRONZE</text></svg>");
+}
+ol.medals > li:before{
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+}
+ol.medals > li:hover:before{
+  -webkit-transform:rotate(360deg);
+  transform:rotate(360deg);
+}

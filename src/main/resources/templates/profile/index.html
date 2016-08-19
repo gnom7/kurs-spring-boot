@@ -7,6 +7,7 @@
     <th:block layout:fragment="styles">
         <th:block th:replace="auth/validation :: styles" />
     </th:block>
+    <link rel="stylesheet" th:href="@{/css/medal.css}" />
 </head>
 <body>
 <div layout:fragment="content">
@@ -14,6 +15,7 @@
     <div class="row">
         <div class="col-md-5">
             <h1 th:text="${profileUser.username}"></h1>
+            <h3 th:text="${profileUser.firstname + ' ' + profileUser.lastname}"></h3>
             <img class="img-thumbnail" width="300" height="300" th:src="@{${profileUser.avatarUrl}}" />
             <br />
             <div id="profile-control-div" th:if="${#authentication.getName() == profileUser.username ||
@@ -23,13 +25,32 @@
                 <button class="btn btn-primary" data-toggle="modal" data-target="#changePassword">
                     <span>Change password</span></button>
             </div>
+
+            <ol class="custom-bullet medals">
+                <li class="gold" th:if="${profileUser.sites.size() ge 15}">creator</li>
+                <li class="silver" th:if="${profileUser.sites.size() ge 10 and profileUser.sites.size() lt 15}">creator</li>
+                <li class="bronze" th:if="${profileUser.sites.size() ge 5 and profileUser.sites.size() lt 10}">creator</li>
+            </ol>
+
+            <ol class="custom-bullet medals">
+                <li class="gold" th:if="${profileUser.comments.size() ge 15}">commentator</li>
+                <li class="silver" th:if="${profileUser.comments.size() ge 10 and profileUser.comments.size() lt 15}">commentator</li>
+                <li class="bronze" th:if="${profileUser.comments.size() ge 5 and profileUser.comments.size() lt 10}">commentator</li>
+            </ol>
+
+            <ol class="custom-bullet medals">
+                <li class="gold" th:if="${profileUser.votes.size() ge 15}">referee</li>
+                <li class="silver" th:if="${profileUser.votes.size() ge 10 and profileUser.votes.size() lt 15}">referee</li>
+                <li class="bronze" th:if="${profileUser.votes.size() ge 5 and profileUser.votes.size() lt 10}">referee</li>
+            </ol>
         </div>
-        <div class="col-md-5">
+
+        <div class="col-md-7">
             <div th:if="${profileUser.siteHolders.size() == 0}">
-                <h1 th:if="${profileUser.username == #authentication.getName()}">You haven't created any sites yet</h1>
-                <h1 th:if="${profileUser.username != #authentication.getName()}">User haven't created any sites yet</h1>
+                <h3 th:if="${profileUser.username == #authentication.getName()}">You haven't created any sites yet</h3>
+                <h3 th:if="${profileUser.username != #authentication.getName()}">User haven't created any sites yet</h3>
             </div>
-            <h1 th:if="${profileUser.siteHolders.size() > 0}">User sites</h1>
+            <h3 th:if="${profileUser.siteHolders.size() > 0}">User sites</h3>
             <div class="row" th:each="siteHolder : ${profileUser.siteHolders}">
                 <div class="siteHolder">
                     <!--<img th:src="${siteHolder.logoUrl}" />-->
@@ -48,6 +69,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
 
