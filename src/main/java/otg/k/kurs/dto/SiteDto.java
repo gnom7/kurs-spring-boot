@@ -40,6 +40,8 @@ public class SiteDto {
 
     private List<VoteDto> votes;
 
+    private List<TableChartDto> tables;
+
     private String logoUrl;
 
     public SiteDto(){}
@@ -63,5 +65,6 @@ public class SiteDto {
         this.comments = site.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
         this.tags = site.getTags().stream().map(Tag::getTag).collect(Collectors.toList());
         this.votes = site.getVotes().stream().map(VoteDto::new).collect(Collectors.toList());
+        this.tables = site.getTables().stream().map(TableChartDto::new).collect(Collectors.toList());
     }
 }

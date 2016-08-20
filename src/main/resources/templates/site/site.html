@@ -11,10 +11,7 @@
     </th:block>
 </head>
 <body>
-
-<div layout:fragment="content">
-
-<div class="col-md-1">
+<div layout:fragment="nowrap-content"><div class="col-md-1">
     <div class="btn-group">
         <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="">
             <span class="glyphicon glyphicon-th" id="user-menu-icon"></span>
@@ -41,7 +38,8 @@
         </button>
     </div>
 </div>
-
+</div>
+<div layout:fragment="content">
 
     <div class="container my-container">
 
@@ -75,21 +73,43 @@
 
 <th:block layout:fragment="scripts">
     <script type="text/javascript" th:src="@{/js/showdown.min.js}"></script>
+    <script type="text/javascript" th:src="@{https://www.gstatic.com/charts/loader.js}"></script>
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        google.charts.load('current', {'packages':['table']});
+
+        function drawTable(tableData, id) {
+            var data = new google.visualization.DataTable();
+
+            tableData.grid.shift().forEach(function (cell) {
+                data.addColumn('string', cell);
+            });
+
+            data.addRows(tableData.grid);
+
+            var table = new google.visualization.Table(document.getElementById(id));
+
+            table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+        }
+        /*]]>*/
+    </script>
     <script th:inline="javascript">
         /*<![CDATA[*/
         let error = [[${error}]];
         let siteHolder = [[${siteHolderDto}]];
         let site = [[${site}]];
 
-        if(error != null) {
-            var myNode = document.getElementById("wrap-container");
-            while (myNode.firstChild) {
-                myNode.removeChild(myNode.firstChild);
+        $(document).ready(setTimeout(function () {
+            if(error != null) {
+                var myNode = document.getElementById("wrap-container");
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
+                $('#wrap-container').append('<div style="vertical-align: top;" class="alert alert-danger">' + error['message'] + '</div>')
+            } else {
+                createSite(site)
             }
-            $('#wrap-container').append('<div style="vertical-align: top;" class="alert alert-danger">' + error['message'] + '</div>')
-        } else {
-            createSite(site)
-        }
+        }, 500));
 
         function createSite(site){
             createGrid(site['grid']);
@@ -141,6 +161,10 @@
             site['images'].forEach(function (item, index) {
                 myContent.eq(item['position']).append('<div class="img-thumbnail"><img src="' +
                         item['url'] + '" /></div>')
+            });
+            site['tables'].forEach(function (item, index) {
+                myContent.eq(item['position']).append('<div id="tableId' + index + '"></div>');
+                drawTable(item, 'tableId' + index)
             });
             myContent.each(function (index, item) {
                 $(item).find($('iframe')).after('<br />');
@@ -209,8 +233,10 @@
         }
 
         var score = document.getElementById("scoreCounter");
-        score.innerHTML = rating;
-        checkScore();
+        if(score){
+            score.innerHTML = rating;
+            checkScore();
+        }
 
         function upVote() {
             if(userVote.vote > 0) return;

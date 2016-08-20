@@ -41,10 +41,11 @@
         <button type="button" class="my-tool btn btn-default btn-lg" id="tool-chart">
             <span class="fa fa-bar-chart"></span> Chart
         </button>
+
+        <div id="chart-div"></div>
     </div>
 
     <div class="container my-container">
-
     </div>
     <div th:replace="constructor/elements :: modals"></div>
 
@@ -58,9 +59,31 @@
     <script type="text/javascript" th:src="@{/js/cloudinary_widgets.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery.tag-editor.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/jquery.caret.min.js}"></script>
+    <script type="text/javascript" th:src="@{https://www.gstatic.com/charts/loader.js}"></script>
+    <script type="text/javascript" th:src="@{/js/work_with_charts.js}"></script>
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        google.charts.load('current', {'packages':['table']});
+
+        function drawTable(tableData, id) {
+            var data = new google.visualization.DataTable();
+
+            tableData.grid.shift().forEach(function (cell) {
+                data.addColumn('string', cell);
+            });
+
+            data.addRows(tableData.grid);
+
+            var table = new google.visualization.Table(document.getElementById(id));
+
+            table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+        }
+        /*]]>*/
+    </script>
     <script th:inline="javascript">
         /*<![CDATA[*/
         var counterForNewSiteID = -1;
+        var tableDivIdCounter = -1;
 
         var siteHolder = {
             sites: [],
@@ -71,10 +94,11 @@
             texts: [],
             videos: [],
             tags: [],
+            tables: [],
             menu: ''
         };
 
-        $(document).ready(function () {
+        $(document).ready(setTimeout(function () {
             var siteHolderDto = [[${siteHolderDto}]];
             if(siteHolderDto && siteHolderDto.sites[0]){
                 siteHolder = siteHolderDto;
@@ -87,7 +111,7 @@
             } else {
                 renderConstructorPage();
             }
-        });
+        }, 500));
 
         function appendSiteToSiteList(site) {
             $('#siteList').append($('<button data-dismiss="modal" class="btn btn-default" ' +
@@ -197,6 +221,15 @@
                         site.videos.push({url: iframe.attr('src'), height: iframe.attr('height'),
                             width: iframe.attr('width'), position: i, id: id});
                     }
+                    if(currentElement.find('.table').length != 0){
+                        let id = parseInt(currentElement.find('.table').attr('id').substr(7));
+                        let tableData = JSON.parse(currentElement.find('.jsonTable').text());
+                        tableData.position = i;
+                        if(id > 0) {
+                            tableData.id = id;
+                        } else {tableData.id = 0}
+                        site.tables.push(tableData);
+                    }
                 }
             }
             site.siteName = siteName.value;
@@ -262,6 +295,7 @@
             var images = site.images;
             var videos = site.videos;
             var texts = site.texts;
+            var tables = site.tables;
 
             var position = -1;
             var element;
@@ -297,6 +331,15 @@
                 container = $('.my-content').eq(position);
                 container.append(element);
                 addText(element, text.markdownText, text.id)
+            }
+
+            for(let i = 0; i < tables.length; i++){
+                var table = tables[i];
+                position = table.position;
+                element = createElement('chart');
+                container = $('.my-content').eq(position);
+                container.append(element);
+                addTable(element, table, table.id)
             }
         }
 

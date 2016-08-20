@@ -3,8 +3,10 @@ var modalInvoker;
 var currentModal;
 
 $(modal).on('show.bs.modal', function (e) {
-    modalInvoker = $(e.relatedTarget.parentNode);
     currentModal = $(this);
+    if(currentModal.id == 'table') {renderModalTable()}
+    if (e.relatedTarget.parentNode.className != 'my-element') return;
+    modalInvoker = $(e.relatedTarget.parentNode);
     if(modalInvoker.children('iframe').length != 0){
         var iframe = modalInvoker.children('iframe');
         var sourceLink = iframe.attr('src');
@@ -75,6 +77,10 @@ fncs = {'film': function() {
         var text = $('#text').val();
 
         addText(modalInvoker, text);
+    },
+
+    'table': function () {
+        addTable(modalInvoker, collectModalTableData());
     }};
 
 function addVideo(element, videoWidth, videoHeight, videoUrl, id) {
@@ -94,12 +100,27 @@ function addVideo(element, videoWidth, videoHeight, videoUrl, id) {
 function addText(element, text, id) {
     if(element.children('.my-tool').length != 0) {
         element.children('.my-tool').remove();
-        element.prepend(markdownToHtml(text));
     } else {
         element.children('.markdown').remove();
-        element.prepend(markdownToHtml(text));
     }
+    element.prepend(markdownToHtml(text));
     element.append('<input type="hidden" class="id" value="' + (id || 0) + '" />')
+}
+
+function addTable(element, tableData, id) {
+    id = 'tableId' + (id || tableDivIdCounter--);
+    if(element.children('.my-tool').length != 0) {
+        element.children('.my-tool').remove();
+    } else {
+        element.children('.table').remove();
+    }
+    element.children('.cog').attr('data-target','#table');
+    element.children('.cog').attr('onclick','renderModalTable(JSON.parse($(this).siblings(\'.jsonTable\').text()))');
+    tableData.id = parseInt(id.substr(7));
+    element.prepend('<div id="' + id + '" class="table"></div><div class="jsonTable" style="display: none;">'
+        + JSON.stringify(tableData) + '</div>');
+    drawTable(tableData, id);
+    
 }
 
 function markdownToHtml(text) {
@@ -193,7 +214,7 @@ function createElement(text) {
             '<span class="glyphicon glyphicon-cog"></span></button>');
         wrapper.prepend('<div class="uploadedImages" id="uploadedImages' + (widgets.length - 1) + '"></div>');
     } else {
-        wrapper.append('<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#' +
+        wrapper.append('<button class="btn btn-primary btn-xs cog" data-toggle="modal" data-target="#' +
             text + '"><span class="glyphicon glyphicon-cog"></span></button>');
     }
     wrapper.append('<button onclick="parentNode.remove()" class="btn btn-danger btn-xs">' +

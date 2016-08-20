@@ -47,6 +47,7 @@ public class ConstructorController {
     @PostMapping("/savesite")
     public @ResponseBody String saveSite(@RequestParam(name = "siteHolder") String siteHolderDtoJSON,
                                          HttpServletRequest request) throws IOException {
+        System.out.println(siteHolderDtoJSON);
         SiteHolder siteHolder = siteHolderService.createSiteHolder(siteHolderDtoJSON);
         if( request.getRemoteUser().equals(siteHolder.getUser().getUsername()) || request.isUserInRole("ROLE_ADMIN")){
             siteHolderService.saveSiteHolder(siteHolder);

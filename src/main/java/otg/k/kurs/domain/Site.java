@@ -5,7 +5,6 @@ import lombok.ToString;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.IndexedEmbedded;
-import otg.k.kurs.dto.ImageDto;
 import otg.k.kurs.dto.SiteDto;
 
 import javax.persistence.*;
@@ -67,6 +66,9 @@ public class Site implements Serializable {
     private List<Video> videos;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
+    private List<TableChart> tables;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     @IndexedEmbedded
     private List<Comment> comments;
 
@@ -92,10 +94,12 @@ public class Site implements Serializable {
         this.images = new ArrayList<>(siteDto.getImages().size());
         this.videos = new ArrayList<>(siteDto.getVideos().size());
         this.texts = new ArrayList<>(siteDto.getTexts().size());
+        this.tables = new ArrayList<>(siteDto.getTables().size());
         this.tags = new ArrayList<>();
         this.images.addAll(siteDto.getImages().stream().map(imageDto -> new Image(imageDto, this)).collect(Collectors.toList()));
         this.videos.addAll(siteDto.getVideos().stream().map(videoDto -> new Video(videoDto, this)).collect(Collectors.toList()));
         this.texts.addAll(siteDto.getTexts().stream().map(textDto -> new Text(textDto, this)).collect(Collectors.toList()));
+        this.tables.addAll(siteDto.getTables().stream().map(table -> new TableChart(table, this)).collect(Collectors.toList()));
         String defaultUrl = "//placehold.it/500x300&text=%20";
         this.logoUrl = "".equals(siteDto.getLogoUrl()) ? defaultUrl : siteDto.getLogoUrl();
     }
