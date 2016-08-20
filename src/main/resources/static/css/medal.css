@@ -1,4 +1,5 @@
 ul.custom-bullet, ol.custom-bullet{
+  margin-left: 25px;
   font-size: 3em;
   list-style:none;
 }

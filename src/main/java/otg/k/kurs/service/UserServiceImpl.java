@@ -178,6 +178,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEnabled(false);
         user.setRole(Role.ROLE_USER);
+        user.setAvatarUrl("//placehold.it/500x300&text=%20");
         return user;
     }
 

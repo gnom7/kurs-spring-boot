@@ -6,6 +6,7 @@
     <title th:text="#{homepage}">Home page</title>
     <th:block layout:fragment="styles" />
     <link rel="stylesheet" th:href="@{/css/card.scss}" />
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
 </head>
 <body>
 <div layout:fragment="nowrap-content">
@@ -13,16 +14,25 @@
     <ul class="cards">
 
         <li class="cards_item" th:each="site : ${sites}">
+
             <div class="card">
 
                 <div class="card_image">
-                    <img src="//placehold.it/500x300&amp;text=%20" />
+                    <a th:href="@{~/{username}/{siteHolderName}/{siteName}(username = ${site.username},
+                    siteHolderName = ${site.siteHolderName}, siteName = ${site.siteName})}"><img th:src="${site.logoUrl}" /></a>
                 </div>
 
                 <div class="card_content">
-                    <h2 class="card_heading">First</h2>
-                    <p>I'm a card and I'm first. Quisque commodo hendrerit lorem quis egestas. Maecenas quis tortor arcu. Vivamus rutrum nunc non neque consectetur quis placerat neque.</p>
-                    <a href="#" class="card_button">Button</a>
+                    <h2 class="card_heading">
+                        <a th:text="${site.siteName}"
+                           th:href="@{~/{username}/{siteHolderName}/{siteName}(username = ${site.username},
+                    siteHolderName = ${site.siteHolderName}, siteName = ${site.siteName})}" class="card_button"></a>
+                    </h2>
+                    <p><a class="label label-info" th:each="tag : ${site.tags}"
+                          th:text="${tag}" th:href="@{~/search(q=${tag})}"></a>
+                    </p>
+                    <p th:id="${'site-id-' + site.id}">Rating: </p>
+                    <a th:text="${'Author: ' + site.username}" th:href="@{/{username}(username = ${site.username})}"></a>
                 </div>
 
             </div>
@@ -33,6 +43,25 @@
 </div>
 
 <th:block layout:fragment="scripts">
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(setRatings());
+
+        function setRatings() {
+            let sites = [[${sites}]];
+
+            for(let i = 0; i < sites.length; i++){
+                let site = sites[i];
+                let rating = 0;
+                for(let j = 0; j < site.votes.length; j++){
+                    let vote = site.votes[j];
+                    rating += vote.vote;
+                }
+                $('#site-id-' + site.id).text('Rating: ' + rating);
+            }
+        }
+        /*]]>*/
+    </script>
 </th:block>
 </body>
 </html>

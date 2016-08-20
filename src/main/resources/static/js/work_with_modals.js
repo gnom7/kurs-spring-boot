@@ -176,8 +176,14 @@ function addElement(item, container) {
 
 function createElement(text) {
     var wrapper = $('<div class="my-element"></div>');
+    var icon;
+    if(text == 'chart'){
+        icon = 'fa fa-bar-chart';
+    } else {
+        icon = 'glyphicon glyphicon-' + text;
+    }
     wrapper.append('<button type="button" class="my-tool btn btn-default btn-lg ' +
-        'tn-lg"><span class="glyphicon glyphicon-' + text + '"></span></button>');
+        'tn-lg"><span class="' + icon + '"></span></button>');
     if(text == 'camera'){
         paramsForWidget['thumbnails'] = '#uploadedImages' + widgets.length;
         widgets.push(cloudinary.createUploadWidget(paramsForWidget, callbackOfWidget));

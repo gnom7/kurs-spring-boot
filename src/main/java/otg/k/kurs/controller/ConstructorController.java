@@ -37,7 +37,7 @@ public class ConstructorController {
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     @GetMapping("constructor")
     public String get(){
         return "constructor/index";

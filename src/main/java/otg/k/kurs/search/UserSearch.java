@@ -33,7 +33,7 @@ public class UserSearch {
                 queryBuilder
                         .keyword()
                         .onFields("username", "firstname", "lastname",
-                                  "sites.siteName", "comments.comment")
+                                  "siteHolders.sites.siteName", "comments.comment")
                         .matching(text)
                         .createQuery();
 

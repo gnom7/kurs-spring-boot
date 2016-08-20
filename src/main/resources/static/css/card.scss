@@ -1,3 +1,13 @@
+p {
+  color: #777;
+}
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+
 /*---------- CARDS LAYOUT ----------*/
 
 $card-background:     #eee;
@@ -16,31 +26,37 @@ $card-radius:         0;
 }
 
 .cards_item {
-  display: flex;
+  display: inline-block;
   .no-flexbox & { float: left; }
 
   margin-top: 0;
   padding: 0 1em 2em;
 
-  // > 640px, 2 items/row
-  @media screen and (min-width: 42em) and ( max-width: 60em ) {
-    width: 50%;
-    .no-flexbox &:nth-child(2n+1) { clear: both; }
-  }
+}
 
-  // > 960px, 3 items/row
-  @media screen and (min-width: 60em) {
-    width: 33.3333%;
-    .no-flexbox &:nth-child(3n+1) { clear: both; }
+@media screen and (min-width: 980px) /* Desktop */ {
+  .cards_item {
+    width: 33%;
   }
+}
 
+@media screen  and (max-width: 979px) /* Tablet */ {
+  .cards_item {
+    width: 49%;
+  }
+}
+
+@media screen and (max-width: 500px) /* Mobile */ {
+  .cards_item {
+    width: 95%;
+  }
 }
 
 .card {
+  background-color: #eee;
   display: flex;
   flex-direction: column;
 
-  background-color: $card-background;
   border: $card-border-width solid $card-border-color;
   border-radius: $card-radius;
 }
@@ -57,6 +73,7 @@ $card-radius:         0;
   display: flex;
   flex: 1 0 auto;
   flex-direction: column;
+  background-color: #eee;
 
   margin-top: 0;
   padding: 1.5em;

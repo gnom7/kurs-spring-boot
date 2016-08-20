@@ -59,7 +59,6 @@
             <h3 th:if="${profileUser.siteHolders.size() > 0}">User sites</h3>
             <div class="row" th:each="siteHolder : ${profileUser.siteHolders}">
                 <div class="siteHolder">
-                    <!--<img th:src="${siteHolder.logoUrl}" />-->
                     <img class="img-thumbnail" height="200px" width="200px"
                          th:src="${siteHolder.sites[0].logoUrl}"/>
                         <a th:if="${#authentication.getName() == profileUser.username ||

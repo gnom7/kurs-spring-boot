@@ -6,6 +6,7 @@
     <title th:text="#{constructor.title}">Constructor</title>
     <th:block layout:fragment="styles" />
     <link rel="stylesheet" th:href="@{/css/jquery.tag-editor.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" />
     <style>.my-content{border: thin solid black;}</style>
 </head>
 <body>
@@ -36,6 +37,9 @@
         </button>
         <button type="button" class="my-tool btn btn-default btn-lg" id="tool-film">
             <span class="glyphicon glyphicon-film"></span> Video
+        </button>
+        <button type="button" class="my-tool btn btn-default btn-lg" id="tool-chart">
+            <span class="fa fa-bar-chart"></span> Chart
         </button>
     </div>
 
@@ -128,6 +132,9 @@
         });
 
         $('#save-siteHolder').on('click', function () {
+            if($('#site-name').val()){
+                $('#save-site').click();
+            }
             var siteHolderName = $('#siteHolder-name').get(0);
             var errorDiv = $('.save-siteHolder-error').get(0);
             if(!siteHolderName.checkValidity()){

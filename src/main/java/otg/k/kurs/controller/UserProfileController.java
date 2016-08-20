@@ -20,7 +20,7 @@ public class UserProfileController {
     @GetMapping("/{username}")
     public String getUserProfile(@PathVariable String username, Model model){
         User profileUser = userService.getUserByUsername(username);
-        if(profileUser == null) return "/index";
+        if(profileUser == null) return "/error";
         model.addAttribute("profileUser", new UserDto(profileUser));
         return "profile/index";
     }

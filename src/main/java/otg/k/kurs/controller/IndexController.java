@@ -25,8 +25,8 @@ public class IndexController {
     @GetMapping(value = {"/index", "/"})
     public String get(Model model){
         List<Site> sites = siteService.getAll();
-        Collections.sort(sites, (o1, o2) -> siteService.getRating(o1) - siteService.getRating(o2));
-        int i = sites.size() < 10 ? sites.size() : 10;
+        Collections.sort(sites, (o1, o2) -> siteService.getRating(o2) - siteService.getRating(o1));
+        int i = sites.size() < 9 ? sites.size() : 9;
         List<Site> subSites = new ArrayList<Site>(sites.subList(0, i));
         List<SiteDto> siteDtoList = subSites.stream().map(SiteDto::new).collect(Collectors.toList());
         model.addAttribute("sites", siteDtoList);
