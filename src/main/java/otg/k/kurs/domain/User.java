@@ -42,10 +42,6 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @IndexedEmbedded(depth = 1)
-    private List<Site> sites;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     @IndexedEmbedded
     private List<Comment> comments;
 
@@ -62,13 +58,6 @@ public class User implements UserDetails {
 
     public User(String username){
         this.username = username;
-    }
-
-    public User(String username, String firstname, String lastname, String email) {
-        this.username = username;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
     }
 
     public User(String username, String firstname, String lastname, String email,

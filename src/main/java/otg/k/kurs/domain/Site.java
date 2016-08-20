@@ -89,7 +89,6 @@ public class Site implements Serializable {
         this.id = siteDto.getId();
         this.menu = siteDto.getMenu();
         this.theme = siteDto.getTheme();
-        this.logoUrl = siteDto.getLogoUrl();
         this.images = new ArrayList<>(siteDto.getImages().size());
         this.videos = new ArrayList<>(siteDto.getVideos().size());
         this.texts = new ArrayList<>(siteDto.getTexts().size());
@@ -97,6 +96,8 @@ public class Site implements Serializable {
         this.images.addAll(siteDto.getImages().stream().map(imageDto -> new Image(imageDto, this)).collect(Collectors.toList()));
         this.videos.addAll(siteDto.getVideos().stream().map(videoDto -> new Video(videoDto, this)).collect(Collectors.toList()));
         this.texts.addAll(siteDto.getTexts().stream().map(textDto -> new Text(textDto, this)).collect(Collectors.toList()));
+        String defaultUrl = "//placehold.it/500x300&text=%20";
+        this.logoUrl = "".equals(siteDto.getLogoUrl()) ? defaultUrl : siteDto.getLogoUrl();
     }
 
 

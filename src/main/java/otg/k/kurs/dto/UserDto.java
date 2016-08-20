@@ -1,9 +1,7 @@
 package otg.k.kurs.dto;
 
 import lombok.Data;
-import otg.k.kurs.domain.Comment;
 import otg.k.kurs.domain.Role;
-import otg.k.kurs.domain.Site;
 import otg.k.kurs.domain.User;
 
 import java.util.List;
@@ -26,7 +24,7 @@ public class UserDto {
 
     private Role role;
 
-    private List<SiteHolderDto> siteHolderDtoList;
+    private List<SiteHolderDto> siteHolders;
 
     private List<CommentDto> comments;
 
@@ -44,8 +42,9 @@ public class UserDto {
         this.locked = user.isLocked();
         this.enabled = user.isEnabled();
         this.role = user.getRole();
-        this.siteHolderDtoList = user.getSiteHolders().stream().map(SiteHolderDto::new).collect(Collectors.toList());
+        this.siteHolders = user.getSiteHolders().stream().map(SiteHolderDto::new).collect(Collectors.toList());
         this.comments = user.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
+        this.votes = user.getVotes().stream().map(VoteDto::new).collect(Collectors.toList());
         this.avatarUrl = user.getAvatarUrl();
     }
 }

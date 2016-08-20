@@ -27,21 +27,27 @@
             </div>
 
             <ol class="custom-bullet medals">
-                <li class="gold" th:if="${profileUser.sites.size() ge 15}">creator</li>
-                <li class="silver" th:if="${profileUser.sites.size() ge 10 and profileUser.sites.size() lt 15}">creator</li>
-                <li class="bronze" th:if="${profileUser.sites.size() ge 5 and profileUser.sites.size() lt 10}">creator</li>
+                <li class="gold" th:if="${profileUser.siteHolders.size() ge 15}">creator</li>
+                <li class="silver" th:if="${profileUser.siteHolders.size() ge 10
+                and profileUser.siteHolders.size() lt 15}">creator</li>
+                <li class="bronze" th:if="${profileUser.siteHolders.size() ge 5
+                and profileUser.siteHolders.size() lt 10}">creator</li>
             </ol>
 
             <ol class="custom-bullet medals">
                 <li class="gold" th:if="${profileUser.comments.size() ge 15}">commentator</li>
-                <li class="silver" th:if="${profileUser.comments.size() ge 10 and profileUser.comments.size() lt 15}">commentator</li>
-                <li class="bronze" th:if="${profileUser.comments.size() ge 5 and profileUser.comments.size() lt 10}">commentator</li>
+                <li class="silver" th:if="${profileUser.comments.size() ge 10 and
+                profileUser.comments.size() lt 15}">commentator</li>
+                <li class="bronze" th:if="${profileUser.comments.size() ge 5 and
+                profileUser.comments.size() lt 10}">commentator</li>
             </ol>
 
             <ol class="custom-bullet medals">
                 <li class="gold" th:if="${profileUser.votes.size() ge 15}">referee</li>
-                <li class="silver" th:if="${profileUser.votes.size() ge 10 and profileUser.votes.size() lt 15}">referee</li>
-                <li class="bronze" th:if="${profileUser.votes.size() ge 5 and profileUser.votes.size() lt 10}">referee</li>
+                <li class="silver" th:if="${profileUser.votes.size() ge 10 and
+                profileUser.votes.size() lt 15}">referee</li>
+                <li class="bronze" th:if="${profileUser.votes.size() ge 5 and
+                profileUser.votes.size() lt 10}">referee</li>
             </ol>
         </div>
 
@@ -54,10 +60,8 @@
             <div class="row" th:each="siteHolder : ${profileUser.siteHolders}">
                 <div class="siteHolder">
                     <!--<img th:src="${siteHolder.logoUrl}" />-->
-                    <th:block th:text="${siteHolder.sites[0]}"></th:block>
-                    <!--<img class="img-thumbnail" height="200px" width="200px"-->
-                         <!--th:src="${siteHolder.sites[0].logoUrl or-->
-                         <!--'http://i.dailymail.co.uk/i/pix/2016/03/22/13/32738A6E00000578-3504412-image-a-6_1458654517341.jpg'}"/>-->
+                    <img class="img-thumbnail" height="200px" width="200px"
+                         th:src="${siteHolder.sites[0].logoUrl}"/>
                         <a th:if="${#authentication.getName() == profileUser.username ||
                         #authorization.getRequest().isUserInRole('ROLE_ADMIN')}"
                                  th:href="${'/redactSite?id=' + siteHolder.id}" class="btn btn-primary btn-xs">

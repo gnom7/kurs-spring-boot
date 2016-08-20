@@ -3,6 +3,7 @@ package otg.k.kurs.domain;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import otg.k.kurs.dto.SiteHolderDto;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class SiteHolder {
     private String siteHolderName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "siteHolder")
+    @IndexedEmbedded
     private List<Site> sites;
 
     @ManyToOne
