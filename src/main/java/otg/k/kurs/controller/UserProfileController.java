@@ -26,7 +26,6 @@ public class UserProfileController {
         return "profile/index";
     }
 
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{username}/changeAvatar")
     public String changeAvatar(@RequestParam String avatarUrl,
                                @PathVariable String username, HttpServletRequest request){

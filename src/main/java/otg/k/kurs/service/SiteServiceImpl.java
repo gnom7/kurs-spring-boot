@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import otg.k.kurs.domain.Site;
 import otg.k.kurs.domain.Tag;
 import otg.k.kurs.domain.User;
+import otg.k.kurs.domain.Vote;
 import otg.k.kurs.dto.SiteDto;
 import otg.k.kurs.repository.SiteRepository;
 import otg.k.kurs.repository.TagRepository;
@@ -68,6 +69,20 @@ public class SiteServiceImpl implements SiteService{
         }
         site.setTags(tags);
         return site;
+    }
+
+    @Override
+    public List<Site> getAll(){
+        return siteRepository.findAll();
+    }
+
+    @Override
+    public int getRating(Site site) {
+        int rating = 0;
+        for(Vote vote : site.getVotes()){
+            rating += vote.getVote();
+        }
+        return rating;
     }
 
 }

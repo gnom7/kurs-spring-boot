@@ -1,11 +1,13 @@
 package otg.k.kurs.domain;
 
 import lombok.Data;
+import lombok.ToString;
 import otg.k.kurs.dto.VoteDto;
 
 import javax.persistence.*;
 
 @Data
+@ToString(exclude = {"site", "user"})
 @Entity
 @Table(name = "votes")
 public class Vote {

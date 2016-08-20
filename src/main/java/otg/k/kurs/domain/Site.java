@@ -73,6 +73,8 @@ public class Site implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<Vote> votes;
 
+    private String logoUrl;
+
     public Site(){}
 
     public Site(long siteId){
@@ -87,6 +89,7 @@ public class Site implements Serializable {
         this.id = siteDto.getId();
         this.menu = siteDto.getMenu();
         this.theme = siteDto.getTheme();
+        this.logoUrl = siteDto.getLogoUrl();
         this.images = new ArrayList<>(siteDto.getImages().size());
         this.videos = new ArrayList<>(siteDto.getVideos().size());
         this.texts = new ArrayList<>(siteDto.getTexts().size());

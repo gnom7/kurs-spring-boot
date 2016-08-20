@@ -7,6 +7,7 @@ import otg.k.kurs.domain.Site;
 import otg.k.kurs.domain.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class UserDto {
@@ -25,9 +26,11 @@ public class UserDto {
 
     private Role role;
 
-    private List<Site> sites;
+    private List<SiteHolderDto> siteHolderDtoList;
 
-    private List<Comment> comments;
+    private List<CommentDto> comments;
+
+    private List<VoteDto> votes;
 
     private String avatarUrl;
 
@@ -41,8 +44,8 @@ public class UserDto {
         this.locked = user.isLocked();
         this.enabled = user.isEnabled();
         this.role = user.getRole();
-        this.sites = user.getSites();
-        this.comments = user.getComments();
+        this.siteHolderDtoList = user.getSiteHolders().stream().map(SiteHolderDto::new).collect(Collectors.toList());
+        this.comments = user.getComments().stream().map(CommentDto::new).collect(Collectors.toList());
         this.avatarUrl = user.getAvatarUrl();
     }
 }

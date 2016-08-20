@@ -54,8 +54,10 @@
             <div class="row" th:each="siteHolder : ${profileUser.siteHolders}">
                 <div class="siteHolder">
                     <!--<img th:src="${siteHolder.logoUrl}" />-->
-                    <img class="img-thumbnail" height="200px" width="200px"
-                         src="http://i.dailymail.co.uk/i/pix/2016/03/22/13/32738A6E00000578-3504412-image-a-6_1458654517341.jpg"/>
+                    <th:block th:text="${siteHolder.sites[0]}"></th:block>
+                    <!--<img class="img-thumbnail" height="200px" width="200px"-->
+                         <!--th:src="${siteHolder.sites[0].logoUrl or-->
+                         <!--'http://i.dailymail.co.uk/i/pix/2016/03/22/13/32738A6E00000578-3504412-image-a-6_1458654517341.jpg'}"/>-->
                         <a th:if="${#authentication.getName() == profileUser.username ||
                         #authorization.getRequest().isUserInRole('ROLE_ADMIN')}"
                                  th:href="${'/redactSite?id=' + siteHolder.id}" class="btn btn-primary btn-xs">

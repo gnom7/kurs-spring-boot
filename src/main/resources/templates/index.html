@@ -1,11 +1,38 @@
 <!DOCTYPE html>
-<html layout:decorator="layout/baselayout">
+<html layout:decorator="layout/baselayout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.thymeleaf.org">
 <head>
-<title th:text="Home"></title>
+    <title th:text="#{homepage}">Home page</title>
+    <th:block layout:fragment="styles" />
+    <link rel="stylesheet" th:href="@{/css/card.scss}" />
 </head>
 <body>
-    <div layout:fragment="content">
-        Hello
-    </div>
+<div layout:fragment="nowrap-content">
+
+    <ul class="cards">
+
+        <li class="cards_item" th:each="site">
+            <div class="card">
+
+                <div class="card_image">
+                    <img src="//placehold.it/500x300&amp;text=%20" />
+                </div>
+
+                <div class="card_content">
+                    <h2 class="card_heading">First</h2>
+                    <p>I'm a card and I'm first. Quisque commodo hendrerit lorem quis egestas. Maecenas quis tortor arcu. Vivamus rutrum nunc non neque consectetur quis placerat neque.</p>
+                    <a href="#" class="card_button">Button</a>
+                </div>
+
+            </div>
+        </li>
+
+    </ul>
+
+</div>
+
+<th:block layout:fragment="scripts">
+</th:block>
 </body>
 </html>

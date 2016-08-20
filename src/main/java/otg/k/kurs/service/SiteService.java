@@ -20,4 +20,8 @@ public interface SiteService {
     void saveSite(Site site);
 
     Site createSiteFromDto(SiteDto siteDto);
+
+    List<Site> getAll();
+
+    int getRating(Site site);
 }
