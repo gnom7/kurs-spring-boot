@@ -124,7 +124,7 @@
                 <div class="modal-body">
                     <div>
                         <button class="btn btn-primary" data-dismiss="modal"
-                                data-toggle="modal" data-target="#table-info">Table</button><br /><br />
+                                data-toggle="modal" data-target="#table" onclick="renderModalTable()">Table</button><br /><br />
 
                         <button class="btn btn-primary" data-dismiss="modal"
                                 data-toggle="modal" data-target="#line" onclick="renderLineModalTable()">Line</button>
@@ -132,28 +132,6 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="table-info" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add table</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
-                        <label>Columns count: <input id="columns-count"/></label><br />
-                        <label>Rows count: <input id="rows-count" /></label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal"
-                            data-toggle="modal" data-target="#table" onclick="renderModalTable()">Next</button>
                 </div>
             </div>
         </div>
@@ -168,8 +146,8 @@
                     <h4 class="modal-title">Add table</h4>
                 </div>
                 <div class="modal-body">
-                    <table id="table-from-modal">
-                    </table>
+                    <div id="table-info-table">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-default modal-data" data-dismiss="modal">Save</button>

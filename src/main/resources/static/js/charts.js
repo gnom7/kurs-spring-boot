@@ -26,7 +26,10 @@ function drawLine(linesData, id) {
     var options = {
         title: (linesData.chartTitle || 'Default'),
         curveType: 'function',
-        legend: { position: 'bottom' }
+        legend: { position: 'bottom' },
+        hAxis: {
+            title: linesData.data[0][0]
+        }
     };
 
     var chart = new google.visualization.LineChart(document.getElementById(id));

@@ -23,7 +23,10 @@
                 <button class="btn btn-primary" data-toggle="modal" data-target="#changeAvatar">
                     <span>Change avatar</span></button>
                 <button class="btn btn-primary" data-toggle="modal" data-target="#changePassword">
-                    <span>Change password</span></button>
+                    <span>Change password</span></button><br/>
+                <a th:if="${profileUser.username == #authentication.getName() and
+                #authorization.getRequest().isUserInRole('ROLE_ADMIN')}" class="btn btn-danger" th:href="@{~/admin}">
+                    <span>Admin Panel</span></a>
             </div>
 
             <ol class="custom-bullet medals">
@@ -59,8 +62,11 @@
             <h3 th:if="${profileUser.siteHolders.size() > 0}">User sites</h3>
             <div class="row" th:each="siteHolder : ${profileUser.siteHolders}">
                 <div class="siteHolder">
-                    <img class="img-thumbnail" height="200px" width="200px"
-                         th:src="${siteHolder.sites[0].logoUrl}"/>
+                    <h5 th:text="${siteHolder.siteHolderName}"></h5>
+                    <a th:href="@{/{username}/{siteHolderName}/{siteName}(username = ${profileUser.username},
+                    siteHolderName = ${siteHolder.siteHolderName}, siteName=${siteHolder.sites[0].siteName})}">
+                        <img class="img-thumbnail" height="200px" width="200px"
+                         th:src="${siteHolder.sites[0].logoUrl}"/></a>
                         <a th:if="${#authentication.getName() == profileUser.username ||
                         #authorization.getRequest().isUserInRole('ROLE_ADMIN')}"
                                  th:href="${'/redactSite?id=' + siteHolder.id}" class="btn btn-primary btn-xs">

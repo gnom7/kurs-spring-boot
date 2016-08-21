@@ -11,9 +11,9 @@ function renderLineModalTable(linesData) {
         '<button class="btn btn-default btn-danger btn-xs" id="delete-line-line" onclick="deleteLine(this)">Delete line</button>' +
         '<table class="table-hover line-info-table">' +
         '<tr><th>Argument name</th><th>Line names</th></tr>' +
-        '<tr><td><input class="argument-name"/></td><td><input class="line-name"/></td></tr>' +
+        '<tr><td><input/></td><td><input/></td></tr>' +
         '<tr><th>Argument value</th><th>Lines value</th></tr>' +
-        '<tr><td><input class="argument-value"/></td><td><input class="line-value"/></td>' +
+        '<tr><td><input/></td><td><input/></td>' +
         '</tr></table>'));
 
     if( !linesData) return;
@@ -22,7 +22,7 @@ function renderLineModalTable(linesData) {
         addRow($('#add-line-row'));
     }
     for(let i = 2; i < linesData.data[0].length; i++){
-        addLine($('#add-line-line'));
+        addColumn($('#add-line-line'));
     }
 
     $('#chart-title').val(linesData.chartTitle);
@@ -39,12 +39,13 @@ function renderLineModalTable(linesData) {
     });
 
 }
+
 function addRow(self) {
     self = $(self);
-    let row = '<tr><td><input class="argument-value"/></td>';
+    let row = '<tr><td><input/></td>';
     let linesCount = self.siblings('table').find('tr').eq(1).find('td').length - 1;
     for(let i = 0; i < linesCount; i++){
-        row += '<td><input class="line-value"/></td>';
+        row += '<td><input/></td>';
     }
     self.siblings('table').append($(row + '</tr>'))
 }
@@ -55,11 +56,11 @@ function deleteRow(self) {
 function addLine(self) {
     self = $(self);
     let linesCount = self.siblings('table').find('tr').eq(1).length;
-    self.siblings('table').find('tr').eq(1).append($('<td><input class="line-name"/></td>'));
+    self.siblings('table').find('tr').eq(1).append($('<td><input/></td>'));
     self.siblings('table').find('tr').each(function (index, tr) {
         if( index < 3 ) return;
         tr = $(tr);
-        tr.append($('<td><input class="line-value"/></td>'));
+        tr.append($('<td><input/></td>'));
     });
 }
 function deleteLine(self) {
@@ -104,28 +105,26 @@ function collectLineModalTableData(){
 
 
 function renderModalTable(tableData) {
-    var columnsCount;
-    var rowsCount;
-    if(tableData){
-        columnsCount = tableData.grid[0].length;
-        rowsCount = tableData.grid.length;
-    } else {
-        columnsCount = parseInt($('#columns-count').val());
-        rowsCount = parseInt($('#rows-count').val());
-    }
-    let table = $('#table-from-modal');
+    let table = $('#table-info-table');
     table.children().each(function (index, child) {
         child.remove();
     });
 
-    for(let i = 0; i < rowsCount; i++){
-        table.append($('<tr></tr>'));
+    table.append($(
+        '<button class="btn btn-default btn-success btn-xs" id="add-table-row" onclick="addRow(this)">Add row</button>' +
+        '<button class="btn btn-default btn-danger btn-xs" id="delete-table-row" onclick="deleteRow(this)">Delete row</button>' +
+        '<button class="btn btn-default btn-success btn-xs" id="add-table-column" onclick="addColumn(this)">Add column</button>' +
+        '<button class="btn btn-default btn-danger btn-xs" id="delete-table-column" onclick="deleteColumn(this)">Delete column</button>' +
+        '<table class="table-hover table-info-table"><tr><td><input/></td></tr></table>'));
 
-        for(let j = 0; j< columnsCount; j++){
-            table.find('tr').last().append($('<td><input  /></td>'));
-        }
-    }
     if( !tableData) return;
+
+    for(let i = 1; i < tableData.grid.length; i++){
+        addRow($('#add-table-row'));
+    }
+    for(let i = 1; i < tableData.grid[0].length; i++){
+        addColumn($('#add-table-column'));
+    }
 
     table.find('tr').each(function (i, tr) {
         tr = $(tr);
@@ -139,7 +138,7 @@ function collectModalTableData(){
     let tableData = {
         grid: []
     };
-    let table = $('#table-from-modal');
+    let table = $('#table-info-table');
 
     table.find('tr').each(function (i, tr) {
         tr = $(tr);
@@ -151,4 +150,19 @@ function collectModalTableData(){
     });
 
     return tableData;
+}
+
+function addColumn(self) {
+    self = $(self);
+    self.siblings('table').find('tr').each(function (index, tr) {
+        tr = $(tr);
+        tr.append($('<td><input/></td>'));
+    });
+}
+function deleteColumn(self) {
+    self = $(self);
+    self.siblings('table').find('tr').each(function (index, tr) {
+        tr = $(tr);
+        tr.find('td').last().remove();
+    });
 }
