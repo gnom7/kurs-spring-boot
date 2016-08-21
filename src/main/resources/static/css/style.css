@@ -262,3 +262,8 @@ a.right-menu {
 .optionChild {
     padding-left: 15px;
 }
+
+/*center tables of modals in constructor*/
+table {
+    margin: 0 auto;
+}

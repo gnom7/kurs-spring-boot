@@ -69,6 +69,9 @@ public class Site implements Serializable {
     private List<TableChart> tables;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
+    private List<LineChart> lines;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     @IndexedEmbedded
     private List<Comment> comments;
 
@@ -95,11 +98,13 @@ public class Site implements Serializable {
         this.videos = new ArrayList<>(siteDto.getVideos().size());
         this.texts = new ArrayList<>(siteDto.getTexts().size());
         this.tables = new ArrayList<>(siteDto.getTables().size());
+        this.lines = new ArrayList<>(siteDto.getLines().size());
         this.tags = new ArrayList<>();
         this.images.addAll(siteDto.getImages().stream().map(imageDto -> new Image(imageDto, this)).collect(Collectors.toList()));
         this.videos.addAll(siteDto.getVideos().stream().map(videoDto -> new Video(videoDto, this)).collect(Collectors.toList()));
         this.texts.addAll(siteDto.getTexts().stream().map(textDto -> new Text(textDto, this)).collect(Collectors.toList()));
         this.tables.addAll(siteDto.getTables().stream().map(table -> new TableChart(table, this)).collect(Collectors.toList()));
+        this.lines.addAll(siteDto.getLines().stream().map(line -> new LineChart(line, this)).collect(Collectors.toList()));
         String defaultUrl = "//placehold.it/500x300&text=%20";
         this.logoUrl = "".equals(siteDto.getLogoUrl()) ? defaultUrl : siteDto.getLogoUrl();
     }

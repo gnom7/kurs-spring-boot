@@ -74,25 +74,7 @@
 <th:block layout:fragment="scripts">
     <script type="text/javascript" th:src="@{/js/showdown.min.js}"></script>
     <script type="text/javascript" th:src="@{https://www.gstatic.com/charts/loader.js}"></script>
-    <script type="text/javascript">
-        /*<![CDATA[*/
-        google.charts.load('current', {'packages':['table']});
-
-        function drawTable(tableData, id) {
-            var data = new google.visualization.DataTable();
-
-            tableData.grid.shift().forEach(function (cell) {
-                data.addColumn('string', cell);
-            });
-
-            data.addRows(tableData.grid);
-
-            var table = new google.visualization.Table(document.getElementById(id));
-
-            table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
-        }
-        /*]]>*/
-    </script>
+    <script type="text/javascript" th:src="@{/js/charts.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
         let error = [[${error}]];

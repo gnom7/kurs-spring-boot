@@ -1,3 +1,43 @@
+function renderLineModalTables(linesData) {
+    var linesCount;
+    if(linesData){
+        linesCount = linesData.length;
+    } else {
+        linesCount = parseInt($('#lines-count').val());
+    }
+    let tables = $('#line-tables');
+    tables.children().each(function (index, child) {
+        child.remove();
+    });
+
+    for(let i = 0; i < linesCount; i++){
+        tables.append($('<div><table id="' + 'line-id-' + i + '" class="table-hover">' +
+            '<tr><th colspan="2"><label>Line name: <input class="line-name"  /></label></th></tr>' +
+            '<tr><td colspan="2">' +
+            '<button class="btn btn-default btn-success btn-xs" onclick="addRow(this)">Add row</button>' +
+            '<button class="btn btn-default btn-danger btn-xs" onclick="deleteRow(this)">Delete row</button>' +
+            '<button class="btn btn-default btn-danger btn-xs" onclick="deleteLineTable(this)">Delete</button>' +
+            '</td></tr>' +
+            '<tr><th>Horizontal</th><th>Vertical</th></tr></table></div><br/>'));
+    }
+
+
+
+}
+function addRow(self) {
+    self = $(self);
+    self.closest('table').append($('<tr><td><input class="x"/></td><td><input class="y"/></td></tr>'))
+}
+function deleteRow(self) {
+    self = $(self);
+    self.closest('table').find('tr').last().remove();
+}
+function deleteLineTable(self) {
+    self.closest('div').remove();
+}
+
+
+
 function renderModalTable(tableData) {
     var columnsCount;
     var rowsCount;

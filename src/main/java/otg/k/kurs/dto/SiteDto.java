@@ -42,6 +42,8 @@ public class SiteDto {
 
     private List<TableChartDto> tables;
 
+    private List<LineChartDto> lines;
+
     private String logoUrl;
 
     public SiteDto(){}
@@ -66,5 +68,6 @@ public class SiteDto {
         this.tags = site.getTags().stream().map(Tag::getTag).collect(Collectors.toList());
         this.votes = site.getVotes().stream().map(VoteDto::new).collect(Collectors.toList());
         this.tables = site.getTables().stream().map(TableChartDto::new).collect(Collectors.toList());
+        this.lines = site.getLines().stream().map(LineChartDto::new).collect(Collectors.toList());
     }
 }
