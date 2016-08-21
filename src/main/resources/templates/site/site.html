@@ -46,6 +46,7 @@
     </div>
 
     <div id="comments-block" th:if="${site.allowComments}">
+        <br/>
         <div class="container" sec:authorize="isAuthenticated()" style="text-align: center">
             <textarea class="form-control" id="new-comment" rows="3" placeholder="Add comment..."></textarea>
             <br />

@@ -156,8 +156,13 @@
                 return;
             }
             for(let i = 0; i < siteHolder.sites.length; i++){
-                if(siteHolder.sites[i].id < 0){
-                    delete siteHolder.sites[i].id;
+                let site = siteHolder.sites[i];
+                if(site.id < 0) delete site.id;
+                for(let j = 0; j < site.tables.length; j++){
+                    if(site.tables[j].id < 0) delete site.tables[j].id;
+                }
+                for(let j = 0; j < site.lines.length; j++){
+                    if(site.lines[j].id < 0) delete site.lines[j].id;
                 }
             }
             $.post('checkSiteHolderNameExist', {
