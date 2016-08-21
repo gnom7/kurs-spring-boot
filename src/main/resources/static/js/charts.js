@@ -15,16 +15,21 @@ function drawTable(tableData, id) {
     table.draw(data, {width: '100%', height: '100%'});
 }
 
-function drawLine(lineData, id) {
-    var data = google.visualization.arrayToDataTable(lineData.data);
+function drawLine(linesData, id) {
+    for(let i = 1; i < linesData.data.length; i++){
+        for(let j = 1; j < linesData.data[i].length; j++){
+            linesData.data[i][j] = parseInt(linesData.data[i][j]);
+        }
+    }
+    var data = google.visualization.arrayToDataTable(linesData.data);
 
     var options = {
-        title: lineData.title,
+        title: (linesData.chartTitle || 'Default'),
         curveType: 'function',
         legend: { position: 'bottom' }
     };
 
-    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+    var chart = new google.visualization.LineChart(document.getElementById(id));
 
     chart.draw(data, options);
 }

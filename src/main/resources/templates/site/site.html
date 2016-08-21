@@ -148,6 +148,11 @@
                 myContent.eq(item['position']).append('<div id="tableId' + index + '"></div>');
                 drawTable(item, 'tableId' + index)
             });
+            site['lines'].forEach(function (item, index) {
+                console.log(site['lines']);
+                myContent.eq(item['position']).append('<div id="lineId' + index + '"></div>');
+                drawLine(item, 'lineId' + index)
+            });
             myContent.each(function (index, item) {
                 $(item).find($('iframe')).after('<br />');
             });

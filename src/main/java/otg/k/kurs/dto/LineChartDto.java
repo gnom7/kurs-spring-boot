@@ -10,6 +10,8 @@ public class LineChartDto {
 
     private int position;
 
+    private String chartTitle;
+
     private String[][] data;
 
     public LineChartDto() {
@@ -18,6 +20,7 @@ public class LineChartDto {
     public LineChartDto(LineChart lineChart) {
         this.id = lineChart.getId();
         this.position = lineChart.getPosition();
+        this.chartTitle = lineChart.getChartTitle();
         this.data = lineChart.getData();
     }
 }

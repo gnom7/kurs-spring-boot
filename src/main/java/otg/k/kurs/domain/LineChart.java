@@ -9,13 +9,15 @@ import javax.persistence.*;
 @Data
 @ToString(exclude = "site")
 @Entity
-@Table(name = "table_charts")
+@Table(name = "line_charts")
 public class LineChart {
 
     @Id
     private long id;
 
     private int position;
+
+    private String chartTitle;
 
     private String[][] data;
 
@@ -29,6 +31,7 @@ public class LineChart {
     public LineChart(LineChartDto lineChartDto, Site site) {
         this.id = lineChartDto.getId();
         this.position = lineChartDto.getPosition();
+        this.chartTitle = lineChartDto.getChartTitle();
         this.data = lineChartDto.getData();
         this.site = site;
     }

@@ -127,10 +127,7 @@
                                 data-toggle="modal" data-target="#table-info">Table</button><br /><br />
 
                         <button class="btn btn-primary" data-dismiss="modal"
-                                data-toggle="modal" data-target="#line-info">Line</button><br /><br />
-
-                        <!--<button class="btn btn-primary" data-dismiss="modal"-->
-                                <!--data-toggle="modal" data-target="#column">Column</button><br /><br />-->
+                                data-toggle="modal" data-target="#line" onclick="renderLineModalTable()">Line</button>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -181,57 +178,16 @@
         </div>
     </div>
 
-    <div id="line-info" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add table</h4>
-                </div>
-                    <div class="modal-body">
-                        <div>
-                            <label>Line count: <input id="lines-count" autofocus="autofocus"/></label>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-default" data-dismiss="modal"
-                                data-toggle="modal" data-target="#line" onclick="renderLineModalTables()">Next</button>
-                    </div>
-            </div>
-        </div>
-    </div>
-
     <div id="line" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add line</h4>
+                    <h4 class="modal-title">Add lines</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="line-tables">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss="modal">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="column" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add column</h4>
-                </div>
-                <div class="modal-body">
-                    <div>
-
+                    <div id="line-info-table">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -240,6 +196,7 @@
             </div>
         </div>
     </div>
+
 </th:body>
 
 </body>

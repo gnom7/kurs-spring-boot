@@ -66,6 +66,7 @@
         /*<![CDATA[*/
         var counterForNewSiteID = -1;
         var tableDivIdCounter = -1;
+        var lineDivIdCounter = -1;
 
         var siteHolder = {
             sites: [],
@@ -208,10 +209,15 @@
                         let id = parseInt(currentElement.find('.table').attr('id').substr(7));
                         let tableData = JSON.parse(currentElement.find('.jsonTable').text());
                         tableData.position = i;
-                        if(id > 0) {
-                            tableData.id = id;
-                        } else {tableData.id = 0}
+                        tableData.id = id;
                         site.tables.push(tableData);
+                    }
+                    if(currentElement.find('.line').length != 0){
+                        let id = parseInt(currentElement.find('.line').attr('id').substr(6));
+                        let linesData = JSON.parse(currentElement.find('.jsonLineTable').text());
+                        linesData.position = i;
+                        linesData.id = id;
+                        site.lines.push(linesData);
                     }
                 }
             }
@@ -241,6 +247,8 @@
             site.texts.splice(0, site.texts.length);
             site.videos.splice(0, site.videos.length);
             site.tags.splice(0, site.tags.length);
+            site.tables.splice(0, site.tables.length);
+            site.lines.splice(0, site.lines.length);
             site.menu = '';
         }
 
@@ -279,6 +287,7 @@
             var videos = site.videos;
             var texts = site.texts;
             var tables = site.tables;
+            var lines = site.lines;
 
             var position = -1;
             var element;
@@ -323,6 +332,16 @@
                 container = $('.my-content').eq(position);
                 container.append(element);
                 addTable(element, table, table.id)
+            }
+
+            console.log(lines);
+            for(let i = 0; i < lines.length; i++){
+                var line = lines[i];
+                position = line.position;
+                element = createElement('chart');
+                container = $('.my-content').eq(position);
+                container.append(element);
+                addLines(element, line, line.id)
             }
         }
 

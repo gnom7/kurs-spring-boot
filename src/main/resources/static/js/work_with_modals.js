@@ -5,6 +5,7 @@ var currentModal;
 $(modal).on('show.bs.modal', function (e) {
     currentModal = $(this);
     if(currentModal.id == 'table') {renderModalTable()}
+    if(currentModal.id == 'line') {renderLineModalTable()}
     if (e.relatedTarget.parentNode.className != 'my-element') return;
     modalInvoker = $(e.relatedTarget.parentNode);
     if(modalInvoker.children('iframe').length != 0){
@@ -81,6 +82,10 @@ fncs = {'film': function() {
 
     'table': function () {
         addTable(modalInvoker, collectModalTableData());
+    },
+
+    'line': function () {
+        addLines(modalInvoker, collectLineModalTableData())
     }};
 
 function addVideo(element, videoWidth, videoHeight, videoUrl, id) {
@@ -117,10 +122,26 @@ function addTable(element, tableData, id) {
     element.children('.cog').attr('data-target','#table');
     element.children('.cog').attr('onclick','renderModalTable(JSON.parse($(this).siblings(\'.jsonTable\').text()))');
     tableData.id = parseInt(id.substr(7));
+    element.find('.jsonTable').remove();
     element.prepend('<div id="' + id + '" class="table"></div><div class="jsonTable" style="display: none;">'
         + JSON.stringify(tableData) + '</div>');
     drawTable(tableData, id);
-    
+}
+
+function addLines(element, linesData, id) {
+    id = 'lineId' + (id || lineDivIdCounter--);
+    if(element.children('.my-tool').length != 0) {
+        element.children('.my-tool').remove();
+    } else {
+        element.children('.line').remove();
+    }
+    element.children('.cog').attr('data-target','#line');
+    element.children('.cog').attr('onclick','renderLineModalTable(JSON.parse($(this).siblings(\'.jsonLineTable\').text()))');
+    linesData.id = parseInt(id.substr(6));
+    element.find('.jsonLineTable').remove();
+    element.prepend('<div id="' + id + '" class="line"></div><div class="jsonLineTable" style="display: none;">'
+        + JSON.stringify(linesData) + '</div>');
+    drawLine(linesData, id);
 }
 
 function markdownToHtml(text) {

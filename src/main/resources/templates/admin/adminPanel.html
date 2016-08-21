@@ -59,7 +59,7 @@
 <th:block layout:fragment="scripts">
     <script th:inline="javascript">
     /*<![CDATA[*/
-// todo: add notification that email must be unique and check it (if not may produce 409 error)
+// todo: add notification that email must be unique and check it (if not user not added and http 409 error)
     $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
         jqXHR.setRequestHeader('X-CSRF-Token', [[${_csrf.token}]]);
     });
@@ -271,126 +271,6 @@
             item.value = '';
         });
     }
-
-//    $('#add-site').on('click', function (e) {
-//        $('#redacting-site').prop('checked', false);
-//        $('#create-site-modal').modal('show');
-//    });
-//
-//    $('#delete-site').on('click', function (e) {
-//        let sitesToDelete = $('#sites').find(':selected');
-//        for(let i = 0; i < sitesToDelete.length; i++){
-//            let siteData = populateSiteDataFromDB(sitesToDelete[i].value);
-//            deleteSite(siteData['_links']['self']['href'].splice('/').pop());
-//        }
-//    });
-//
-//    var redactSiteId;
-//    $('#redact-site').on('click', function (e) {
-//        $('#redacting-site').prop('checked', true);
-//
-//        let siteToRedact = $('#sites').find(':selected')[0];
-//        if( !siteToRedact) return;
-//        siteToRedact = siteToRedact.value;
-//
-//        let siteData = populateSiteDataFromDB(siteToRedact);
-//        redactSiteId = siteData['_links']['self']['href'].splice('/').pop();
-//
-//        for(let key in siteData){
-//            $('#' + key).val(siteData[key]);
-//        }
-//        $('#create-site-modal').modal('show');
-//
-//    });
-//
-//    function populateSiteDataFromDB(siteToRedact) {
-//        let siteData;
-//        $.ajax({
-//            method: 'GET',
-//            async: false,
-//            url: '/admin/crud/datarest/siteHolders/search/findBySiteHolderName?name=' + siteToRedact,
-//            success: function (response) {
-//                siteData = response;
-////                    siteIdToRedact = response['_links']['self']['href'].splice('/').pop();
-//            }
-//        });
-//        return siteData;
-//    }
-//
-//    $('#create-site').on('click', function (e) {
-//        if($('#redacting-site').is(':checked')) {
-//            deleteSite(redactSiteId);
-//            createSite();
-//            return;
-//        }
-//        createSite();
-//
-//        function createSite() {
-//            let siteData = collectSiteData();
-//            $.ajax({
-//                method: 'POST',
-//                url: '/admin/crud/datarest/siteHolders',
-//                contentType: 'application/json',
-//                data: JSON.stringify(siteData)
-//            });
-//        }
-//
-//        function collectSiteData() {
-//            let siteData = {
-//                siteHolderName: $('#siteHolderName').val()
-//            };
-//            let userData = populateUserDataFromDB($('#site-creator').val());
-//            siteData.user = saveUser(userData);  // returns link to user (from POST response)
-//            return siteData;
-//        }
-//
-//        function populateUserDataFromDB(username) {
-//            let userData;
-//            $.ajax({
-//                method: 'GET',
-//                async: false,
-//                url: '/admin/crud/datarest/users/' + username,
-//                success: function (response) {
-//                    let username = userData.username;
-//                    userData = response;
-//                    userData.username = username;
-//                    delete userData.authorities;
-//                },
-//                statusCode: {
-//                    404: function() {
-//                        userData.role = 'ROLE_USER';
-//                    }
-//                }
-//            });
-//            return userData;
-//        }
-//
-//        function saveUser(userData) {
-//            let userLink;
-//            $.ajax({
-//                method: 'POST',
-//                async: false,
-//                url: '/admin/crud/datarest/users',
-//                contentType: 'application/json',
-//                data: JSON.stringify(userData),
-//                success: function (response) {
-//                    userLink = response['_links']['self']['href'];
-//                    console.log(userLink);
-//                }
-//            });
-//            return userLink;
-//        }
-//
-//    });
-//
-//    function deleteSite(siteId) {
-//        $.ajax({
-//            method: 'DELETE',
-//            async: false,
-//            url: '/admin/crud/datarest/siteHolders/' + siteId
-//        })
-//    }
-
     /*]]>*/
     </script>
 </th:block>

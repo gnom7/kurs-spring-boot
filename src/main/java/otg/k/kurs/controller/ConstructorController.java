@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import otg.k.kurs.domain.*;
+import otg.k.kurs.dto.SiteDto;
 import otg.k.kurs.dto.SiteHolderDto;
 import otg.k.kurs.service.SiteHolderService;
 import otg.k.kurs.service.SiteService;
@@ -83,6 +84,12 @@ public class ConstructorController {
     @GetMapping("/redactSite")
     public String redactSite(@RequestParam long id, Model model) throws JsonProcessingException {
         SiteHolder siteHolder = siteHolderService.getBySiteHolderId(id);
+        if(siteHolder == null) {
+            model.addAttribute("error", new Exception("Such site doesn't exist"));
+            model.addAttribute("siteHolderDto", new SiteHolderDto("error"));
+            model.addAttribute("site", new SiteDto("error"));
+            return "site/site";
+        }
         SiteHolderDto siteHolderDto = new SiteHolderDto(siteHolder);
         model.addAttribute("siteHolderDto", siteHolderDto);
         model.addAttribute("allTags", tagService.getAllStringTags());

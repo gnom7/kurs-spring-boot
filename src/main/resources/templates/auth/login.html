@@ -51,6 +51,10 @@
     <div class="alert alert-info alert-dismissible" role="alert" th:if="${param.resendConfirmEmailComplete}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <p th:text="#{registration.confirmEmailResended}">Confirmation email was resended</p>
+        <div>
+            <a data-toggle="modal" data-target="#resendConfirmationEmail" href=""
+               th:text="#{registration.resendConfirmationEmail}" style="color: black"></a>
+        </div>
     </div>
     <div class="alert alert-danger alert-dismissible" role="alert" th:if="${param.passwordResetError}">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
