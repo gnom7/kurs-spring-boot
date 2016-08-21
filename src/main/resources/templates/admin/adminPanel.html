@@ -59,10 +59,9 @@
 <th:block layout:fragment="scripts">
     <script th:inline="javascript">
     /*<![CDATA[*/
-// todo: add notification that email must be unique and check it (if not user not added and http 409 error)
-    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-        jqXHR.setRequestHeader('X-CSRF-Token', [[${_csrf.token}]]);
-    });
+//    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+//        jqXHR.setRequestHeader('X-CSRF-Token', [[${_csrf.token}]]);
+//    });
 
 //    for users
 
@@ -131,11 +130,10 @@
     }
 
     function deleteUser(username) {
-        $.ajax({
-            method: 'DELETE',
-            async: false,
-            url: '/admin/crud/datarest/users/' + username
-        })
+        $.post('deleteUser', {
+            username: username,
+            [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+        });
     }
 
 //    for sites
@@ -223,9 +221,7 @@
 
     function getUserDataFromName(username) {
         let users = [[${users}]];
-        console.log(users);
         for(let i = 0; i < users.length; i++){
-            console.log(users[i]);
             if(users[i].username = username) return users[i];
         }
     }
