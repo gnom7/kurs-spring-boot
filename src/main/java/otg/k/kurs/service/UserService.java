@@ -4,6 +4,7 @@ import org.springframework.social.connect.UserProfile;
 import otg.k.kurs.domain.User;
 import otg.k.kurs.domain.VerificationToken;
 import otg.k.kurs.dto.AccountDto;
+import otg.k.kurs.dto.UserDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -37,4 +38,8 @@ public interface UserService {
     boolean resetPassword(String newPassword, String token);
 
     List<User> getAll();
+
+    void deleteUser(String username);
+
+    void updateUserFromDto(UserDto userDto, String password);
 }

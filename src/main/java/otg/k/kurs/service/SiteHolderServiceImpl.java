@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import otg.k.kurs.domain.Role;
 import otg.k.kurs.domain.Site;
 import otg.k.kurs.domain.SiteHolder;
 import otg.k.kurs.domain.User;
@@ -12,6 +13,7 @@ import otg.k.kurs.dto.SiteHolderDto;
 import otg.k.kurs.repository.SiteHolderRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -84,5 +86,29 @@ public class SiteHolderServiceImpl implements SiteHolderService {
     @Override
     public SiteHolder getBySiteHolderId(long id){
         return siteHolderRepository.findOne(id);
+    }
+
+    @Override
+    public void updateSiteHolderFromDto(SiteHolderDto siteHolderDto){
+        User user = userService.getUserByUsername(siteHolderDto.getUsername());
+        if(user == null){
+            user = new User(siteHolderDto.getUsername());
+            user.setRole(Role.ROLE_USER);
+        }
+        String siteHolderName = siteHolderDto.getSiteHolderName();
+        SiteHolder siteHolder = siteHolderRepository.findOne(siteHolderDto.getId());
+        if(siteHolder == null){
+            siteHolder = new SiteHolder();
+            Site site = new Site("default");
+            site.setSiteHolder(siteHolder);
+            site.setUser(user);
+            site.setLogoUrl("//placehold.it/500x300&text=%20");
+            List<Site> sites = new ArrayList<>();
+            sites.add(site);
+            siteHolder.setSites(sites);
+        }
+        siteHolder.setSiteHolderName(siteHolderName);
+        siteHolder.setUser(user);
+        siteHolderRepository.save(siteHolder);
     }
 }

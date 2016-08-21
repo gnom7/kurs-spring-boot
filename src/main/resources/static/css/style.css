@@ -59,6 +59,7 @@ body {
 }
 
 p {
+    min-height: 20.8px;
     margin: 0 0 1em;
     word-wrap: break-word;
 }

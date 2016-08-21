@@ -32,7 +32,7 @@
                           th:text="${tag}" th:href="@{~/search(q=${tag})}"></a>
                     </p>
                     <p th:id="${'site-id-' + site.id}">Rating: </p>
-                    <a th:text="${'Author: ' + site.username}" th:href="@{/{username}(username = ${site.username})}"></a>
+                    <p>Author: <a th:text="${site.username}" th:href="@{/{username}(username = ${site.username})}"></a></p>
                 </div>
 
             </div>

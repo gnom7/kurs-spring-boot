@@ -37,7 +37,7 @@ public class Site implements Serializable {
     @IndexedEmbedded(depth = 1)
     private SiteHolder siteHolder;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "tag_site", joinColumns = {
             @JoinColumn(name = "id")},
             inverseJoinColumns = {@JoinColumn(name = "tagId")})
@@ -84,6 +84,10 @@ public class Site implements Serializable {
 
     public Site(long siteId){
         this.id = siteId;
+    }
+
+    public Site(String siteName){
+        this.siteName = siteName;
     }
 
     public Site(SiteDto siteDto){

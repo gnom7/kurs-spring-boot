@@ -2,6 +2,7 @@ package otg.k.kurs.service;
 
 import otg.k.kurs.domain.SiteHolder;
 import otg.k.kurs.domain.User;
+import otg.k.kurs.dto.SiteHolderDto;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,4 +24,6 @@ public interface SiteHolderService {
     List<SiteHolder> getAll();
 
     SiteHolder getBySiteHolderId(long id);
+
+    void updateSiteHolderFromDto(SiteHolderDto siteHolderDto);
 }

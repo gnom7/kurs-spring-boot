@@ -3,6 +3,7 @@ package otg.k.kurs.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import otg.k.kurs.domain.Role;
 import otg.k.kurs.domain.User;
 import otg.k.kurs.domain.VerificationToken;
 import otg.k.kurs.dto.AccountDto;
+import otg.k.kurs.dto.UserDto;
 import otg.k.kurs.event.ForgotPasswordEvent;
 import otg.k.kurs.event.OnRegistrationCompleteEvent;
 import otg.k.kurs.repository.ForgotPasswordRepository;
@@ -200,5 +202,30 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> getAll(){
         return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteUser(String username){
+        userRepository.delete(username);
+    }
+
+    @Override
+    public void updateUserFromDto(UserDto userDto, String password){
+        User user = userRepository.findByUsername(userDto.getUsername());
+        if(user == null){
+            user = new User();
+        }
+        if( !"".equals(password)) {
+            user.setPassword(new BCryptPasswordEncoder().encode(password));
+        }
+        user.setUsername(userDto.getUsername());
+        user.setFirstname(userDto.getFirstname());
+        user.setLastname(userDto.getLastname());
+        user.setEmail(userDto.getEmail());
+        user.setAvatarUrl(userDto.getAvatarUrl());
+        user.setRole(userDto.getRole());
+        user.setEnabled(userDto.isEnabled());
+        user.setLocked(userDto.isLocked());
+        userRepository.save(user);
     }
 }

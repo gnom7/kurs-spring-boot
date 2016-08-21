@@ -27,9 +27,6 @@ import java.util.List;
 public class ConstructorController {
 
     @Autowired
-    private SiteService siteService;
-
-    @Autowired
     private TagService tagService;
 
     @Autowired
