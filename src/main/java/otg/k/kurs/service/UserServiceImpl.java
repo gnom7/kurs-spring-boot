@@ -216,7 +216,7 @@ public class UserServiceImpl implements UserService{
             user = new User();
         }
         if( !"".equals(password)) {
-            user.setPassword(new BCryptPasswordEncoder().encode(password));
+            user.setPassword(passwordEncoder.encode(password));
         }
         user.setUsername(userDto.getUsername());
         user.setFirstname(userDto.getFirstname());

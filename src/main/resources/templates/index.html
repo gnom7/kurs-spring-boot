@@ -11,6 +11,19 @@
 <body>
 <div layout:fragment="nowrap-content">
 
+    <!--<div class="row">-->
+        <!--<div class="col-md-4"></div>-->
+        <!--<div class="col-md-4">-->
+            <!--<canvas width="400" height="272" id="tag-canvas">-->
+                <!--<ul>-->
+                    <!--<li th:each="tag : ${tagList}">-->
+                        <!--<a th:href="@{/search(q=${tag})}" th:text="${tag}">Tag</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</canvas>-->
+        <!--</div>-->
+    <!--</div>-->
+
     <ul class="cards">
 
         <li class="cards_item" th:each="site : ${sites}">
@@ -43,6 +56,18 @@
 </div>
 
 <th:block layout:fragment="scripts">
+    <script type="text/javascript" th:src="@{/js/jquery.tagcanvas.min.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        $('#tag-canvas').tagcanvas({
+            textColour : 'black',
+            outlineThickness : 1,
+            maxSpeed : 0.05,
+            reverse: true,
+            depth : 0.75
+        });
+        /*]]>*/
+    </script>
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
         $(document).ready(setRatings());

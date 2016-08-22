@@ -37,7 +37,8 @@ public class ConstructorController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("constructor")
-    public String get(){
+    public String get(Model model){
+        model.addAttribute("allTags", tagService.getAllStringTags());
         return "constructor/index";
     }
 

@@ -10,6 +10,7 @@ import otg.k.kurs.dto.SiteDto;
 import otg.k.kurs.dto.SiteHolderDto;
 import otg.k.kurs.service.SiteHolderService;
 import otg.k.kurs.service.SiteService;
+import otg.k.kurs.service.TagService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +23,9 @@ public class IndexController {
     @Autowired
     private SiteService siteService;
 
+    @Autowired
+    private TagService tagService;
+
     @GetMapping(value = {"/index", "/"})
     public String get(Model model){
         List<Site> sites = siteService.getAll();
@@ -30,6 +34,8 @@ public class IndexController {
         List<Site> subSites = new ArrayList<Site>(sites.subList(0, i));
         List<SiteDto> siteDtoList = subSites.stream().map(SiteDto::new).collect(Collectors.toList());
         model.addAttribute("sites", siteDtoList);
+        System.out.println(tagService.getAllStringTags().toArray(new String[10]));
+        model.addAttribute("tagList", tagService.getAllStringTags());
         return "index";
     }
 
