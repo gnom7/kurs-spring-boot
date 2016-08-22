@@ -36,8 +36,8 @@ public class AdminController {
         return "admin/adminPanel";
     }
 
-    @PostMapping("/deleteUser")
-    public @ResponseBody void deleteUser(@RequestParam String username){
+    @DeleteMapping("/deleteUser")
+    public @ResponseBody void deleteUser(@RequestHeader String username){
         userService.deleteUser(username);
     }
 
