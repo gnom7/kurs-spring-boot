@@ -25,7 +25,7 @@ public class SiteHolder {
     @Column(unique = true)
     private String siteHolderName;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "siteHolder")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "siteHolder")
     @IndexedEmbedded
     private List<Site> sites;
 
