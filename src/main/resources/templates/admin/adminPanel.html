@@ -59,9 +59,9 @@
 <th:block layout:fragment="scripts">
     <script th:inline="javascript">
     /*<![CDATA[*/
-//    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-//        jqXHR.setRequestHeader('X-CSRF-Token', [[${_csrf.token}]]);
-//    });
+    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+        jqXHR.setRequestHeader('X-CSRF-Token', [[${_csrf.token}]]);
+    });
 
 //    for users
 
@@ -81,7 +81,6 @@
     });
 
     function populateUserForm(userData) {
-        console.log([[${users}]]);
         $('#username').val(userData.username);
         $('#firstname').val(userData.firstname);
         $('#lastname').val(userData.lastname);
@@ -122,17 +121,25 @@
     }
 
     function saveUser(userData) {
-        $.post('addUser', {
-            userDto: JSON.stringify(userData),
-            password: ($('#password').val() || null),
-            [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+        $.ajax({
+            url: 'addUser',
+            method: 'POST',
+            async: false,
+            data: {
+                userDto: JSON.stringify(userData),
+                password: ($('#password').val() || null)
+            }
         });
     }
 
     function deleteUser(username) {
-        $.post('deleteUser', {
-            username: username,
-            [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+        $.ajax({
+            url: 'deleteUser',
+            method: 'DELETE',
+            async: false,
+            headers: {
+                username: username
+            }
         });
     }
 
@@ -171,9 +178,13 @@
     });
 
     function saveSite(siteData) {
-        $.post('addSite', {
-            siteHolderDto: JSON.stringify(siteData),
-            [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+        $.ajax({
+            url: 'addSite',
+            method: 'POST',
+            async: false,
+            data: {
+                siteHolderDto: JSON.stringify(siteData)
+            }
         });
     }
 
@@ -191,9 +202,13 @@
     }
 
     function deleteSite(siteId) {
-        $.post('deleteSite', {
-            siteHolderId: siteId,
-            [[${_csrf.parameterName}]]:[[${_csrf.token}]]
+        $.ajax({
+            url: 'deleteSite',
+            method: 'POST',  //mapping from old constructor controller (which uses $.post)
+            async: false,
+            data: {
+                siteHolderId: siteId
+            }
         })
     }
 
