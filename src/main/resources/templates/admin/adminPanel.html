@@ -76,7 +76,6 @@
         username = username.value;
         $('#redacting-user').val(username);
         let userData = getUserDataFromName(username);
-        console.log(userData);
         populateUserForm(userData);
         $('#create-user-modal').modal('show');
     });

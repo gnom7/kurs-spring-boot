@@ -23,7 +23,7 @@ public class Tag {
     @Column(unique = true)
     private String tag;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags")
     private List<Site> sites;
 
     public Tag(){}

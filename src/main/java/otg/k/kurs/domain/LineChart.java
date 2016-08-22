@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class LineChart {
 
     @Id
+    @GeneratedValue
     private long id;
 
     private int position;
