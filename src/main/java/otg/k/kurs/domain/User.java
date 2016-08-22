@@ -5,15 +5,9 @@ import org.hibernate.search.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import otg.k.kurs.dto.UserDto;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Data
 @Entity
@@ -53,7 +47,14 @@ public class User implements UserDetails {
     private List<SiteHolder> siteHolders;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @IndexedEmbedded
+    private List<Site> sites;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Vote> votes;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<VerificationToken> tokens;
 
     private String avatarUrl;
 
@@ -61,6 +62,7 @@ public class User implements UserDetails {
 
     public User(String username){
         this.username = username;
+        this.siteHolders = new ArrayList<>();
     }
 
     public User(String username, String firstname, String lastname, String email,

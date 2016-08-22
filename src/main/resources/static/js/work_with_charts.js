@@ -5,7 +5,7 @@ function renderLineModalTable(linesData) {
     });
 
     table.append($('<label>Chart title: <input id="chart-title"/></label><br/>' +
-        '<button class="btn btn-default btn-success btn-xs" id="add-line-row" onclick="addRow(this)">Add row</button>' +
+        '<button class="btn btn-default btn-success btn-xs" id="add-line-row" onclick="addLineRow(this)">Add row</button>' +
         '<button class="btn btn-default btn-danger btn-xs" id="delete-line-row" onclick="deleteRow(this)">Delete row</button>' +
         '<button class="btn btn-default btn-success btn-xs" id="add-line-line" onclick="addLine(this)">Add line</button>' +
         '<button class="btn btn-default btn-danger btn-xs" id="delete-line-line" onclick="deleteLine(this)">Delete line</button>' +
@@ -19,7 +19,7 @@ function renderLineModalTable(linesData) {
     if( !linesData) return;
 
     for(let i = 2; i < linesData.data.length; i++){
-        addRow($('#add-line-row'));
+        addLineRow($('#add-line-row'));
     }
     for(let i = 2; i < linesData.data[0].length; i++){
         addColumn($('#add-line-line'));
@@ -40,7 +40,7 @@ function renderLineModalTable(linesData) {
 
 }
 
-function addRow(self) {
+function addLineRow(self) {
     self = $(self);
     let row = '<tr><td><input/></td>';
     let linesCount = self.siblings('table').find('tr').eq(1).find('td').length - 1;
@@ -111,7 +111,7 @@ function renderModalTable(tableData) {
     });
 
     table.append($(
-        '<button class="btn btn-default btn-success btn-xs" id="add-table-row" onclick="addRow(this)">Add row</button>' +
+        '<button class="btn btn-default btn-success btn-xs" id="add-table-row" onclick="addTableRow(this)">Add row</button>' +
         '<button class="btn btn-default btn-danger btn-xs" id="delete-table-row" onclick="deleteRow(this)">Delete row</button>' +
         '<button class="btn btn-default btn-success btn-xs" id="add-table-column" onclick="addColumn(this)">Add column</button>' +
         '<button class="btn btn-default btn-danger btn-xs" id="delete-table-column" onclick="deleteColumn(this)">Delete column</button>' +
@@ -120,7 +120,7 @@ function renderModalTable(tableData) {
     if( !tableData) return;
 
     for(let i = 1; i < tableData.grid.length; i++){
-        addRow($('#add-table-row'));
+        addTableRow($('#add-table-row'));
     }
     for(let i = 1; i < tableData.grid[0].length; i++){
         addColumn($('#add-table-column'));
@@ -165,4 +165,13 @@ function deleteColumn(self) {
         tr = $(tr);
         tr.find('td').last().remove();
     });
+}
+function addTableRow(self) {
+    self = $(self);
+    let row = '<tr>';
+    let linesCount = self.siblings('table').find('tr').eq(0).find('td').length;
+    for(let i = 0; i < linesCount; i++){
+        row += '<td><input/></td>';
+    }
+    self.siblings('table').append($(row + '</tr>'))
 }

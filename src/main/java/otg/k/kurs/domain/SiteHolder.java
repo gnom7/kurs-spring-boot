@@ -34,6 +34,7 @@ public class SiteHolder {
     private User user;
 
     public SiteHolder() {
+        this.sites = new ArrayList<>();
     }
 
     public SiteHolder(SiteHolderDto siteHolderDto) {

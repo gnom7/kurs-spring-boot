@@ -91,24 +91,23 @@ public class SiteHolderServiceImpl implements SiteHolderService {
     @Override
     public void updateSiteHolderFromDto(SiteHolderDto siteHolderDto){
         User user = userService.getUserByUsername(siteHolderDto.getUsername());
+        SiteHolder siteHolder = siteHolderRepository.findOne(siteHolderDto.getId());
         if(user == null){
             user = new User(siteHolderDto.getUsername());
             user.setRole(Role.ROLE_USER);
         }
-        String siteHolderName = siteHolderDto.getSiteHolderName();
-        SiteHolder siteHolder = siteHolderRepository.findOne(siteHolderDto.getId());
         if(siteHolder == null){
             siteHolder = new SiteHolder();
             Site site = new Site("default");
             site.setSiteHolder(siteHolder);
             site.setUser(user);
             site.setLogoUrl("//placehold.it/500x300&text=%20");
-            List<Site> sites = new ArrayList<>();
-            sites.add(site);
-            siteHolder.setSites(sites);
+            siteHolder.getSites().add(site);
         }
-        siteHolder.setSiteHolderName(siteHolderName);
+        user.getSiteHolders().add(siteHolder);
+        siteHolder.setSiteHolderName(siteHolderDto.getSiteHolderName());
         siteHolder.setUser(user);
         siteHolderRepository.save(siteHolder);
+        userService.saveUser(user);
     }
 }

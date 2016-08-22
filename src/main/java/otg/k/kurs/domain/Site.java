@@ -32,7 +32,7 @@ public class Site implements Serializable {
     @IndexedEmbedded(includeEmbeddedObjectId = true, depth = 1)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "siteHolderId")
     @IndexedEmbedded(depth = 1)
     private SiteHolder siteHolder;
@@ -55,20 +55,20 @@ public class Site implements Serializable {
 
     private boolean allowComments;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "site")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<Image> images;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "site")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     @IndexedEmbedded
     private List<Text> texts;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "site")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<Video> videos;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "site")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<TableChart> tables;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "site")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
     private List<LineChart> lines;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "site")
