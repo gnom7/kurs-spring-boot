@@ -84,20 +84,34 @@
                         <span class="sr-only">Toggle Dropdown</span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a th:href="@{/auth/facebook}">Facebook</a></li>
-                        <li><a th:href="@{/auth/twitter}">Twitter</a></li>
-                        <li><a th:href="@{/auth/vkontakte}">VK</a></li>
+                        <li><a href="#" th:onclick="'signInFacebook()'">Facebook</a></li>
+                        <li><a href="#" th:onclick="'signInTwitter()'">Twitter</a></li>
+                        <li><a href="#" th:onclick="'signInVkontakte()'">VK</a></li>
                     </ul>
                 </div>
             </form>
         </div>
     </div>
 
+    <th:block th:replace="connect/facebookConnect :: connect"/>
+    <th:block th:replace="connect/twitterConnect :: connect"/>
     <div th:replace="auth/elements :: modals"></div>
 </div>
 
 <th:block layout:fragment="scripts">
     <th:block th:replace="auth/validation :: scripts" />
+
+    <script th:inline="javascript">
+        function signInFacebook() {
+            $('#facebook').submit();
+        }
+        function signInTwitter() {
+            $('#twitter').submit();
+        }
+        function signInVkontakte() {
+            $('#vkontakte').submit();
+        }
+    </script>
 </th:block>
 </body>
 </html>

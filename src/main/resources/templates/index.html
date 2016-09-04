@@ -41,8 +41,8 @@
                            th:href="@{~/{username}/{siteHolderName}/{siteName}(username = ${site.username},
                     siteHolderName = ${site.siteHolderName}, siteName = ${site.siteName})}" class="card_button"></a>
                     </h2>
-                    <p><th:block th:each="tag : ${site.tags}"><a class="label label-info"
-                          th:text="${tag}" th:href="@{~/search(q=${tag})}"></a><span> </span></th:block>
+                    <p><a class="label label-info" th:each="tag : ${site.tags}"
+                          th:text="${tag}" th:href="@{~/search(q=${tag})}"></a>
                     </p>
                     <p th:id="${'site-id-' + site.id}">Rating: </p>
                     <p>Author: <a th:text="${site.username}" th:href="@{/{username}(username = ${site.username})}"></a></p>
