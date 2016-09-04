@@ -39,6 +39,7 @@
 			<url>https://repo.spring.io/libs-release</url>
 		</repository>
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>spring-releases</id>
@@ -119,6 +120,20 @@
 			<groupId>ru.shadam.spring-boot</groupId>
 			<artifactId>social-vkontakte-spring-boot-starter</artifactId>
 			<version>0.1</version>
+		</dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.13</version>
+        </dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
 		</dependency>
 	</dependencies>
 

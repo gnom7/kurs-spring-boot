@@ -5,6 +5,7 @@ import org.hibernate.search.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.security.SocialUserDetails;
 
 import javax.persistence.*;
 import java.util.*;
@@ -13,7 +14,7 @@ import java.util.*;
 @Entity
 @Indexed
 @Table(name = "users")
-public class User implements UserDetails {
+public class User implements UserDetails, SocialUserDetails {
 
     @Id
     private String username;
@@ -65,6 +66,12 @@ public class User implements UserDetails {
         this.siteHolders = new ArrayList<>();
     }
 
+    public User(String username, String password, Role role){
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     public User(String username, String firstname, String lastname, String email,
                 String password, boolean locked, boolean enabled, Role role) {
         this.username = username;
@@ -105,4 +112,8 @@ public class User implements UserDetails {
     }
 
 
+    @Override
+    public String getUserId() {
+        return username;
+    }
 }
