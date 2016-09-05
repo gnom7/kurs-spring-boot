@@ -34,7 +34,6 @@ public class IndexController {
         List<Site> subSites = new ArrayList<Site>(sites.subList(0, i));
         List<SiteDto> siteDtoList = subSites.stream().map(SiteDto::new).collect(Collectors.toList());
         model.addAttribute("sites", siteDtoList);
-        System.out.println(tagService.getAllStringTags().toArray(new String[10]));
         model.addAttribute("tagList", tagService.getAllStringTags());
         return "index";
     }

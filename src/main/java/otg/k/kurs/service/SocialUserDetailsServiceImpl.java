@@ -17,8 +17,8 @@ public class SocialUserDetailsServiceImpl implements SocialUserDetailsService {
     private UserRepository userRepository;
 
     @Override
-    public SocialUserDetails loadUserByUserId(String username) throws UsernameNotFoundException {
-        UserDetails userDetails = userRepository.findByUsername(username);
+    public SocialUserDetails loadUserByUserId(String localUserId) throws UsernameNotFoundException {
+        UserDetails userDetails = userRepository.findByUsername(localUserId);
         return new SocialUser(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
     }
 

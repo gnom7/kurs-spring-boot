@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,15 +47,12 @@ public class UserServiceImpl implements UserService{
     private ApplicationEventPublisher eventPublisher;
 
     @Override
-    public void registerSocialUser(UserProfile userProfile) {
-        User user = createSocialUser(userProfile);
-        userRepository.save(user);
-    }
-
-    private User createSocialUser(UserProfile userProfile){
-        String password = passwordEncoder.encode(UUID.randomUUID().toString());
-        return new User(userProfile.getUsername(), userProfile.getFirstName(),
-                userProfile.getLastName(), userProfile.getEmail(), password, false, true, Role.ROLE_USER);
+    public User createSocialUser(Connection<?> connection){
+        UserProfile userProfile = connection.fetchUserProfile();
+        User user = new User(userProfile.getName(), userProfile.getFirstName(), userProfile.getLastName(),
+                userProfile.getEmail(), passwordEncoder.encode(UUID.randomUUID().toString()), false, true, Role.ROLE_USER);
+        user.setThirdPartyId(connection.createData().getProviderId() + connection.createData().getProviderUserId());
+        return user;
     }
 
     @Override

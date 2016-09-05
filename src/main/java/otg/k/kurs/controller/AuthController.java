@@ -1,7 +1,6 @@
 package otg.k.kurs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
@@ -10,10 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import otg.k.kurs.domain.ForgotPasswordToken;
 import otg.k.kurs.dto.AccountDto;
 import otg.k.kurs.service.UserService;
-import otg.k.kurs.service.auth.SimpleConnectionSignUp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -25,12 +22,11 @@ public class AuthController {
     private UserService userService;
 
 
+    @Autowired
+    private UsersConnectionRepository usersConnectionRepository;
 
     @Autowired
     private ConnectionSignUp connectionSignUp;
-
-    @Autowired
-    private UsersConnectionRepository usersConnectionRepository;
 
     @GetMapping("/login")
     public String login() {

@@ -59,17 +59,13 @@ public class User implements UserDetails, SocialUserDetails {
 
     private String avatarUrl;
 
+    private String thirdPartyId;
+
     public User(){}
 
     public User(String username){
         this.username = username;
         this.siteHolders = new ArrayList<>();
-    }
-
-    public User(String username, String password, Role role){
-        this.username = username;
-        this.password = password;
-        this.role = role;
     }
 
     public User(String username, String firstname, String lastname, String email,

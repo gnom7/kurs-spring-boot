@@ -1,5 +1,6 @@
 package otg.k.kurs.service;
 
+import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
 import otg.k.kurs.domain.User;
 import otg.k.kurs.domain.VerificationToken;
@@ -11,9 +12,9 @@ import java.util.List;
 
 public interface UserService {
 
-    boolean registerUser(AccountDto accountDto, HttpServletRequest request);
+    User createSocialUser(Connection<?> connection);
 
-    void registerSocialUser(UserProfile userProfile);
+    boolean registerUser(AccountDto accountDto, HttpServletRequest request);
 
     VerificationToken createVerificationToken(User user);
 
