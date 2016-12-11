@@ -6,7 +6,7 @@
 	<groupId>otg.k.kurs</groupId>
 	<artifactId>kurs</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>kurs</name>
 	<description>SiteMaker</description>
@@ -105,6 +105,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.social</groupId>

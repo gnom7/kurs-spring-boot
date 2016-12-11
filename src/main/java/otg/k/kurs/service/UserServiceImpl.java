@@ -3,7 +3,6 @@ package otg.k.kurs.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.UserProfile;
@@ -22,10 +21,7 @@ import otg.k.kurs.repository.TokenRepository;
 import otg.k.kurs.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -112,8 +108,8 @@ public class UserServiceImpl implements UserService{
     public User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = null;
-        if (principal instanceof User) {
-            user = getUserByUsername(((User) principal).getUsername());
+        if (principal instanceof org.springframework.security.core.userdetails.User) {
+            user = getUserByUsername(((org.springframework.security.core.userdetails.User) principal).getUsername());
         } else {
             String username = principal.toString();
             user = getUserByUsername(username);
